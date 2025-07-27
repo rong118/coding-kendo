@@ -1,51 +1,56 @@
 # String
 
-In computer science, a string is a sequence of characters, typically used to represent text. Strings are a fundamental data type in most programming languages and are often treated as a built-in data structure.
+In computer science, a **string** is a sequence of characters used to represent text. It's a core data type in most programming languages.
 
-## Implementation
-### Python Example:
+## Python Examples
 ```python
-# 1. Concatenating Strings
-str1 = "Hello"
-str2 = "World"
-result = str1 + " " + str2
-print(result)  # Output: Hello World
+# 1. Concatenation
+str1, str2 = "Hello", "World"
+print(str1 + " " + str2)  # Hello World
 
-# 2. String Slicing
+# 2. Slicing
 text = "PythonProgramming"
-print(text[0:6])  # Output: Python
-print(text[-11:]) # Output: Programming
+print(text[:6])     # Python
+print(text[-11:])   # Programming
 
-# 3. Changing Case
+# 3. Case Conversion
 text = "hello, World!"
-print(text.upper())       # Output: HELLO, WORLD!
-print(text.lower())       # Output: hello, world!
-print(text.capitalize())  # Output: Hello, world!
+print(text.upper())      # HELLO, WORLD!
+print(text.lower())      # hello, world!
+print(text.capitalize()) # Hello, world!
 
-# 4. Finding and Replacing
+# 4. Find & Replace
 text = "I love programming in Python."
-print(text.find("Python"))                     # Output: 23
-print(text.replace("Python", "JavaScript"))    # Output: I love programming in JavaScript.
+print(text.find("Python"))                     # 23
+print(text.replace("Python", "JavaScript"))    # I love programming in JavaScript.
 
-# 5. Splitting and Joining
+# 5. Split & Join
 text = "apple,banana,cherry"
 fruits = text.split(",")
-print(fruits)  # Output: ['apple', 'banana', 'cherry']
+print(fruits)                   # ['apple', 'banana', 'cherry']
+print("-".join(fruits))         # apple-banana-cherry
 
-joined_text = "-".join(fruits)
-print(joined_text)  # Output: apple-banana-cherry
-
-# 6. Checking Content
+# 6. Content Checks
 text = "Python123"
-print(text.isalpha())  # Output: False
-print(text.isalnum())  # Output: True
-print(text.isdigit())  # Output: False
+print(text.isalpha())  # False
+print(text.isalnum())  # True
+print(text.isdigit())  # False
 
-# 7. Formatting Strings
-name = "Alice"
-age = 25
+# 7. String Formatting
+name, age = "Alice", 25
 print(f"My name is {name} and I am {age} years old.")
-# Output: My name is Alice and I am 25 years old.
+# My name is Alice and I am 25 years old.
+
+# 8, substring
+text = "Hello, Python!"
+
+# Check if a substring exists
+print("Python" in text)     # True
+print("Java" in text)       # False
+
+# Count occurrences of a substring
+text = "banana"
+print(text.count("an"))     # 2
 ```
 
 ## Leetcode Questions
