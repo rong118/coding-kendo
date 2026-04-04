@@ -2,9 +2,28 @@
 
 Explore data structures, algorithms, and complexity analysis. Plus a curated set of interview coding questions.
 
-## I. Data Structures
+## Table of Contents
 
-A data structure is a specialized format for organizing, processing, retrieving, and storing data in computer science.
+- [I. Complexity Analysis](#i-complexity-analysis)
+- [II. Data Structures](#ii-data-structures)
+  - [Basic Data Structures](#basic-data-structures)
+  - [Tree](#tree)
+  - [Graph](#graph)
+  - [Other Data Structures](#other-data-structures)
+- [III. Algorithms](#iii-algorithms)
+  - [Basic Algorithms](#basic-algorithms)
+  - [Other Algorithms](#other-algorithms)
+
+## I. Complexity Analysis
+
+Complexity analysis is the process of evaluating how an algorithm's resource usage — time and memory — scales as the input size grows. It helps compare algorithms and choose the right one for a given problem.
+
+- [Big O Notation](./algorithms/BigONotation.md) ✅
+- [Runtime Complexity Cheatsheet](./algorithms/CommonRuntime.md) ✅
+
+## II. Data Structures
+
+A data structure defines how data is organized and stored in memory. Choosing the right structure directly impacts the efficiency of operations like access, search, insertion, and deletion.
 
 ### Basic Data Structures
 - [Array](./data_structures/basic/array.md) ✅
@@ -35,7 +54,7 @@ A data structure is a specialized format for organizing, processing, retrieving,
   - [Breadth First Search](./data_structures/graph/graph_search.md#i-breadth-first-search-bfs) ✅
   - [Depth First Search](./data_structures/graph/graph_search.md#ii-depth-first-search-dfs) ✅
 - [Topological Sort](./data_structures/graph/topological_sort.md) ✅
-  - [Kahn's Algorithm](./data_structures/graph/topological_sort.md#kahns-algorithm)  ✅
+  - [Kahn's Algorithm](./data_structures/graph/topological_sort.md#kahns-algorithm) ✅
 - [Shortest Path](./data_structures/graph/shortest_path.md) ✅
   - [Dijkstra's Algorithm](./data_structures/graph/shortest_path.md#dijkstras-algorithm) ✅
   - [Bellman-Ford Algorithm](./data_structures/graph/shortest_path.md#bellman-ford-algorithm) ✅
@@ -44,14 +63,14 @@ A data structure is a specialized format for organizing, processing, retrieving,
   - [Kruskal's Algorithm](./data_structures/graph/minimum_spanning_tree.md#kruskals-algorithm) ✅
 
 ### Other Data Structures
-- [Trie (Prefix Tree)](./data_structures/advance/trie.md)  ✅
+- [Trie (Prefix Tree)](./data_structures/advance/trie.md) ✅
 - [Disjoint-set (Union Find)](./data_structures/advance/union_find.md) ✅
 - [Binary Index Tree (Fenwick Tree)](./data_structures/advance/binary_index_tree.md) ✅
 - [Segment Tree (ZKW Tree)](./data_structures/advance/segment_tree.md) ✅
 
-## II. Algorithms
+## III. Algorithms
 
-An algorithm is a procedure used for solving a problem or performing a computation.
+An algorithm is a step-by-step procedure for solving a problem. Understanding common algorithmic patterns allows you to break down complex problems and apply proven strategies efficiently.
 
 ### Basic Algorithms
 - [Sort Algorithms](./algorithms/basic/sort_algorithms.md) ✅
@@ -59,15 +78,13 @@ An algorithm is a procedure used for solving a problem or performing a computati
   - [Selection Sort](./algorithms/basic/sort_algorithms.md#ii-selection-sort) ✅
   - [Merge Sort](./algorithms/basic/sort_algorithms.md#iii-merge-sort) ✅
   - [Quick Sort](./algorithms/basic/sort_algorithms.md#iv-quick-sort) ✅
- 
-###
 - [Search Algorithms](./algorithms/basic/search_algorithms.md) ✅
   - [Linear Search](./algorithms/basic/search_algorithms.md#i-linear-search) ✅
   - [Binary Search](./algorithms/basic/search_algorithms.md#ii-binary-search) ✅
 
 ### Other Algorithms
 - [Brute Force](./algorithms/others/bruteforce.md) ✅
-- [Backingtracking](./algorithms/others/backtracking.md) ✅
+- [Backtracking](./algorithms/others/backtracking.md) ✅
 - [Recursion](./algorithms/others/recursion.md) ✅
 - [Divide and Conquer](./algorithms/others/divide_and_conque.md) ✅
 - [Two Pointers](./algorithms/others/two_pointers.md) ✅
@@ -75,7 +92,3 @@ An algorithm is a procedure used for solving a problem or performing a computati
 - [Greedy](./algorithms/others/greedy.md) ✅
 - [Dynamic Programming (DP)](./algorithms/others/dynamic_programming.md) ✅
 - [Math](./algorithms/others/math.md) ✅
-
-## III. Complexity Analysis
-- [Big O Notation](./algorithms/BigONotation.md) ✅
-- [Runtime Complexity Cheetsheet](./algorithms/CommonRuntime.md) ✅
