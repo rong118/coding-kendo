@@ -1,25 +1,24 @@
 # Big O Notation
 
-Big O notation, also known as the simply "O", is a way to describe the performance or complexity of an algorithm.
+Big O notation describes how an algorithm's time or space requirements grow as the input size (n) increases.
 
-It's used to classify algorithms based on how their running time or space requirements scale with respect to the size of the input.
+## Key Points
+- **Growth rate**: Big O cares about how performance scales with large n, not absolute speed.
+- **Worst-case**: It measures the upper bound — the most time/space an algorithm could need.
+- **Constants ignored**: O(2n) and O(n) are equivalent; only the dominant term matters (e.g., O(n² + n) = O(n²)).
 
-## Key Aspects
-- **Asymptotic notation**: Big O notation is a way to describe an algorithm's performance as the input size increases without bound (i.e., n approaches infinity).
-- **Worst-case scenario**: Big O notation measures the maximum amount of time or space required by the algorithm in the worst-case scenario.
-- **Upper bound**: Big O notation provides an upper bound on the running time or space usage, which means that the actual performance may be better (but not worse) than what's described.
-- **Constant factor ignored**: When describing an algorithm's performance using Big O notation, any constant factors are ignored. For example, O(2n) and O(n) would be considered equivalent because the constant factor 2 is ignored.
-- **Only considering worst-case scenario**: Big O notation only considers the worst-case scenario and does not account for average-case or best-case scenarios.
+## Growth Order (fastest to slowest)
 
-## Common Examples
-Below is the list of some of the most used Big O notations and their performance comparisons against different sizes of the input data.
+`O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(2ⁿ) < O(n!)`
 
-| Big O Notation | Type        | Computations for 10 elements | Computations for 100 elements | Computations for 1000 elements  |
-| -------------- | ----------- | ---------------------------- | ----------------------------- | ------------------------------- |
-| **O(1)**       | Constant    | 1                            | 1                             | 1                               |
-| **O(log N)**   | Logarithmic | 3                            | 6                             | 9                               |
-| **O(N)**       | Linear      | 10                           | 100                           | 1000                            |
-| **O(N log N)** | n log(n)    | 30                           | 600                           | 9000                            |
-| **O(N^2)**     | Quadratic   | 100                          | 10000                         | 1000000                         |
-| **O(2^N)**     | Exponential | 1024                         | 1.26e+29                      | 1.07e+301                       |
-| **O(N!)**      | Factorial   | 3628800                      | 9.3e+157                      | 4.02e+2567                      |
+## Common Complexities
+
+| Big O Notation | n = 10 | n = 100 | n = 1000 | Common Pattern |
+| :--- | ---: | ---: | ---: | :--- |
+| **O(1)**       | 1 | 1 | 1 | Direct access (array index, hash table lookup) |
+| **O(log n)**   | ~3 | ~7 | ~10 | Halving the problem each step (binary search) |
+| **O(n)**       | 10 | 100 | 1000 | Single loop through input |
+| **O(n log n)** | ~33 | ~664 | ~9966 | Divide & conquer sorting (merge sort, quick sort) |
+| **O(n²)**      | 100 | 10000 | 1000000 | Nested loops over input |
+| **O(2ⁿ)**      | 1024 | ~1.3e30 | ~1e301 | Trying all subsets (brute force combinations) |
+| **O(n!)**      | 3.6e6 | ~9e157 | ~4e2568 | Trying all permutations |
