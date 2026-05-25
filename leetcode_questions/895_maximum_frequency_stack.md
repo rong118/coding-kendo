@@ -16,7 +16,7 @@ Example 1:
 
 > Input
 > ["FreqStack", "push", "push", "push", "push", "push", "push", "pop", "pop", "pop", "pop"]
-[[], [5], [7], [5], [7], [4], [5], [], [], [], []]
+> [[], [5], [7], [5], [7], [4], [5], [], [], [], []]
 > Output
 > [null, null, null, null, null, null, null, 5, 7, 5, 4]
 >
@@ -42,28 +42,30 @@ Constraints:
 - stack
 
 ## Code Implementation
-```c++
-class FreqStack {
-private:
-    unordered_map<int, int> freq;  //key, freq
-    unordered_map<int, stack<int>> m; //freq, stack intem
-    int maxFreq=0; //max freq
-public:    
-    void push(int x) {
-        freq[x]++;
-        maxFreq = max(maxFreq, freq[x]);
-        m[freq[x]].push(x);
-        return;
-    }
-    
-    int pop() {
-        int ret =  m[maxFreq].top();
-        m[maxFreq].pop();
-        if(m[maxFreq].size()==0) maxFreq--;
-        freq[ret]--;
-        return ret;
-    }
-};
+```python
+class FreqStack:
+    def __init__(self):
+        self.freq = {}
+        self.group = {}
+        self.max_freq = 0
+
+    def push(self, val: int) -> None:
+        self.freq[val] = self.freq.get(val, 0) + 1
+        f = self.freq[val]
+        self.max_freq = max(self.max_freq, f)
+        if f not in self.group:
+            self.group[f] = []
+        self.group[f].append(val)
+
+    def pop(self) -> int:
+        val = self.group[self.max_freq].pop()
+        self.freq[val] -= 1
+        if not self.group[self.max_freq]:
+            self.max_freq -= 1
+        return val
 ```
 
 ## Time Complexity Analysis
+> Time complexity  : O(1) for both push and pop
+>
+> Space complexity : O(n)

@@ -48,46 +48,33 @@ Constraints:
 - sliding window
 
 ## Code Implementation
-```c++
-class Solution {
-public:
-    string minWindow(string s, string t) {
-        vector<int> m(256, 0);
-        for(char c : t){
-            m[c]++;
-        }
+```python
+from collections import Counter
 
-        int cnt = t.size();
-        int l = 0;
-        int r = 0;
-        int ans = INT_MAX;
-        string res = "";
-        while(r < s.size()){
-            if(m[s[r]] > 0){
-                cnt--;
-            }
-            m[s[r]]--;
-            r++;
-            while(cnt == 0){
-                if(ans > r - l + 1) {
-                    ans = r - l + 1;
-                    res = s.substr(l, r - l + 1);
-                }
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        need = Counter(t)
+        missing = len(t)
+        l = 0
+        start, end = 0, float('inf')
 
-                if(m[s[l]] >= 0){ // m[s[l]] >= 0 means s[l] is included in t
-                    cnt++;
-                }
-                m[s[l]]++;
-                l++;
-            }
-        }
+        for r in range(len(s)):
+            if need[s[r]] > 0:
+                missing -= 1
+            need[s[r]] -= 1
 
-        return res;
-    }
-};
+            while missing == 0:
+                if r - l < end - start:
+                    start, end = l, r
+                if need[s[l]] >= 0:
+                    missing += 1
+                need[s[l]] += 1
+                l += 1
+
+        return s[start:end + 1] if end != float('inf') else ""
 ```
 
 ## Time Complexity Analysis
 > Time complexity  : O(n)
 >
-> Space complexity : O(1)
+> Space complexity : O(1) — at most 52 uppercase/lowercase letters

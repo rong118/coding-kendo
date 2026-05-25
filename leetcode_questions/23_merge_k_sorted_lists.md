@@ -1,7 +1,7 @@
 # 23. Merge k Sorted Lists
 
 ## Question link
-> (https://leetcode.com/problems/merge-k-sorted-lists/)
+(https://leetcode.com/problems/merge-k-sorted-lists/)
 
 ## Question Description
 You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
@@ -41,74 +41,35 @@ Constraints:
 - linkedlist
 
 ## Code Implementation
-```c++
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
+```python
+import heapq
+from typing import Optional
 
- // heap
-class Solution {
-public:
-    struct compNode {
-        bool operator()(ListNode *p, ListNode *q) const {
-            return p->val>q->val;
-        }  
-    };
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
 
-    ListNode *mergeKLists(vector<ListNode *> &lists) {
-        priority_queue<ListNode*, vector<ListNode*>, compNode> pq;
-        ListNode *dummy = new ListNode(0), *tail = dummy;
-        
-        for(int i=0; i<lists.size(); i++) 
-            if(lists[i]) pq.push(lists[i]);
-            
-        while(!pq.empty()) {
-            tail->next = pq.top();
-            tail = tail->next;
-            pq.pop();
-            if(tail->next) pq.push(tail->next);
-        }
-        
-        return dummy->next;
-    }
-};
+class Solution:
+    def mergeKLists(self, lists: list[Optional[ListNode]]) -> Optional[ListNode]:
+        dummy = tail = ListNode(0)
+        heap = []
 
-// linkedlist O(nlogn)
-class Solution {
-public:
-    ListNode* mergeKLists(vector<ListNode *> &lists) {
-       return partion(lists, 0, lists.size() - 1);
-    }
+        for i, node in enumerate(lists):
+            if node:
+                heapq.heappush(heap, (node.val, i, node))
 
-    ListNode* partion(vector<ListNode *> &lists, int start, int end){
-        if(start == end) return lists[start];
-        if(start < end){
-            int mid = (start + end)/2;
-            ListNode* l1 = partion(lists, start, mid);
-            ListNode* l2 = partion(lists, mid + 1, end);
-            return merge(l1, l2);
-        }
-        return NULL;
-    }
+        while heap:
+            _, i, node = heapq.heappop(heap)
+            tail.next = node
+            tail = tail.next
+            if node.next:
+                heapq.heappush(heap, (node.next.val, i, node.next))
 
-    ListNode* merge(ListNode* l1, ListNode* l2){
-        if(l1 == NULL) return l2;
-        if(l2 == NULL) return l1;
-        if(l1->val < l2->val) {
-            l1->next = merge(l1->next, l2);
-            return l1;
-        }else{
-            l2->next = merge(l1, l2->next);
-            return l2;
-        }
-    }
-};
+        return dummy.next
 ```
 
 ## Time Complexity Analysis
-Running time  : O(nlog(n))
+> Time complexity  : O(N log k) — N total nodes, k lists
+>
+> Space complexity : O(k) — the heap holds at most k nodes

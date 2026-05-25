@@ -43,108 +43,29 @@ Constraints:
 - hashMap
 
 ## Code Implementation
-```c++
-class Solution {
-public:
-    vector<int> findAnagrams(string s, string p) {
-        // Initial p ino map;
-        vector<int> m(26, 0);
-        for(char c : p){
-            m[c - 'a']++;
-        }
+```python
+from collections import Counter
 
-        // Sliding Windows
-        vector<int> ans;
-        int tmp = 0;
-        vector<int> tm(26, 0);
-        int l = 0;
-        int r = 0;
-        
-        while(r < s.size()){
-            if(m[s[r] - 'a'] > 0){
-                tm[s[r] - 'a']++;
-                if(_same(m, tm)){
-                    ans.push_back(l);
-                }
-            }else{
-                _reset(tm);
-                l = r + 1;
-            }
-            r++;
-            if(r - l + 1 > p.size()){
-                tm[s[l] - 'a'] --;
-                l++;
-            }
-        }
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> list[int]:
+        p_count = Counter(p)
+        window = Counter()
+        ans = []
 
-        return ans;
-    }
+        for i in range(len(s)):
+            window[s[i]] += 1
+            if i >= len(p):
+                if window[s[i - len(p)]] == 1:
+                    del window[s[i - len(p)]]
+                else:
+                    window[s[i - len(p)]] -= 1
+            if window == p_count:
+                ans.append(i - len(p) + 1)
 
-    void _reset(vector<int> &a){
-        for(int i = 0; i < a.size(); i++){
-            a[i] = 0;
-        }
-        return;
-    }
-    bool _same(vector<int> &a, vector<int> &b){
-        if(a.size() != b.size()) {return false;}
-        for(int i = 0; i < a.size(); i++){
-            if(a[i] != b[i]){
-                return false;
-            }
-        }
-        return true;
-    }
-};
-
-class Solution {
-public:
-    vector<int> findAnagrams(string s, string p) {
-        vector<int> res;
-        int hash[256] ={0}; //character hash
-        
-        for (auto c : p) {
-            hash[c]++;
-        }
-        
-        //two points, initialize count to p's length
-        int left = 0, right = 0, count = p.length();
-        while (right < s.size()) {
-            //move right everytime, if the character exists in p's hash, decrease the count
-            //current hash value >= 1 means the character is existing in p
-            if (hash[s[right]] >= 1) {
-                count--; 
-            }
-            hash[s[right]]--;
-            right++;
-            
-            
-            //when the count is down to 0, means we found the right anagram
-            //then add window's left to result list
-            if (count == 0) {
-                res.push_back(left);
-            }
-            
-            //if we find the window's size equals to p, then we have to move left (narrow the window) to find the new match window
-            //++ to reset the hash because we kicked out the left
-            //only increase the count if the character is in p
-            //the count >= 0 indicate it was original in the hash, cuz it won't go below 0
-            if (right - left == p.length()){
-                if(hash[s[left]] >= 0) {
-                    count++;
-                }
-                hash[s[left]]++;   
-                left++;
-            }
-            
-        }
-        
-        return res;
-    }
-};
+        return ans
 ```
 
 ## Time Complexity Analysis
 > Time complexity  : O(n)
 >
-> Space complexity : O(1)
+> Space complexity : O(1) — at most 26 lowercase letters

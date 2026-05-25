@@ -25,54 +25,18 @@ Example 1:
 > Input: s = "42"
 >
 > Output: 42
->
-> Explanation: The underlined characters are what is read in, the caret is the current reader position.
->
-> Step 1: "42" (no characters read because there is no leading whitespace)
->         ^
-> Step 2: "42" (no characters read because there is neither a '-' nor '+')
->         ^
-> Step 3: "42" ("42" is read in)
->           ^
-> The parsed integer is 42.
-> Since 42 is in the range [-231, 231 - 1], the final result is 42.
 
 Example 2:
 
 > Input: s = "   -42"
 >
 > Output: -42
->
-> Explanation:
->
-> Step 1: "   -42" (leading whitespace is read and ignored)
->            ^
-> Step 2: "   -42" ('-' is read, so the result should be negative)
->             ^
-> Step 3: "   -42" ("42" is read in)
->              ^
-> The parsed integer is -42.
->
-> Since -42 is in the range [-231, 231 - 1], the final result is -42.
 
 Example 3:
 
 > Input: s = "4193 with words"
 >
 > Output: 4193
->
-> Explanation:
->
-> Step 1: "4193 with words" (no characters read because there is no leading whitespace)
->         ^
-> Step 2: "4193 with words" (no characters read because there is neither a '-' nor '+')
->         ^
-> Step 3: "4193 with words" ("4193" is read in; reading stops because the next character is a non-digit)
->             ^
->
-> The parsed integer is 4193.
->
-> Since 4193 is in the range [-231, 231 - 1], the final result is 4193.
  
 Constraints:
 * 0 <= s.length <= 200
@@ -82,53 +46,27 @@ Constraints:
 - string
 
 ## Code Implementation
-```c++
-class Solution {
-public:
-    int myAtoi(string s) {
-        int flag = 1;
-        // 1. Trim leading and tailing space
-        s = trim(s);
+```python
+class Solution:
+    def myAtoi(self, s: str) -> int:
+        s = s.lstrip()
+        if not s:
+            return 0
 
-        // 2. Get rid of first if + or -
-        if(s.size() > 1 && (s[0] == '+' || s[0] == '-')){
-            if(s[0] == '-'){
-                flag = -1;
-            }
-            s = s.substr(1);
-        }
+        sign = 1
+        i = 0
+        if s[0] == '-' or s[0] == '+':
+            sign = -1 if s[0] == '-' else 1
+            i = 1
 
-        // Convert to int (out of range?)
-        long num = 0;
-        for(int i = 0; i < s.size(); i++){
-            if((s[i] >= '0' && s[i] <= '9')){
-                num += (s[i] - '0');
-                if(num > INT_MAX){
-                    if(flag == -1) return INT_MIN;
-                    return INT_MAX;
-                }
-                num *= 10;
-            }else{
-                break;
-            }
-        }
+        num = 0
+        while i < len(s) and s[i].isdigit():
+            num = num * 10 + int(s[i])
+            i += 1
 
-        num /= 10;
-        return flag * (int)num;
-    }
-
-    std::string ltrim(const std::string &s) {
-        return std::regex_replace(s, std::regex("^\\s+"), std::string(""));
-    }
-    
-    std::string rtrim(const std::string &s) {
-        return std::regex_replace(s, std::regex("\\s+$"), std::string(""));
-    }
-    
-    std::string trim(const std::string &s) {
-        return ltrim(rtrim(s));
-    }
-};
+        num *= sign
+        INT_MIN, INT_MAX = -2**31, 2**31 - 1
+        return max(INT_MIN, min(num, INT_MAX))
 ```
 
 ## Time Complexity Analysis

@@ -42,23 +42,20 @@ Constraints:
 - string
 
 ## Code Implementation
-```c++
-class Solution {
-public:
-    bool isPalindrome(string s) {
-        int l = 0;
-        int r = s.size() - 1;
-        while(l < s.size() && r >= 0 && l < r){
-            if(!isalnum(s[l])){ l++; continue; }
-            if(!isalnum(s[r])){ r--; continue; }
-            if(std::tolower(s[l++]) != std::tolower(s[r--])){
-                return false;
-            }
-        }
-
-        return true;
-    }
-};
+```python
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        l, r = 0, len(s) - 1
+        while l < r:
+            while l < r and not s[l].isalnum():
+                l += 1
+            while l < r and not s[r].isalnum():
+                r -= 1
+            if s[l].lower() != s[r].lower():
+                return False
+            l += 1
+            r -= 1
+        return True
 ```
 
 ## Time Complexity Analysis

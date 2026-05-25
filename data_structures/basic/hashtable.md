@@ -1,98 +1,45 @@
 # Hashtable
 
-A **hashtable** (also called hashmap, dictionary, or hash set) stores key-value pairs using a **hash function** to compute indices. It enables fast, unordered data access.
+A hashtable (hash map, dictionary, or hash set) maps keys to values using a hash function for O(1) average lookups.
 
-## Key Traits
-- **Key-Value Pairs**: Unique keys mapped to values.
-- **Hash Function**: Converts keys to array indices.
+## Complexity
 
-## Hash Collisions
-When multiple keys hash to the same index:
-- **Chaining**: Store entries in a list at that index.
-- **Open Addressing**: Find alternate slots (linear, quadratic, or double hashing).
-
-## Time Complexity (Average Case)
-| Operation           | Time      |
-|---------------------|-----------|
+| Operation | Average |
+|---|---|
 | Lookup / Insert / Delete | O(1) |
-| Iteration           | O(n)     |
-| Collision Resolution | O(1) ~ O(log n) |
+| Iteration | O(n) |
 
----
+## Collision Handling
 
-# Hash Map
+- **Chaining**: Store colliding entries in a linked list at the same index.
+- **Open Addressing**: Probe for the next available slot.
 
-A **hash map** implements a key-value store using an array and a hash function.
+## Python Usage
 
-## Python Example
+### dict (hash map)
+
 ```python
-# Create & update
-hashmap = {"apple": 5, "banana": 3}
-hashmap["orange"] = 8
-hashmap["banana"] = 10
-
-# Access & delete
-print(hashmap["apple"])
-del hashmap["banana"]
-
-# Check & iterate
-print("orange" in hashmap)
-for k, v in hashmap.items():
-    print(k, v)
-
-# Safe access, size, and clear
-print(hashmap.get("pear", "Not Found"))
-print(len(hashmap))
-hashmap.clear()
+d = {"apple": 5, "banana": 3}
+d["orange"] = 8
+print(d["apple"], d.get("pear", 0))
+del d["banana"]
+"orange" in d            # membership
+for k, v in d.items():   # iterate
+d.clear()
 ```
 
-# HashSet
+### set (hash set)
 
-A **HashSet** is an unordered collection of **unique** elements, implemented using a hash table. It allows efficient insertion, deletion, and membership testing.
-
-## Key Traits
-- Only unique elements are allowed (no duplicates).
-- Unordered storage.
-- Average-case time complexity: O(1) for add, remove, and lookup.
-
-## Python Example
 ```python
-# Create a hashset
-hashset = set()
-
-# Add elements
-hashset.add(10)
-hashset.add(20)
-
-# Duplicate add (ignored)
-hashset.add(20)
-
-# Membership test
-print(20 in hashset)  # True
-print(50 in hashset)  # False
-
-# Remove elements
-hashset.remove(10)     # Raises error if not found
-hashset.discard(50)    # Safe remove (no error)
-
-# Print current elements
-print("HashSet:", hashset)
-
-# Iterate over elements
-for item in hashset:
-    print(item)
-
-# Size and clear
-print("Size:", len(hashset))
-hashset.clear()
-print("After clear:", hashset)
+s = set()
+s.add(10); s.add(20)
+10 in s                   # True
+s.remove(10)              # raises KeyError if missing
+s.discard(50)             # safe remove
+len(s); s.clear()
 ```
 
-## Leetcode Questions
+## Related LeetCode Questions
+
 - [1. Two Sum](../../leetcode_questions/1_two_sum.md)
-- [3. Longest Substring Without Repeating Characters]()
-- [49. Group Anagrams]()
 - [217. Contains Duplicate](../../leetcode_questions/217_contain_duplicate.md)
-- [242. Valid Anagram]()
-- [347. Top K Frequent Elements]()
-- [350. Intersection of Two Arrays II]()

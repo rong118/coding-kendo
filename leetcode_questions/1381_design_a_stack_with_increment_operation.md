@@ -46,47 +46,35 @@ Constraints:
 - stack
 
 ## Code Implementation
-```c++
-class CustomStack {
-    stack<int> stk;
-    vector<int> inc;  //Lazy inc
-    int limit = 0;
-public:
-    CustomStack(int maxSize) {
-        limit = maxSize;
-        inc.resize(limit);
-    }
-    
-    void push(int x) {
-        if(stk.size() < limit){
-            stk.push(x);
-        }
-    }
-    
-    int pop() {
-        int i = stk.size() - 1;
-        if(i < 0) return -1;
-        if(i > 0) inc[i-1] += inc[i];
-        int ans = stk.top() + inc[i];
-        stk.pop();
-        inc[i] = 0;
-        return ans;
-    }
-    
-    void increment(int k, int val) {
-        int i = min(k, (int)stk.size()) - 1;
-        if(i >= 0) inc[i] += val;
-    }
-};
+```python
+class CustomStack:
+    def __init__(self, maxSize: int):
+        self.stack = []
+        self.inc = []
+        self.limit = maxSize
 
+    def push(self, x: int) -> None:
+        if len(self.stack) < self.limit:
+            self.stack.append(x)
+            self.inc.append(0)
 
-/**
- * Your CustomStack object will be instantiated and called as such:
- * CustomStack* obj = new CustomStack(maxSize);
- * obj->push(x);
- * int param_2 = obj->pop();
- * obj->increment(k,val);
- */
+    def pop(self) -> int:
+        if not self.stack:
+            return -1
+        i = len(self.stack) - 1
+        if i > 0:
+            self.inc[i - 1] += self.inc[i]
+        val = self.stack.pop() + self.inc[i]
+        self.inc.pop()
+        return val
+
+    def increment(self, k: int, val: int) -> None:
+        i = min(k, len(self.stack)) - 1
+        if i >= 0:
+            self.inc[i] += val
 ```
 
 ## Time Complexity Analysis
+> Time complexity  : O(1) for all operations
+>
+> Space complexity : O(n)

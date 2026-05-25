@@ -43,32 +43,24 @@ Constraints:
 - hashMap
 
 ## Code Implementation
-```c++
-class Solution {
-public:
-    int lengthOfLongestSubstring(string s) {
-        if(s.size() == 0) { return 0; }
-        vector<int> m(256, 0);
-        int l = 0;
-        int r = 0;
-        int ans = 1;
-        
-        while(r < s.size()){
-            m[s[r]] += 1;
-            while(m[s[r]] > 1){
-                m[s[l]]--;
-                l++;
-            }
-            ans = max(ans, r - l + 1);
-            r++;
-        }
+```python
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        seen = set()
+        l = 0
+        ans = 0
 
-        return ans;
-    }
-};
+        for r in range(len(s)):
+            while s[r] in seen:
+                seen.remove(s[l])
+                l += 1
+            seen.add(s[r])
+            ans = max(ans, r - l + 1)
+
+        return ans
 ```
 
 ## Time Complexity Analysis
 > Time complexity  : O(n)
 >
-> Space complexity : O(1)
+> Space complexity : O(1) — at most 128 ASCII characters in the set

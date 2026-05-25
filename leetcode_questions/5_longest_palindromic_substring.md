@@ -14,14 +14,6 @@ Example 1:
 >
 > Explanation: "aba" is also a valid answer.
 
-   b a b a d
- b 1
- a 1 1
- b 1 1 1
- a 1 1 1 1
- d 1 1 1 1 1
-
-
 Example 2:
 
 > Input: s = "cbbd"
@@ -37,39 +29,28 @@ Constraints:
 - dynamic programming
 
 ## Code Implementation
-```c++
-class Solution {
-public:     
-    string longestPalindrome(string s) {
-        vector<vector<int>> dp(s.size(), vector<int>(s.size(), 0));
-        int start = 0, end = 0, len = 1;
-        for(int i = 0;i < s.size();i++){
-            for(int j = 0;j < i + 1;j++){
-                dp[i][j] = 1;
-            }
-        }
-        
-        for(int i = s.size() - 1;i >= 0;i--){
-            for(int j = i + 1;j < s.size();j++){
-                if(s[i] == s[j]){
-                    dp[i][j] = dp[i + 1][j - 1];
-                    if(dp[i][j] == 1 && j -i + 1 > len){
-                        len = j - i + 1;
-                        start = i;
-                        end = j;
-                    }
-                }else{
-                    dp[i][j] = 0;
-                }
-            }
-        }
-        
-        return s.substr(start,end - start + 1);
-    }
-};
+```python
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        def expand(l: int, r: int) -> str:
+            while l >= 0 and r < len(s) and s[l] == s[r]:
+                l -= 1
+                r += 1
+            return s[l + 1:r]
+
+        res = ""
+        for i in range(len(s)):
+            odd = expand(i, i)
+            even = expand(i, i + 1)
+            if len(odd) > len(res):
+                res = odd
+            if len(even) > len(res):
+                res = even
+
+        return res
 ```
 
 ## Time Complexity Analysis
 > Time complexity  : O(n^2)
 >
-> Space complexity : O(n^2)
+> Space complexity : O(1)

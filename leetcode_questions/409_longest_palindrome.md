@@ -33,33 +33,21 @@ Constraints:
 - hashMap
 
 ## Code Implementation
-```c++
-class Solution {
-public:
-    int longestPalindrome(string s) {
-        unordered_map<char,int> map;
-        int ans = 0;
-        int odd = 0;
-        
-        for(auto i : s){
-            map[i]++;
-        }
-        
-        for(auto j = map.begin();j!=map.end();j++){
-            if(j->second % 2==0){
-                ans += j->second;
-            }else{
-                odd = 1;
-                ans += j->second - 1;
-            }
-        }
+```python
+from collections import Counter
 
-        return ans + odd;
-    }
-};
+class Solution:
+    def longestPalindrome(self, s: str) -> int:
+        ans = 0
+        has_odd = False
+        for count in Counter(s).values():
+            ans += count // 2 * 2
+            if count % 2 == 1:
+                has_odd = True
+        return ans + (1 if has_odd else 0)
 ```
 
 ## Time Complexity Analysis
 > Time complexity  : O(n)
 >
-> Space complexity : O(n)
+> Space complexity : O(1) — at most 52 uppercase/lowercase letters

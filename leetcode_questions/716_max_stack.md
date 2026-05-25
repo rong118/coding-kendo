@@ -1,7 +1,7 @@
-# 716 Max Stack
+# 716. Max Stack
 
 ## Question link
-> (https://leetcode.com/problems/max-stack/)
+(https://leetcode.com/problems/max-stack/)
 
 ## Question Description
 Design a max stack that supports push, pop, top, peekMax and popMax.
@@ -31,51 +31,43 @@ Note:
 - The last four operations won't be called when stack is empty.
 
 ## Tags
-stack
+- stack
 
 ## Code Implementation
-```c++
-class MaxStack {
-public:
-    /** initialize your data structure here. */
-    MaxStack() {}
-    
-    void push(int x) {
-        if (s2.empty() || s2.top() <= x) s2.push(x);
-        s1.push(x);
-    }
-    
-    int pop() {
-        if (!s2.empty() && s2.top() == s1.top()) s2.pop();
-        int t = s1.top(); s1.pop();
-        return t;
-    }
-    
-    int top() {
-        return s1.top();
-    }
-    
-    int peekMax() {
-        return s2.top();
-    }
-    
-    int popMax() {
-        int mx = s2.top();
-        stack<int> t;
-        while (s1.top() != s2.top()) {
-            t.push(s1.top()); s1.pop();
-        }
-        s1.pop(); s2.pop();
-        while (!t.empty()) {
-            push(t.top()); t.pop();
-        }
-        return mx;
-    }
+```python
+class MaxStack:
+    def __init__(self):
+        self.stack = []
+        self.max_stack = []
 
-private:
-    stack<int> s1, s2;
-};
+    def push(self, x: int) -> None:
+        self.stack.append(x)
+        if not self.max_stack or x >= self.max_stack[-1]:
+            self.max_stack.append(x)
+
+    def pop(self) -> int:
+        if self.stack[-1] == self.max_stack[-1]:
+            self.max_stack.pop()
+        return self.stack.pop()
+
+    def top(self) -> int:
+        return self.stack[-1]
+
+    def peekMax(self) -> int:
+        return self.max_stack[-1]
+
+    def popMax(self) -> int:
+        mx = self.max_stack.pop()
+        buf = []
+        while self.stack[-1] != mx:
+            buf.append(self.stack.pop())
+        self.stack.pop()
+        while buf:
+            self.push(buf.pop())
+        return mx
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
+> Time complexity  : O(1) for push, pop, top, peekMax; O(n) for popMax
+>
+> Space complexity : O(n)

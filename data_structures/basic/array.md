@@ -1,48 +1,42 @@
 # Array
 
-Array is a fundamental data structure that stores elements of the same data type in contiguous memory locations, allowing efficient random access to its elements by index.
+An array stores elements of the same type in contiguous memory, enabling O(1) random access by index.
 
-## Implementation
-### Python Example
+## Complexity
+
+| Operation | Time |
+|---|---|
+| Access | O(1) |
+| Insert / Delete at end | O(1) |
+| Insert / Delete in middle | O(n) — shifting elements |
+
+## Python Usage
+
+Python's `list` is a dynamic array that grows automatically.
+
 ```python
-numbers = [10, 20, 30, 40, 50]
-print(numbers[0], numbers[-1])  # Access
-numbers[2] = 35                 # Modify
-for num in numbers: print(num) # Iterate
+# Create
+nums = [10, 20, 30]
 
-numbers = [3, 6, 1, 8, 2]
-numbers.sort(); print(numbers)     # [1, 2, 3, 6, 8]
-numbers.reverse(); print(numbers) # [8, 6, 3, 2, 1]
-print(max(numbers), min(numbers), sum(numbers))
+# Access & modify
+nums[0], nums[-1]    # first & last
+nums[1] = 25          # update
+
+# Common operations
+nums.sort(); nums.reverse()
+max(nums); min(nums); sum(nums)
+
+# Dynamic resizing
+nums.append(40)       # O(1) amortized
+nums.pop()            # O(1)
+nums.remove(20)       # O(n)
 ```
 
-## Runtime Complexity
-- **Access**: O(1)
-- **Insert/Delete**: O(n) (O(1) at end)
+## Related LeetCode Questions
 
-## Dynamic Array
-
-A **dynamic array** (or resizable/growable array) supports **runtime resizing** while retaining key features like **random access** and **contiguous memory**.
-
-Unlike static arrays, it adjusts size automatically when capacity is exceeded by allocating more memory and copying existing elements.
-
-## Implementation
-### Python Example using List:
-```python
-dynamic_array = []
-dynamic_array.append(1)
-dynamic_array.append(2)
-dynamic_array.append(3)
-dynamic_array.remove(2)
-
-print(len(dynamic_array))  # 2
-print(" ".join(map(str, dynamic_array)))
-```
-
-## Leetcode Questions
 - [1. Two Sum](../../leetcode_questions/1_two_sum.md)
-- [15. Three Sum](../../leetcode_questions/15_three_sum.md)
-- [26. Remove Duplicates From Sorted Array](../../leetcode_questions/26_remove_duplicates_from_sorted_array.md)
+- [15. 3Sum](../../leetcode_questions/15_three_sum.md)
+- [26. Remove Duplicates from Sorted Array](../../leetcode_questions/26_remove_duplicates_from_sorted_array.md)
 - [27. Remove Element](../../leetcode_questions/27_remove_element.md)
 - [75. Sort Colors](../../leetcode_questions/75_sort_colors.md)
 - [169. Majority Element](../../leetcode_questions/169_majority_element.md)

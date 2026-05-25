@@ -4,7 +4,7 @@
 (https://leetcode.com/problems/valid-anagram/)
 
 ## Question Description
-GGiven two strings s and t, return true if t is an anagram of s, and false otherwise.
+Given two strings s and t, return true if t is an anagram of s, and false otherwise.
 
 An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
 
@@ -31,31 +31,17 @@ Constraints:
 - hashMap
 
 ## Code Implementation
-```c++
-class Solution {
-public:
-    bool isAnagram(string s, string t) {
-        if(s.size() != t.size()) return false;
-        vector<int> map(256, 0);
-        
-        for(int i = 0;i < s.size();i++){
-            map[s[i]]++;
-        }
-        
-        for(int i = 0;i < t.size();i++){
-            if(map[t[i]] <= 0) 
-                return false;
-            else{
-                map[t[i]]--;
-            }
-        }
-        
-        return true;
-    }
-};
+```python
+from collections import Counter
+
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        if len(s) != len(t):
+            return False
+        return Counter(s) == Counter(t)
 ```
 
 ## Time Complexity Analysis
 > Time complexity  : O(n)
 >
-> Space complexity : O(1)
+> Space complexity : O(1) — at most 26 lowercase letters

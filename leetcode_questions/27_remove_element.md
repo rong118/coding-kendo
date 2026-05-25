@@ -47,9 +47,9 @@ Constraints:
 
 ## Code Implementation
 ```python
-def removeElement(A, val)
+def removeElement(A, val):
     i = 0
-    foreach j in range(0, len(A)):
+    for j in range(len(A)):
         if A[j] != val:
             A[i] = A[j]
             i += 1

@@ -1,7 +1,7 @@
-# 155 Min Stack
+# 155. Min Stack
 
 ## Question link
-> (https://leetcode.com/problems/min-stack/)
+(https://leetcode.com/problems/min-stack/)
 
 ## Question Description
 Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
@@ -41,36 +41,30 @@ Constraints:
 - stack
 
 ## Code Implementation
-```c++
-class MinStack {
-private:
-    stack<int> mStk;   //keep input number
-    stack<int> mMinStk; //trace minium number for each input;
+```python
+class MinStack:
+    def __init__(self):
+        self.stack = []
+        self.min_stack = []
 
-public:
-    void push(int x) {
-        mStk.push(x);
-        if(mMinStk.empty() || x <= mMinStk.top()){
-            mMinStk.push(x);
-        }
-    }
+    def push(self, val: int) -> None:
+        self.stack.append(val)
+        if not self.min_stack or val <= self.min_stack[-1]:
+            self.min_stack.append(val)
 
-    void pop() {
-        if(mStk.top() <= mMinStk.top()){
-            mMinStk.pop();
-        }
-        mStk.pop();
-    }
+    def pop(self) -> None:
+        if self.stack[-1] == self.min_stack[-1]:
+            self.min_stack.pop()
+        self.stack.pop()
 
-    int top() {
-        return mStk.top();
-    }
+    def top(self) -> int:
+        return self.stack[-1]
 
-    int getMin() {
-        return mMinStk.top();
-    }
-};
+    def getMin(self) -> int:
+        return self.min_stack[-1]
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
+> Time complexity  : O(1) for all operations
+>
+> Space complexity : O(n)
