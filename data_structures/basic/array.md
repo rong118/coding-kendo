@@ -34,11 +34,10 @@ nums.remove(20)       # O(n)
 
 ## Related LeetCode Questions
 
-- [1. Two Sum](../../leetcode_questions/1_two_sum.md)
-- [15. 3Sum](../../leetcode_questions/15_three_sum.md)
-- [26. Remove Duplicates from Sorted Array](../../leetcode_questions/26_remove_duplicates_from_sorted_array.md)
-- [27. Remove Element](../../leetcode_questions/27_remove_element.md)
-- [75. Sort Colors](../../leetcode_questions/75_sort_colors.md)
-- [169. Majority Element](../../leetcode_questions/169_majority_element.md)
-- [217. Contains Duplicate](../../leetcode_questions/217_contain_duplicate.md)
-- [238. Product of Array Except Self](../../leetcode_questions/238_product_of_array_except_self.md)
+| # | Problem | Technique |
+|---|---------|-----------|
+| 26 | [Remove Duplicates from Sorted Array](../../leetcode_questions/26_remove_duplicates_from_sorted_array.md) | In-place overwrite with write pointer |
+| 48 | [Rotate Image](../../leetcode_questions/48_rotate_image.md) | 2D transpose + reverse |
+| 88 | [Merge Sorted Array](../../leetcode_questions/88_merge_sorted_array.md) | Fill from end |
+| 189 | [Rotate Array](../../leetcode_questions/189_rotate_array.md) | Three-reversal in-place rotation |
+| 448 | [Find All Numbers Disappeared in an Array](../../leetcode_questions/448_find_all_numbers_disappeared_in_an_array.md) | Values as indices / in-place marking |
