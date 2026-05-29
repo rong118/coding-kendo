@@ -1,0 +1,16 @@
+{
+  "name": "coding-kendo",
+  "version": "1.0.0",
+  "description": "Explore data structures, algorithms, and complexity analysis. Plus a curated set of interview coding questions.",
+  "main": "index.js",
+  "scripts": {
+    "docsify": "docsify serve . --port 3000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "docsify-cli": "^4.4.4"
+  }
+}
