@@ -6,25 +6,26 @@
 ## Question Description
 Design your implementation of the circular double-ended queue (deque).
 
-Implement the MyCircularDeque class:
+Implement the `MyCircularDeque` class:
 
-- MyCircularDeque(int k) Initializes the deque with a maximum size of k.
-- boolean insertFront() Adds an item at the front of Deque. Returns true if the operation is successful, or false otherwise.
-- boolean insertLast() Adds an item at the rear of Deque. Returns true if the operation is successful, or false otherwise.
-- boolean deleteFront() Deletes an item from the front of Deque. Returns true if the operation is successful, or false otherwise.
-- boolean deleteLast() Deletes an item from the rear of Deque. Returns true if the operation is successful, or false otherwise.
-- int getFront() Returns the front item from the Deque. Returns -1 if the deque is empty.
-- int getRear() Returns the last item from Deque. Returns -1 if the deque is empty.
-- boolean isEmpty() Returns true if the deque is empty, or false otherwise.
-- boolean isFull() Returns true if the deque is full, or false otherwise.
+* `MyCircularDeque(int k)` Initializes the deque with a maximum size of `k`.
+* `boolean insertFront()` Adds an item at the front of Deque. Returns `true` if the operation is successful, or `false` otherwise.
+* `boolean insertLast()` Adds an item at the rear of Deque. Returns `true` if the operation is successful, or `false` otherwise.
+* `boolean deleteFront()` Deletes an item from the front of Deque. Returns `true` if the operation is successful, or `false` otherwise.
+* `boolean deleteLast()` Deletes an item from the rear of Deque. Returns `true` if the operation is successful, or `false` otherwise.
+* `int getFront()` Returns the front item from the Deque. Returns `-1` if the deque is empty.
+* `int getRear()` Returns the last item from Deque. Returns `-1` if the deque is empty.
+* `boolean isEmpty()` Returns `true` if the deque is empty, or `false` otherwise.
+* `boolean isFull()` Returns `true` if the deque is full, or `false` otherwise.
 
-Example
+Example 1:
+
 > Input
 > ["MyCircularDeque", "insertLast", "insertLast", "insertFront", "insertFront", "getRear", "isFull", "deleteLast", "insertFront", "getFront"]
 > [[3], [1], [2], [3], [4], [], [], [], [4], []]
 > Output
 > [null, true, true, true, false, 2, true, true, true, 4]
-> 
+>
 > Explanation
 > MyCircularDeque myCircularDeque = new MyCircularDeque(3);
 > myCircularDeque.insertLast(1);  // return True
@@ -38,97 +39,70 @@ Example
 > myCircularDeque.getFront();     // return 4
 
 Constraints:
-- 1 <= k <= 1000
-- 0 <= value <= 1000
-- At most 2000 calls will be made to insertFront, insertLast, deleteFront, deleteLast, getFront, getRear, isEmpty, isFull.
+
+* 1 <= k <= 1000
+* 0 <= value <= 1000
+* At most 2000 calls will be made to `insertFront`, `insertLast`, `deleteFront`, `deleteLast`, `getFront`, `getRear`, `isEmpty`, `isFull`.
 
 ## Tags
 - queue
-- array point
 
 ## Code Implementation
-```c++
-class MyCircularDeque {
-public:
-    vector<int> q;
-    int front, rear, size;
-    MyCircularDeque(int k) {
-        q.resize(k);
-        front = 0;
-        rear = -1;
-        size = 0;
-    }
-    
-    bool insertFront(int value) {
-        if(!isFull()){
-            if(--front < 0) front += q.size();
-            q[front] = value;
-            size++;
-            if(size == 1) {rear = front};
-            return true;
-        }
-        return false;
-    }
-    
-    bool insertLast(int value) {
-        if(!isFull()){
-            rear = (rear + 1) % q.size();
-            q[rear] = value;
-            size++;
-            return true;
-        }
+```python
+class MyCircularDeque:
+    def __init__(self, k: int):
+        self.q = [0] * k
+        self.front = 0
+        self.rear = -1
+        self.size = 0
+        self.capacity = k
 
-        return false;
-    }
-    
-    bool deleteFront() {
-        if(!isEmpty()){
-            front = (front + 1) % q.size();
-            size--;
-            return true;
-        }
-        return false;
-    }
-    
-    bool deleteLast() {
-        if(!isEmpty()){
-            if(--rear < 0) rear += q.size();
-            size--;
-            return true;
-        }
+    def insertFront(self, value: int) -> bool:
+        if self.isFull():
+            return False
+        self.front = (self.front - 1) % self.capacity
+        self.q[self.front] = value
+        self.size += 1
+        if self.size == 1:
+            self.rear = self.front
+        return True
 
-        return false;
-    }
-    
-    int getFront() {
-        return isEmpty() ? -1 : q[front];
-    }
-    
-    int getRear() {
-        return isEmpty() ? -1 : q[rear];
-    }
-    
-    bool isEmpty() {
-        return size == 0;
-    }
-    
-    bool isFull() {
-        return size == q.size();
-    }
-};
+    def insertLast(self, value: int) -> bool:
+        if self.isFull():
+            return False
+        self.rear = (self.rear + 1) % self.capacity
+        self.q[self.rear] = value
+        self.size += 1
+        return True
 
-/**
- * Your MyCircularDeque object will be instantiated and called as such:
- * MyCircularDeque* obj = new MyCircularDeque(k);
- * bool param_1 = obj->insertFront(value);
- * bool param_2 = obj->insertLast(value);
- * bool param_3 = obj->deleteFront();
- * bool param_4 = obj->deleteLast();
- * int param_5 = obj->getFront();
- * int param_6 = obj->getRear();
- * bool param_7 = obj->isEmpty();
- * bool param_8 = obj->isFull();
- */
+    def deleteFront(self) -> bool:
+        if self.isEmpty():
+            return False
+        self.front = (self.front + 1) % self.capacity
+        self.size -= 1
+        return True
+
+    def deleteLast(self) -> bool:
+        if self.isEmpty():
+            return False
+        self.rear = (self.rear - 1) % self.capacity
+        self.size -= 1
+        return True
+
+    def getFront(self) -> int:
+        return -1 if self.isEmpty() else self.q[self.front]
+
+    def getRear(self) -> int:
+        return -1 if self.isEmpty() else self.q[self.rear]
+
+    def isEmpty(self) -> bool:
+        return self.size == 0
+
+    def isFull(self) -> bool:
+        return self.size == self.capacity
 ```
 
 ## Time Complexity Analysis
+> Time complexity  : O(1) for all operations
+>
+> Space complexity : O(k) — fixed-size array for ring buffer

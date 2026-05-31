@@ -29,8 +29,7 @@ A data structure defines how data is organized and stored in memory. Choosing th
 - [Array](./data_structures/basic/array.md) ✅
 - [String](./data_structures/basic/string.md) ✅
 - [Linked List](./data_structures/basic/linkedlist.md) ✅
-- [Stack](./data_structures/basic/stack.md) ✅
-- [Queue](./data_structures/basic/queue.md) ✅
+- [Stack & Queue](./data_structures/basic/stack_queue.md) ✅
 - [Heap (PriorityQueue)](./data_structures/basic/heap.md) ✅
 - [Hashing](./data_structures/basic/hashtable.md) ✅
 - [TreeMap & TreeSet](./data_structures/basic/treemap.md) ✅

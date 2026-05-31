@@ -8,25 +8,26 @@ Design your implementation of the circular queue. The circular queue is a linear
 
 One of the benefits of the circular queue is that we can make use of the spaces in front of the queue. In a normal queue, once the queue becomes full, we cannot insert the next element even if there is a space in front of the queue. But using the circular queue, we can use the space to store new values.
 
-Implementation the MyCircularQueue class:
+Implement the `MyCircularQueue` class:
 
-- MyCircularQueue(k) Initializes the object with the size of the queue to be k.
-- int Front() Gets the front item from the queue. If the queue is empty, return -1.
-- int Rear() Gets the last item from the queue. If the queue is empty, return -1.
-- boolean enQueue(int value) Inserts an element into the circular queue. Return true if the operation is successful.
-- boolean deQueue() Deletes an element from the circular queue. Return true if the operation is successful.
-- boolean isEmpty() Checks whether the circular queue is empty or not.
-- boolean isFull() Checks whether the circular queue is full or not.
+* `MyCircularQueue(k)` Initializes the object with the size of the queue to be `k`.
+* `int Front()` Gets the front item from the queue. If the queue is empty, return `-1`.
+* `int Rear()` Gets the last item from the queue. If the queue is empty, return `-1`.
+* `boolean enQueue(int value)` Inserts an element into the circular queue. Return `true` if the operation is successful.
+* `boolean deQueue()` Deletes an element from the circular queue. Return `true` if the operation is successful.
+* `boolean isEmpty()` Checks whether the circular queue is empty or not.
+* `boolean isFull()` Checks whether the circular queue is full or not.
 
-You must solve the problem without using the built-in queue data structure in your programming language. 
+You must solve the problem **without** using the built-in queue data structure in your programming language.
 
-Example
+Example 1:
+
 > Input
 > ["MyCircularQueue", "enQueue", "enQueue", "enQueue", "enQueue", "Rear", "isFull", "deQueue", "enQueue", "Rear"]
 > [[3], [1], [2], [3], [4], [], [], [], [4], []]
 > Output
 > [null, true, true, true, false, 3, true, true, true, 4]
-> 
+>
 > Explanation
 > MyCircularQueue myCircularQueue = new MyCircularQueue(3);
 > myCircularQueue.enQueue(1); // return True
@@ -40,77 +41,53 @@ Example
 > myCircularQueue.Rear();     // return 4
 
 Constraints:
-- 1 <= k <= 1000
-- 0 <= value <= 1000
--  At most 3000 calls will be made to enQueue, deQueue, Front, Rear, isEmpty, and isFull.
+
+* 1 <= k <= 1000
+* 0 <= value <= 1000
+* At most 3000 calls will be made to `enQueue`, `deQueue`, `Front`, `Rear`, `isEmpty`, and `isFull`.
 
 ## Tags
 - queue
-- linkedlist
 
 ## Code Implementation
-```c++
-class MyCircularQueue {
-public:
-    vector<int> q;
-    int front, rear, size;
-    MyCircularQueue(int k) {
-        q.resize(k);
-        front = 0;
-        rear = -1;
-        size = 0;
-    }
-    
-    bool enQueue(int value) {
-        if(!isFull()){
-            rear = (rear + 1) % q.size();
-            q[rear] = value;
-            size++;
-            return true;
-        }
+```python
+class MyCircularQueue:
+    def __init__(self, k: int):
+        self.q = [0] * k
+        self.front = 0
+        self.rear = -1
+        self.size = 0
+        self.capacity = k
 
-        return false;
-    }
-    
-    bool deQueue() {
-        if(!isEmpty()){
-            front = (front + 1) % q.size();
-            size--;
-            return true;
-        }
-        return false;
-    }
-    
-    int Front() {
-        return isEmpty() ? -1 : q[front];
-    }
-    
-    int Rear() {
-        return isEmpty() ? -1 : q[rear];
-    }
-    
-    bool isEmpty() {
-        return size == 0;
-    }
-    
-    bool isFull() {
-        return size == q.size();
-    }
-};
+    def enQueue(self, value: int) -> bool:
+        if self.isFull():
+            return False
+        self.rear = (self.rear + 1) % self.capacity
+        self.q[self.rear] = value
+        self.size += 1
+        return True
 
-/**
- * Your MyCircularQueue object will be instantiated and called as such:
- * MyCircularQueue* obj = new MyCircularQueue(k);
- * bool param_1 = obj->enQueue(value);
- * bool param_2 = obj->deQueue();
- * int param_3 = obj->Front();
- * int param_4 = obj->Rear();
- * bool param_5 = obj->isEmpty();
- * bool param_6 = obj->isFull();
- */
+    def deQueue(self) -> bool:
+        if self.isEmpty():
+            return False
+        self.front = (self.front + 1) % self.capacity
+        self.size -= 1
+        return True
+
+    def Front(self) -> int:
+        return -1 if self.isEmpty() else self.q[self.front]
+
+    def Rear(self) -> int:
+        return -1 if self.isEmpty() else self.q[self.rear]
+
+    def isEmpty(self) -> bool:
+        return self.size == 0
+
+    def isFull(self) -> bool:
+        return self.size == self.capacity
 ```
 
-## followup 
-- mutithread => c++ mutex
-
 ## Time Complexity Analysis
+> Time complexity  : O(1) for all operations
+>
+> Space complexity : O(k) — fixed-size array for ring buffer
