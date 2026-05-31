@@ -52,7 +52,9 @@ while not pq.empty():
 
 ## Related LeetCode Questions
 
-- [23. Merge k Sorted Lists](../../leetcode_questions/23_merge_k_sorted_lists.md)
-- [215. Kth Largest Element in an Array](../../leetcode_questions/215_Kth_Largest_Element_in_an_Array.md)
-- [347. Top K Frequent Elements](../../leetcode_questions/347_top_k_frequent_elements.md)
-- [912. Sort an Array](../../leetcode_questions/912_sort_an_array.md)
+| # | Problem | Technique |
+|---|---------|-----------|
+| 23 | [Merge k Sorted Lists](../../leetcode_questions/23_merge_k_sorted_lists.md) | Min-heap of k list heads |
+| 215 | [Kth Largest Element in an Array](../../leetcode_questions/215_kth_largest_element_in_an_array.md) | Min-heap of size k for top-k selection |
+| 347 | [Top K Frequent Elements](../../leetcode_questions/347_top_k_frequent_elements.md) | Min-heap of size k with frequency |
+| 703 | [Kth Largest Element in a Stream](../../leetcode_questions/703_kth_largest_element_in_a_stream.md) | Streaming min-heap of size k |
