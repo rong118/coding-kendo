@@ -40,10 +40,10 @@ f"My name is {name} and I am {age} years old."
 
 ## Related LeetCode Questions
 
-| # | Problem | Technique |
-|---|---------|-----------|
-| 14 | [Longest Common Prefix](../../leetcode_questions/14_longest_common_prefix.md) | Horizontal character scan |
-| 28 | [Find the Index of the First Occurrence in a String](../../leetcode_questions/28_find_the_index_of_the_first_occurrence_in_a_string.md) | Substring search |
-| 58 | [Length of Last Word](../../leetcode_questions/58_length_of_last_word.md) | Reverse string traversal |
-| 151 | [Reverse Words in a String](../../leetcode_questions/151_reverse_words_in_a_string.md) | Split, reverse, join |
-| 344 | [Reverse String](../../leetcode_questions/344_reverse_string.md) | Two-pointer in-place swap |
+| # | Problem | Difficulty | Technique |
+|---|---------|------------|-----------|
+| 14 | [Longest Common Prefix](../../leetcode_questions/14_longest_common_prefix.md) | Easy | Horizontal character scan |
+| 28 | [Find the Index of the First Occurrence in a String](../../leetcode_questions/28_find_the_index_of_the_first_occurrence_in_a_string.md) | Easy | Substring search |
+| 58 | [Length of Last Word](../../leetcode_questions/58_length_of_last_word.md) | Easy | Reverse string traversal |
+| 151 | [Reverse Words in a String](../../leetcode_questions/151_reverse_words_in_a_string.md) | Medium | Split, reverse, join |
+| 344 | [Reverse String](../../leetcode_questions/344_reverse_string.md) | Easy | Two-pointer in-place swap |

@@ -61,16 +61,16 @@ dq.rotate(2)                    # rotate right by 2
 
 ### Stack
 
-| # | Problem | Technique |
-|---|---------|-----------|
-| 155 | [Min Stack](../../leetcode_questions/155_min_stack.md) | Auxiliary min-stack tracking |
-| 225 | [Implement Stack using Queues](../../leetcode_questions/225_implement_stack_using_queue.md) | Single-queue rotation |
-| 1381 | [Design a Stack With Increment Operation](../../leetcode_questions/1381_design_a_stack_with_increment_operation.md) | Lazy increment array |
+| # | Problem | Difficulty | Technique |
+|---|---------|------------|-----------|
+| 155 | [Min Stack](../../leetcode_questions/155_min_stack.md) | Medium | Auxiliary min-stack tracking |
+| 225 | [Implement Stack using Queues](../../leetcode_questions/225_implement_stack_using_queue.md) | Easy | Single-queue rotation |
+| 1381 | [Design a Stack With Increment Operation](../../leetcode_questions/1381_design_a_stack_with_increment_operation.md) | Medium | Lazy increment array |
 
 ### Queue
 
-| # | Problem | Technique |
-|---|---------|-----------|
-| 232 | [Implement Queue using Stacks](../../leetcode_questions/232_implement_queue_using_stacks.md) | Two-stack transfer |
-| 622 | [Design Circular Queue](../../leetcode_questions/622_design_circular_queue.md) | Ring buffer with modulo arithmetic |
-| 641 | [Design Circular Deque](../../leetcode_questions/641_design_circular_deque.md) | Circular array with front/rear pointers |
+| # | Problem | Difficulty | Technique |
+|---|---------|------------|-----------|
+| 232 | [Implement Queue using Stacks](../../leetcode_questions/232_implement_queue_using_stacks.md) | Easy | Two-stack transfer |
+| 622 | [Design Circular Queue](../../leetcode_questions/622_design_circular_queue.md) | Medium | Ring buffer with modulo arithmetic |
+| 641 | [Design Circular Deque](../../leetcode_questions/641_design_circular_deque.md) | Medium | Circular array with front/rear pointers |

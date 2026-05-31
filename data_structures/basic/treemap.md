@@ -25,7 +25,7 @@ del tm['a']
 
 ## Related LeetCode Questions
 
-| # | Problem | Technique |
-|---|---------|-----------|
-| 729 | [My Calendar I](../../leetcode_questions/729_my_calendar_i.md) | SortedDict for floor/ceiling collision check |
-| 981 | [Time Based Key-Value Store](../../leetcode_questions/981_time_based_key_value_store.md) | SortedDict with bisect for floor key lookup |
+| # | Problem | Difficulty | Technique |
+|---|---------|------------|-----------|
+| 729 | [My Calendar I](../../leetcode_questions/729_my_calendar_i.md) | Medium | SortedDict for floor/ceiling collision check |
+| 981 | [Time Based Key-Value Store](../../leetcode_questions/981_time_based_key_value_store.md) | Medium | SortedDict with bisect for floor key lookup |

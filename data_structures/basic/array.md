@@ -34,10 +34,10 @@ nums.remove(20)       # O(n)
 
 ## Related LeetCode Questions
 
-| # | Problem | Technique |
-|---|---------|-----------|
-| 26 | [Remove Duplicates from Sorted Array](../../leetcode_questions/26_remove_duplicates_from_sorted_array.md) | In-place overwrite with write pointer |
-| 48 | [Rotate Image](../../leetcode_questions/48_rotate_image.md) | 2D transpose + reverse |
-| 88 | [Merge Sorted Array](../../leetcode_questions/88_merge_sorted_array.md) | Fill from end |
-| 189 | [Rotate Array](../../leetcode_questions/189_rotate_array.md) | Three-reversal in-place rotation |
-| 448 | [Find All Numbers Disappeared in an Array](../../leetcode_questions/448_find_all_numbers_disappeared_in_an_array.md) | Values as indices / in-place marking |
+| # | Problem | Difficulty | Technique |
+|---|---------|------------|-----------|
+| 26 | [Remove Duplicates from Sorted Array](../../leetcode_questions/26_remove_duplicates_from_sorted_array.md) | Easy | In-place overwrite with write pointer |
+| 48 | [Rotate Image](../../leetcode_questions/48_rotate_image.md) | Medium | 2D transpose + reverse |
+| 88 | [Merge Sorted Array](../../leetcode_questions/88_merge_sorted_array.md) | Easy | Fill from end |
+| 189 | [Rotate Array](../../leetcode_questions/189_rotate_array.md) | Medium | Three-reversal in-place rotation |
+| 448 | [Find All Numbers Disappeared in an Array](../../leetcode_questions/448_find_all_numbers_disappeared_in_an_array.md) | Easy | Values as indices / in-place marking |

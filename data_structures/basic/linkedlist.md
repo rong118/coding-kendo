@@ -56,29 +56,39 @@ class LinkedList:
 ## Related LeetCode Questions
 
 ### Reversal
-- [206. Reverse Linked List](../../leetcode_questions/206_reverse_linked_list.md)
-- [92. Reverse Linked List II](../../leetcode_questions/92_reverse_linked_list_II.md)
-- [25. Reverse Nodes in K-Group](../../leetcode_questions/25_reverse_nodes_in_k_group.md)
+| # | Problem | Difficulty |
+|---|---------|------------|
+| 206 | [Reverse Linked List](../../leetcode_questions/206_reverse_linked_list.md) | Easy |
+| 92 | [Reverse Linked List II](../../leetcode_questions/92_reverse_linked_list_II.md) | Medium |
+| 25 | [Reverse Nodes in K-Group](../../leetcode_questions/25_reverse_nodes_in_k_group.md) | Hard |
 
 ### Merge
-- [2. Add Two Numbers](../../leetcode_questions/2_add_two_numbers.md)
-- [445. Add Two Numbers II](../../leetcode_questions/445_add_two_numbers_II.md)
-- [21. Merge Two Sorted Lists](../../leetcode_questions/21_merge_two_sorted_lists.md)
-- [23. Merge k Sorted Lists](../../leetcode_questions/23_merge_k_sorted_lists.md)
+| # | Problem | Difficulty |
+|---|---------|------------|
+| 21 | [Merge Two Sorted Lists](../../leetcode_questions/21_merge_two_sorted_lists.md) | Easy |
+| 2 | [Add Two Numbers](../../leetcode_questions/2_add_two_numbers.md) | Medium |
+| 445 | [Add Two Numbers II](../../leetcode_questions/445_add_two_numbers_II.md) | Medium |
+| 23 | [Merge k Sorted Lists](../../leetcode_questions/23_merge_k_sorted_lists.md) | Hard |
 
 ### Cycle Detection
-- [141. Linked List Cycle](../../leetcode_questions/141_linked_list_cycle.md)
-- [142. Linked List Cycle II](../../leetcode_questions/142_linked_list_cycle_II.md)
-- [160. Intersection of Two Linked Lists](../../leetcode_questions/160_intersection_of_two_linked_lists.md)
+| # | Problem | Difficulty |
+|---|---------|------------|
+| 141 | [Linked List Cycle](../../leetcode_questions/141_linked_list_cycle.md) | Easy |
+| 160 | [Intersection of Two Linked Lists](../../leetcode_questions/160_intersection_of_two_linked_lists.md) | Easy |
+| 142 | [Linked List Cycle II](../../leetcode_questions/142_linked_list_cycle_II.md) | Medium |
 
 ### Deletion
-- [203. Remove Linked List Elements](../../leetcode_questions/203_remove_linked_list_elements.md)
-- [83. Remove Duplicates from Sorted List](../../leetcode_questions/83_remove_duplicates_from_sorted_list.md)
-- [82. Remove Duplicates from Sorted List II](../../leetcode_questions/82_remove_duplicates_from_sorted_list_II.md)
-- [19. Remove Nth Node From End of List](../../leetcode_questions/19_remove_Nth_node_from_end_of_list.md)
-- [1171. Remove Zero Sum Consecutive Nodes from Linked List](../../leetcode_questions/1171_remove_zero_sum_consecutive_nodes_from_linkedlist.md)
+| # | Problem | Difficulty |
+|---|---------|------------|
+| 203 | [Remove Linked List Elements](../../leetcode_questions/203_remove_linked_list_elements.md) | Easy |
+| 83 | [Remove Duplicates from Sorted List](../../leetcode_questions/83_remove_duplicates_from_sorted_list.md) | Easy |
+| 82 | [Remove Duplicates from Sorted List II](../../leetcode_questions/82_remove_duplicates_from_sorted_list_II.md) | Medium |
+| 19 | [Remove Nth Node From End of List](../../leetcode_questions/19_remove_Nth_node_from_end_of_list.md) | Medium |
+| 1171 | [Remove Zero Sum Consecutive Nodes from Linked List](../../leetcode_questions/1171_remove_zero_sum_consecutive_nodes_from_linkedlist.md) | Medium |
 
 ### Other
-- [234. Palindrome Linked List](../../leetcode_questions/234_palindrome_linked_list.md)
-- [138. Copy List with Random Pointer](../../leetcode_questions/138_copy_list_with_random_pointer.md)
-- [426. Convert Binary Search Tree to Sorted Doubly Linked List](../../leetcode_questions/426_convert_binary_search_tree_to_sorted_doubly_linked_list.md)
+| # | Problem | Difficulty |
+|---|---------|------------|
+| 234 | [Palindrome Linked List](../../leetcode_questions/234_palindrome_linked_list.md) | Easy |
+| 138 | [Copy List with Random Pointer](../../leetcode_questions/138_copy_list_with_random_pointer.md) | Medium |
+| 426 | [Convert Binary Search Tree to Sorted Doubly Linked List](../../leetcode_questions/426_convert_binary_search_tree_to_sorted_doubly_linked_list.md) | Medium |

@@ -41,9 +41,9 @@ len(s); s.clear()
 
 ## Related LeetCode Questions
 
-| # | Problem | Technique |
-|---|---------|-----------|
-| 1 | [Two Sum](../../leetcode_questions/1_two_sum.md) | Hash map for complement lookup |
-| 49 | [Group Anagrams](../../leetcode_questions/49_group_anagrams.md) | Hash map keyed by sorted string |
-| 128 | [Longest Consecutive Sequence](../../leetcode_questions/128_longest_consecutive_sequence.md) | Hash set for O(1) neighbor search |
-| 217 | [Contains Duplicate](../../leetcode_questions/217_contain_duplicate.md) | Hash set for membership test |
+| # | Problem | Difficulty | Technique |
+|---|---------|------------|-----------|
+| 1 | [Two Sum](../../leetcode_questions/1_two_sum.md) | Easy | Hash map for complement lookup |
+| 49 | [Group Anagrams](../../leetcode_questions/49_group_anagrams.md) | Medium | Hash map keyed by sorted string |
+| 128 | [Longest Consecutive Sequence](../../leetcode_questions/128_longest_consecutive_sequence.md) | Medium | Hash set for O(1) neighbor search |
+| 217 | [Contains Duplicate](../../leetcode_questions/217_contain_duplicate.md) | Easy | Hash set for membership test |
