@@ -68,8 +68,7 @@ class LinkedList:
 
 ### Cycle Detection
 - [141. Linked List Cycle](../../leetcode_questions/141_linked_list_cycle.md)
-- [142. Linked List Cycle II](../../leetcode_questions/142_linked_list_cycle.md)
-- [287. Find the Duplicate Number](../../leetcode_questions/287_find_the_duplicate_number.md)
+- [142. Linked List Cycle II](../../leetcode_questions/142_linked_list_cycle_II.md)
 - [160. Intersection of Two Linked Lists](../../leetcode_questions/160_intersection_of_two_linked_lists.md)
 
 ### Deletion
