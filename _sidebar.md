@@ -10,8 +10,7 @@
   - [Array](data_structures/basic/array.md)
   - [String](data_structures/basic/string.md)
   - [Linked List](data_structures/basic/linkedlist.md)
-  - [Stack](data_structures/basic/stack.md)
-  - [Queue](data_structures/basic/queue.md)
+  - [Stack & Queue](data_structures/basic/stack_queue.md)
   - [Heap (PriorityQueue)](data_structures/basic/heap.md)
   - [Hashing](data_structures/basic/hashtable.md)
   - [TreeMap & TreeSet](data_structures/basic/treemap.md)
@@ -29,27 +28,27 @@
   - [BFS & DFS](data_structures/graph/graph_search.md)
   - [Topological Sort](data_structures/graph/topological_sort.md)
   - [Shortest Path](data_structures/graph/shortest_path.md)
-  - [Minimum Spanning Tree](data_structures/graph/mst.md)
+  - [Minimum Spanning Tree](data_structures/graph/minimum_spanning_tree.md)
 
 - Advance
   - [Trie](data_structures/advance/trie.md)
   - [Union Find](data_structures/advance/union_find.md)
-  - [Binary Indexed Tree](data_structures/advance/bit.md)
+  - [Binary Indexed Tree](data_structures/advance/binary_index_tree.md)
   - [Segment Tree](data_structures/advance/segment_tree.md)
 
 - **III. Algorithms**
 
 - Basic
-  - [Sorting Algorithms](algorithms/basic/sorting.md)
-  - [Search Algorithms](algorithms/basic/searching.md)
+  - [Sorting Algorithms](algorithms/basic/sort_algorithms.md)
+  - [Search Algorithms](algorithms/basic/search_algorithms.md)
 
 - Others
   - [Brute Force](algorithms/others/bruteforce.md)
   - [Backtracking](algorithms/others/backtracking.md)
   - [Recursion](algorithms/others/recursion.md)
-  - [Divide & Conquer](algorithms/others/divideandconquer.md)
-  - [Two Pointers](algorithms/others/twopointers.md)
-  - [Sliding Window](algorithms/others/slidingwindow.md)
+  - [Divide & Conquer](algorithms/others/divide_and_conque.md)
+  - [Two Pointers](algorithms/others/two_pointers.md)
+  - [Sliding Window](algorithms/others/sliding_window.md)
   - [Greedy](algorithms/others/greedy.md)
-  - [Dynamic Programming](algorithms/others/dynamicprogramming.md)
+  - [Dynamic Programming](algorithms/others/dynamic_programming.md)
   - [Math](algorithms/others/math.md)
