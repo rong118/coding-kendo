@@ -1,5 +1,7 @@
 # 297. Serialize and Deserialize Binary Tree
 
+**Difficulty:** 🔴 Hard
+
 ## Question link
 (https://leetcode.com/problems/serialize-and-deserialize-binary-tree/)
 
@@ -44,63 +46,66 @@ Constraints:
 ## Tags
 - tree
 
+## Approach
+**Key idea:** A preorder traversal that also writes a marker (`#`) for every missing child describes the tree exactly, so it can be read back in the same order without ambiguity.
+
+1. `serialize`: do a preorder DFS, writing the node value, or `#` for `None`.
+2. Join the tokens with a delimiter (`,`).
+3. `deserialize`: split the string into tokens and read them through an iterator.
+4. Read the next token: `#` means `None`; otherwise create a node, then build its left subtree, then its right subtree.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
-class Codec {
-public:
-    int idx = 0;
-    // Encodes a tree to a single string.
-    string serialize(TreeNode* root) {
-        if(root == NULL) return "#";
-        return to_string(root->val) + "/" + serialize(root->left) + "/" + serialize(root->right); 
-    }
+```python
+from typing import Optional
 
-    // Decodes your encoded data to tree.
-    TreeNode* deserialize(string data) {
-        // cout<< data <<endl;
-        vector<string> m;
-        
-        _split(data, m, '/');
-        return _helper(m);
-    }
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
 
-    // c++ pain point + 1 vs python/java
-    void _split(const std::string& str,  vector<string>& cont, char delim = '/'){
-        std::size_t current, previous = 0;
-        current = str.find(delim);
-        while (current != std::string::npos) {
-            cont.push_back(str.substr(previous, current - previous));
-            previous = current + 1;
-            current = str.find(delim, previous);
-        }
-        cont.push_back(str.substr(previous, current - previous));
-    }
+class Codec:
+    def serialize(self, root: Optional[TreeNode]) -> str:
+        out = []
 
-    TreeNode* _helper(vector<string>& m){
-        string s = m[idx++];
-        TreeNode* root = NULL;
-        if(s != "#") {
-            root = new TreeNode(stoi(s));
-            root->left  = _helper(m);
-            root->right = _helper(m);
-        }
+        def dfs(node: Optional[TreeNode]) -> None:
+            if node is None:
+                out.append('#')
+                return
+            out.append(str(node.val))
+            dfs(node.left)
+            dfs(node.right)
 
-        return root;
-    }
-};
+        dfs(root)
+        return ','.join(out)
 
-// Your Codec object will be instantiated and called as such:
-// Codec ser, deser;
-// TreeNode* ans = deser.deserialize(ser.serialize(root));
+    def deserialize(self, data: str) -> Optional[TreeNode]:
+        tokens = iter(data.split(','))
+
+        def build() -> Optional[TreeNode]:
+            tok = next(tokens)
+            if tok == '#':
+                return None
+            node = TreeNode(int(tok))
+            node.left = build()
+            node.right = build()
+            return node
+
+        return build()
+
+# Your Codec object will be instantiated and called as such:
+# ser = Codec()
+# deser = Codec()
+# ans = deser.deserialize(ser.serialize(root))
 ```
 
 ## Time Complexity Analysis
+> Time complexity  : O(n) — each node is serialized and rebuilt once
+>
+> Space complexity : O(n) — the string/token list plus the recursion stack
+
+## Related Problems
+- [449. Serialize and Deserialize BST](./449_serialize_and_deserialize_BST.md) — 🟡 Medium · BST ordering lets you drop the null markers
+- [428. Serialize and Deserialize N-ary Tree](./428_serialize_and_deserialize_nary_tree.md) — 🔴 Hard · same idea with a child count per node
+- [105. Construct Binary Tree from Preorder and Inorder Traversal](./105_construct_binary_tree_from_preorder_and_inorder_traversal.md) — 🟡 Medium · rebuilding a tree from a traversal

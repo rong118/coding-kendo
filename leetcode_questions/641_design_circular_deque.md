@@ -1,5 +1,7 @@
 # 641. Design Circular Deque
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/design-circular-deque/)
 
@@ -46,6 +48,15 @@ Constraints:
 
 ## Tags
 - queue
+
+## Approach
+**Key idea:** Use a fixed-size array as a ring buffer with `front` and `rear` indices that wrap around via modulo, plus a `size` counter to distinguish empty from full.
+
+1. Allocate an array of length `k`; start with `front = 0`, `rear = -1`, `size = 0`.
+2. `insertFront`: step `front` back one slot (mod `k`) and write the value there.
+3. `insertLast`: step `rear` forward one slot (mod `k`) and write the value there.
+4. `deleteFront` / `deleteLast`: move `front` forward or `rear` back; the old slot is simply abandoned.
+5. Check `size` against `0` and `k` for `isEmpty` / `isFull`, and read `q[front]` / `q[rear]` for the getters.
 
 ## Code Implementation
 ```python
@@ -106,3 +117,8 @@ class MyCircularDeque:
 > Time complexity  : O(1) for all operations
 >
 > Space complexity : O(k) — fixed-size array for ring buffer
+
+## Related Problems
+- [622. Design Circular Queue](./622_design_circular_queue.md) — 🟡 Medium · the single-ended ring buffer
+- [232. Implement Queue using Stacks](./232_implement_queue_using_stacks.md) — 🟢 Easy · designing a queue interface
+- [225. Implement Stack using Queues](./225_implement_stack_using_queue.md) — 🟢 Easy · designing a container from primitives

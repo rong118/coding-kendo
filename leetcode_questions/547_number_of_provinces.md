@@ -1,5 +1,7 @@
 # 547 Number of Provinces
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/number-of-provinces/)
 
@@ -36,55 +38,48 @@ Constraints:
 - graph
 - unionfind
 
+## Approach
+**Key idea:** A province is a connected component, so union every directly connected pair in a disjoint-set union (DSU); the number of distinct roots left is the number of provinces.
+
+1. Initialize a DSU where every city is its own parent.
+2. For every pair `(i, j)` with `isConnected[i][j] == 1`, union `i` and `j`.
+3. `find` uses path compression so later lookups are nearly constant time.
+4. Count the cities that are their own root (`find(i) == i`) and return that count.
+
 ## Code Implementation
-```c++
-class DSU {
-public:
-    vector<int> parent;
-    DSU(int N){
-        parent.resize(N);
-        for(int i = 0; i < N; i++){
-            parent[i] = i;
-        }
-    }
+```python
+class DSU:
+    def __init__(self, n: int):
+        self.parent = list(range(n))
 
-    int _find(int x){
-        if(parent[x] != x)
-            parent[x] = _find(parent[x]);
-        
-        return parent[x];
-    }
+    def find(self, x: int) -> int:
+        while self.parent[x] != x:
+            self.parent[x] = self.parent[self.parent[x]]  # path compression (halving)
+            x = self.parent[x]
+        return x
 
-    void _union(int x, int y){
-        parent[_find(x)] = _find(y);
-        return; 
-    }
-};
+    def union(self, x: int, y: int) -> None:
+        self.parent[self.find(x)] = self.find(y)
 
-class Solution {
-public:
-    int findCircleNum(vector<vector<int>>& isConnected) {
-        DSU* dsu = new DSU(isConnected.size());
-        
-        for(int i = 0; i < isConnected.size(); i++){
-            for(int j = 0; j < isConnected[i].size(); j++){
-                if(isConnected[i][j] == 1){
-                    dsu->_union(i, j);
-                }
-            }
-        }
 
-        int ans = 0;
-        for(int i = 0; i < isConnected.size(); i++){
-            if(dsu->_find(i) == i){
-                ans++;
-            }
-        }
-
-        return ans;
-    }
-};
+class Solution:
+    def findCircleNum(self, isConnected: list[list[int]]) -> int:
+        n = len(isConnected)
+        dsu = DSU(n)
+        for i in range(n):
+            for j in range(n):
+                if isConnected[i][j] == 1:
+                    dsu.union(i, j)
+        return sum(1 for i in range(n) if dsu.find(i) == i)
 ```
 
 ## Time Complexity Analysis
-Running time  : O(N * N * log*N)
+> Time complexity  : O(n² · log n) — n² cells, each possibly a union; path compression alone gives O(log n) amortized per operation (nearly O(n²) in practice)
+>
+> Space complexity : O(n) — the parent array
+
+## Related Problems
+- [261. Graph Valid Tree](./261_graph_valid_tree.md) — 🟡 Medium · union-find to detect cycles and count components
+- [305. Number of Islands II](./305_number_of_island_ii.md) — 🔴 Hard · union-find counting components dynamically
+- [200. Number of Islands](https://leetcode.com/problems/number-of-islands) — 🟡 Medium · counting connected components on a grid
+- [1135. Connecting Cities With Minimum Cost](./1135_connecting_cities_with_minimum_cost.md) — 🟡 Medium · union-find inside Kruskal's MST

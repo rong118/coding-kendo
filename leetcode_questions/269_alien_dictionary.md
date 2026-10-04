@@ -1,5 +1,7 @@
 # 269. Alien Dictionary
 
+**Difficulty:** 🔴 Hard
+
 ## Question link
 (https://leetcode.com/problems/alien-dictionary/)
 
@@ -55,63 +57,56 @@ Note:
 - graph
 - topologic sort
 
+## Approach
+**Key idea:** The first differing letter of two adjacent words gives one ordering rule `a < b`; collecting these rules as edges and topologically sorting them yields a valid alphabet, and a cycle means none exists.
+
+1. Create a graph node (indegree 0) for every letter that appears.
+2. For each adjacent pair of words, return `""` if the longer word comes first and the shorter is its prefix.
+3. Otherwise find the first differing letters `a`, `b` and add edge `a -> b` (once), incrementing `b`'s indegree.
+4. Run Kahn's BFS: repeatedly output a letter with indegree 0 and decrement its neighbours.
+5. If not every letter was output, there is a cycle — return `""`.
+
 ## Code Implementation
-```c++
-// bfs topologic sort
-class solution {
-    unordered_map<char, vector<char>> g;
-    unordered_map<char, int> indegree;
-    bool valid = true;
-    string alienOrder(vector<string> words){
-        _build(words);
-        if(valid == false) return "";
+```python
+from collections import deque
 
-        string sb;
-        deque<char> q;
-        // 入度
-        for(auto k = indegree.begin(); k != indegree.end(); k++){
-            if(k.second == 0){
-                q.push_back(k.first);
-            }
-        }
 
-        // topologic
-        while(!q.empty()){
-            char c = q.front(); q.pop_front();
-            s += c;
-            for(char nei : g[c]){
-                indregee[nei]--;
-                if(indregee[nei] == 0) q.push_back(nei);
-            }
-        }
+class Solution:
+    def alienOrder(self, words: list[str]) -> str:
+        graph: dict[str, set[str]] = {c: set() for word in words for c in word}
+        indegree = {c: 0 for c in graph}
 
-        return sb.size() < indegree.size() ? "" : sb;
-    }
+        for w1, w2 in zip(words, words[1:]):
+            # "abc" before "ab" is impossible in any ordering
+            if len(w1) > len(w2) and w1.startswith(w2):
+                return ""
+            for a, b in zip(w1, w2):
+                if a != b:
+                    if b not in graph[a]:
+                        graph[a].add(b)
+                        indegree[b] += 1
+                    break  # only the first difference carries information
 
-    void _build(vector<string> words){
-        // build graph and indgree
-        for(string word : words){
-            for(char c : word){
-                indegree[c] = 0;
-                g[c] = {};
-            }
-        }
+        q = deque(c for c in indegree if indegree[c] == 0)
+        order: list[str] = []
+        while q:
+            c = q.popleft()
+            order.append(c)
+            for nxt in graph[c]:
+                indegree[nxt] -= 1
+                if indegree[nxt] == 0:
+                    q.append(nxt)
 
-        for(int i = 0; i < words.size() - 1; i++){
-            string word1 = words[i];
-            string word2 = words[i + 1];
-            if(word1.size() > word2.size() && word1.find(word2, 0) == 0) valid = false;
-            
-            for(int j = 0; j < min(word1.size(), word2.size()); j++){
-                if(word1[j] != word2[j]){
-                    g[word1[j]].push_back(word2[j]);
-                    indegree[word2[j]] = indegree[word1[j]] + 1;
-                    break;
-                }
-            }
-        }
-    }
-}
+        # Letters left over are on a cycle -> contradictory order
+        return "".join(order) if len(order) == len(indegree) else ""
 ```
 
 ## Time Complexity Analysis
+> Time complexity  : O(C) — C is the total number of characters across all words
+>
+> Space complexity : O(1) — at most 26 letters and 26 × 26 edges
+
+## Related Problems
+- [207. Course Schedule](./207_course_schedule.md) — 🟡 Medium · topological sort / cycle detection
+- [210. Course Schedule II](./210_course_schedule_ii.md) — 🟡 Medium · output a topological order
+- [953. Verifying an Alien Dictionary](https://leetcode.com/problems/verifying-an-alien-dictionary) — 🟢 Easy · the reverse: order given, check the words

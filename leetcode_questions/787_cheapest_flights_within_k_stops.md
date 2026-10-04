@@ -1,5 +1,7 @@
 # 787. Cheapest Flights Within K Stops
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 > (https://leetcode.com/problems/cheapest-flights-within-k-stops/)
 
@@ -47,52 +49,66 @@ Constraints:
 - dijkstra
 - bellman-ford
 
+## Approach
+**Key idea:** At most `k` stops means at most `k + 1` flights, so the search state must include how many edges are left — either Dijkstra over `(city, stops left)` or Bellman-Ford limited to `k + 1` rounds.
+
+1. **Dijkstra:** push `(cost, src, k)` into a min-heap and pop the cheapest state each time.
+2. The first time `dst` is popped, its cost is the answer.
+3. Skip a state if it has no stops left or the city was already expanded with at least as many stops remaining (that earlier visit was also cheaper); otherwise push every outgoing flight with `stops - 1`.
+4. **Bellman-Ford:** run `k + 1` rounds; in each, relax every flight using a copy of the previous round's costs so a round extends paths by exactly one edge.
+5. Return the cost of `dst`, or `-1` if it was never reached.
+
 ## Code Implementation
-```c++
-// dijkstra
-class Solution {
-public:
-    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
-        vector<pair<int,int>> adj[n];
-        for(const auto &x : flights){
-            adj[x[0]].push_back({x[1], x[2]});
-        }
-        set<vector<int>> q;  // TLE if use priority_queue 
-        q.insert({0,src,k});
-        while(q.size() > 0){
-            auto x = *q.begin(); q.erase(q.begin());
-            int cost = x[0], node = x[1], stops = x[2];
-            if(node == dst)return cost;
-            if(stops >= 0){
-                for(auto &y : adj[node]){
-                    q.insert({y.second + cost, y.first, stops-1});
-                }
-            }
-        }
-        return -1;
-    }
-};
+### Approach 1: Dijkstra with stop count
 
-// bellman-ford
-class Solution {
-public:
-    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
-        const int max = 1000000000;
-        vector<int> cost(n, max);
-        cost[src] = 0;
-        int res = max;
-        for(int i = 0; i <= k; i++){
-            vector<int> cur = cost;
-            for(vector<int> flight : flights){
-                cur[flight[1]] = min(cur[flight[1]], cost[flight[0]] + flight[2]);
-            }
-            res = min(res, cur[dst]);
-            cost = cur;
-        }
+```python
+import heapq
 
-        return res == max ? -1 : res;
-    }
-};
 
+class Solution:
+    def findCheapestPrice(self, n: int, flights: list[list[int]], src: int, dst: int, k: int) -> int:
+        graph: list[list[tuple[int, int]]] = [[] for _ in range(n)]
+        for u, v, price in flights:
+            graph[u].append((v, price))
+
+        # (cost so far, city, stops still allowed)
+        heap = [(0, src, k)]
+        best_stops = [-2] * n  # most stops left when each city was expanded
+        while heap:
+            cost, city, stops = heapq.heappop(heap)
+            if city == dst:
+                return cost
+            if stops < 0 or stops <= best_stops[city]:
+                continue  # out of stops, or already expanded cheaper with more stops left
+            best_stops[city] = stops
+            for nxt, price in graph[city]:
+                heapq.heappush(heap, (cost + price, nxt, stops - 1))
+        return -1
 ```
+
+### Approach 2: Bellman-Ford
+
+```python
+class Solution:
+    def findCheapestPrice(self, n: int, flights: list[list[int]], src: int, dst: int, k: int) -> int:
+        INF = float("inf")
+        cost = [INF] * n
+        cost[src] = 0
+        for _ in range(k + 1):  # k stops = at most k + 1 edges
+            cur = cost[:]  # relax only from the previous round's costs
+            for u, v, price in flights:
+                if cost[u] + price < cur[v]:
+                    cur[v] = cost[u] + price
+            cost = cur
+        return -1 if cost[dst] == INF else cost[dst]
+```
+
 ## Time Complexity Analysis
+> Time complexity  : O(k · E · log(k · E)) for Dijkstra; O(k · E) for Bellman-Ford (E = number of flights)
+>
+> Space complexity : O(k · E) for Dijkstra (heap); O(n) for Bellman-Ford
+
+## Related Problems
+- [743. Network Delay Time](https://leetcode.com/problems/network-delay-time) — 🟡 Medium · plain single-source Dijkstra
+- [1514. Path with Maximum Probability](https://leetcode.com/problems/path-with-maximum-probability) — 🟡 Medium · Dijkstra with a different path metric
+- [1631. Path With Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort) — 🟡 Medium · Dijkstra on a grid with a modified cost

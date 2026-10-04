@@ -1,5 +1,7 @@
 # 49. Group Anagrams
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/group-anagrams/)
 
@@ -36,6 +38,14 @@ Constraints:
 - hashmap
 - string
 
+## Approach
+**Key idea:** Anagrams contain exactly the same letters, so sorting a word produces a canonical key that all of its anagrams share.
+
+1. Create a hash map from key to a list of words.
+2. For each string, sort its characters to build the key.
+3. Append the original string to the list for that key.
+4. Return all lists in the map.
+
 ## Code Implementation
 ```python
 from collections import defaultdict
@@ -57,3 +67,8 @@ class Solution:
 > Time complexity  : O(n * k log k) — where n is the number of strings and k is the maximum string length
 >
 > Space complexity : O(n * k) — the hash map stores all strings
+
+## Related Problems
+- [242. Valid Anagram](./242_valid_anagram.md) — 🟢 Easy · checks whether two strings are anagrams
+- [438. Find All Anagrams in a String](./438_find_all_anagrams_in_a_string.md) — 🟡 Medium · anagram matching with a sliding window
+- [249. Group Shifted Strings](https://leetcode.com/problems/group-shifted-strings) — 🟡 Medium · group strings by a canonical key

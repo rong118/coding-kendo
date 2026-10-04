@@ -1,5 +1,7 @@
 # 210. Course Schedule II
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/course-schedule-ii/)
 
@@ -44,94 +46,81 @@ Constraints:
 - graph
 - topologic sort
 
+## Approach
+**Key idea:** A valid course order is a topological sort of the prerequisite graph; if the graph has a cycle, no order exists.
+
+1. Build a graph with an edge `prerequisite -> course` and count each course's indegree.
+2. BFS (Kahn's algorithm): queue every course with indegree 0, pop one at a time into the answer, and decrement its neighbors' indegrees, queueing any that reach 0.
+3. If fewer than `numCourses` courses were output, there is a cycle, so return `[]`.
+4. DFS alternative: color nodes unvisited / visiting / done; reaching a "visiting" node means a cycle. Add each node after all its dependents (post-order) and reverse the list at the end.
+
 ## Code Implementation
-```c++
-// bfs
-class Solution {
-public:
-    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
-        // build gragh and indegree
-        unordered_map<int, vector<int> > g;
-        vector<int> indegree(numCourses, 0);
-        for(vector<int> edge : prerequisites){
-            int end = edge[0];
-            int start = edge[1];
-            if(g.find(start) == g.end()){
-                g[start] = {};
-            }
-            g[start].push_back(end);
-            indegree[end]++;
-        }
+### Approach 1: BFS (Kahn's algorithm)
 
-        // find node that indegree is 0
-        deque<int> q;
-        for(int i = 0; i < numCourses; i++){
-            if(indegree[i] == 0){
-                q.push_back(i);
-            }
-        }
+```python
+from collections import defaultdict, deque
 
-        vector<int> ans;
-        int count = 0;
-        // bfs put node that indegree become zero in queue and loop until queue is empty
-        while(!q.empty()){
-            int cur = q.front(); q.pop_front();
-            count++;
-            ans.push_back(cur);
-            for(int neighbor : g[cur]){
-                indegree[neighbor]--;
-                if(indegree[neighbor] == 0){
-                    q.push_back(neighbor);
-                }
-            }
-        }
 
-        if(count != numCourses) return {};
-        
-        return ans;
-    }
-};
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: list[list[int]]) -> list[int]:
+        graph = defaultdict(list)
+        indegree = [0] * numCourses
+        for course, pre in prerequisites:
+            graph[pre].append(course)
+            indegree[course] += 1
 
-// dfs 
-class Solution {
-    vector<vector<int> > edges;
-    vector<int> visited;
-    vector<int> ans;
-    bool valid = true;
-public:
-    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
-        edges.resize(numCourses, {});
-        visited.resize(numCourses, 0);
-        for(vector<int> edge : prerequisites){
-            edges[edge[1]].push_back(edge[0]);
-        }
+        q = deque(i for i in range(numCourses) if indegree[i] == 0)
+        order = []
+        while q:
+            cur = q.popleft()
+            order.append(cur)
+            for nxt in graph[cur]:
+                indegree[nxt] -= 1
+                if indegree[nxt] == 0:
+                    q.append(nxt)
 
-        for(int i = 0; i < numCourses; i++){
-            if(visited[i] == 0){
-                _dfs(i);
-            }
-        }
+        # Some courses never reached indegree 0 -> cycle
+        return order if len(order) == numCourses else []
+```
 
-        // Return empty if there is cycle in graph
-        if(!valid) return {};
-        
-        // reverse result due to dfs (buttom to up)
-        reverse(ans.begin(), ans.end());
-        return ans;
-    }
+### Approach 2: DFS
 
-    void _dfs(int u){
-        visited[u] = 1;
-        
-        for(int v : edges[u]){
-            if(visited[v] == 0) _dfs(v);
-            else if(visited[v] == 1) valid = false;
-        }
-        ans.push_back(u);
-        visited[u] = 2;
-    }
-};
+```python
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: list[list[int]]) -> list[int]:
+        graph = [[] for _ in range(numCourses)]
+        for course, pre in prerequisites:
+            graph[pre].append(course)
+
+        # 0 = unvisited, 1 = visiting (on the stack), 2 = done
+        state = [0] * numCourses
+        order = []
+        valid = True
+
+        def dfs(u: int) -> None:
+            nonlocal valid
+            state[u] = 1
+            for v in graph[u]:
+                if state[v] == 0:
+                    dfs(v)
+                elif state[v] == 1:
+                    valid = False  # back edge -> cycle
+            state[u] = 2
+            order.append(u)  # post-order: u comes after all courses that depend on it
+
+        for i in range(numCourses):
+            if state[i] == 0:
+                dfs(i)
+
+        return order[::-1] if valid else []
 ```
 
 ## Time Complexity Analysis
-Running time  : O(V + E)
+> Time complexity  : O(V + E) — V = numCourses, E = len(prerequisites); each node and edge is processed once
+>
+> Space complexity : O(V + E) — adjacency list, plus the queue / recursion stack
+
+## Related Problems
+- [207. Course Schedule](./207_course_schedule.md) — 🟡 Medium · same graph, only asks whether an order exists
+- [269. Alien Dictionary](./269_alien_dictionary.md) — 🔴 Hard · topological sort on letters
+- [2127. Maximum Employees to Be Invited to a Meeting](./2127_maximum_employees_to_be_invited_to_a_meeting.md) — 🔴 Hard · Kahn-style peeling of a dependency graph

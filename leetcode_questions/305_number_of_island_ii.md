@@ -1,4 +1,6 @@
-# Questions Name
+# 305. Number of Islands II
+
+**Difficulty:** 🔴 Hard
 
 ## Question link
 (https://leetcode.com/problems/number-of-islands-ii/)
@@ -21,66 +23,53 @@ Follow up:
 - dfs
 - unionfind
 
+## Approach
+**Key idea:** Treat each land cell as a Union-Find node; adding land creates a new island, and every successful union with a neighboring island merges two islands into one.
+
+1. Map cell `(x, y)` to id `x * n + y` and initialize a Union-Find over all `m * n` cells.
+2. For each position: if it is already land, the count is unchanged — record it and continue.
+3. Otherwise mark it as land and increment `count`.
+4. For each of the 4 land neighbors, if its root differs from the new cell's root, union them and decrement `count`.
+5. Append `count` after processing each position.
+
 ## Code Implementation
-```c++
-class DSU {
-public:
-    vector<int> parent;
-    DSU(int N){
-        parent.resize(N);
-        for(int i = 0; i < N; i++){
-            parent[i] = i;
-        }
-    }
+```python
+class Solution:
+    def numIslands2(self, m: int, n: int, positions: list[list[int]]) -> list[int]:
+        parent = list(range(m * n))
 
-    int _find(int x){
-        if(parent[x] != x)
-            parent[x] = _find(parent[x]);
-        
-        return parent[x];
-    }
+        def find(x: int) -> int:
+            while parent[x] != x:
+                parent[x] = parent[parent[x]]  # path compression (halving)
+                x = parent[x]
+            return x
 
-    void _union(int x, int y){
-        parent[_find(x)] = _find(y);
-        return; 
-    }
-};
-
-class Solution {
-public:
-    vector<int> numIsland2(int m, int n, vector<vector<int>> pos) {
-        DSU* dsu = new DSU(m * n);
-        vector<int> ans;
-        vector<vector<int>> dirs = {{-1. 0}. {1, 0}, {0, 1}. {1, 0}};
-        vector<vector<bool>> v(m, vector<int>(n, false));
-        int count = 0;
-        for(int i = 0; i < pos.size(); i++){
-            int x = pos[i][0];
-            int y = pos[i][1];
-            if(v[x][y]){
-                ans.push_back(count);
-            }
-            v[x][y] = true;
-            count++;
-            for(int j = 0; j < dirs.size(); j++){
-                int nx = x + dirs[j][0];
-                int ny = y + dirs[j][1];
-                if(nx < 0 || nx >= m || ny < 0 || ny >= n || v[nx][ny] == false) continue;
-                int c1 = dsu->_find(nx * m + ny);
-                int c2 = dsu->_find(x * m + y);
-                if(c1 != c2){
-                    dsu->_union(c2, c1);
-                } 
-                count--;
-            }
-            ans.push_back(count);
-        }
-
-        return ans;
-    }
-};
-
+        land = [[False] * n for _ in range(m)]
+        ans = []
+        count = 0
+        for x, y in positions:
+            if land[x][y]:
+                ans.append(count)
+                continue
+            land[x][y] = True
+            count += 1
+            for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < m and 0 <= ny < n and land[nx][ny]:
+                    r1, r2 = find(nx * n + ny), find(x * n + y)
+                    if r1 != r2:
+                        parent[r2] = r1
+                        count -= 1
+            ans.append(count)
+        return ans
 ```
 
 ## Time Complexity Analysis
-Running time  : O(m * n)
+> Time complexity  : O(m * n + k * α(m * n)) — initializing the DSU plus near-constant work per position
+>
+> Space complexity : O(m * n) — parent array and land grid
+
+## Related Problems
+- [200. Number of Islands](https://leetcode.com/problems/number-of-islands) — 🟡 Medium · static version solved with DFS/BFS
+- [547. Number of Provinces](./547_number_of_provinces.md) — 🟡 Medium · counting components with Union-Find
+- [261. Graph Valid Tree](./261_graph_valid_tree.md) — 🟡 Medium · Union-Find merge detection

@@ -1,5 +1,7 @@
 # 203. Remove Linked List Elements
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/remove-linked-list-elements/)
 
@@ -32,6 +34,15 @@ Constraints:
 
 ## Tags
 - linkedlist
+
+## Approach
+**Key idea:** A dummy node in front of the head means the head is just another "next" pointer, so removing it needs no special case.
+
+1. Create `dummy` pointing at `head` and set `cur = dummy`.
+2. While `cur.next` exists, check its value.
+3. If `cur.next.val == val`, unlink it with `cur.next = cur.next.next` (stay on `cur` to check the new next node).
+4. Otherwise advance `cur`.
+5. Return `dummy.next`. (The recursive version cleans the tail first, then decides whether to keep the current node.)
 
 ## Code Implementation
 ```python
@@ -66,3 +77,9 @@ class Solution:
 > Time complexity  : O(n) — single pass through the list
 >
 > Space complexity : O(1) iterative, O(n) recursive (call stack)
+
+## Related Problems
+- [83. Remove Duplicates from Sorted List](./83_remove_duplicates_from_sorted_list.md) — 🟢 Easy · unlinking nodes in a single pass
+- [82. Remove Duplicates from Sorted List II](./82_remove_duplicates_from_sorted_list_II.md) — 🟡 Medium · dummy node for possible head removal
+- [19. Remove Nth Node From End of List](./19_remove_Nth_node_from_end_of_list.md) — 🟡 Medium · dummy node plus pointer unlinking
+- [27. Remove Element](./27_remove_element.md) — 🟢 Easy · same task on an array

@@ -1,5 +1,7 @@
 # 48. Rotate Image
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/rotate-image/)
 
@@ -30,6 +32,13 @@ Constraints:
 - array
 - matrix
 
+## Approach
+**Key idea:** A 90° clockwise rotation equals a transpose (flip across the main diagonal) followed by reversing each row — both can be done in place with swaps.
+
+1. Transpose: for every `i < j`, swap `matrix[i][j]` with `matrix[j][i]`.
+2. Reverse each row in place.
+3. The matrix now holds the clockwise rotation; no extra matrix is allocated.
+
 ## Code Implementation
 ```python
 def rotate(matrix):
@@ -49,3 +58,9 @@ def rotate(matrix):
 > Time complexity  : O(n²)
 >
 > Space complexity : O(1)
+
+## Related Problems
+- [189. Rotate Array](./189_rotate_array.md) — 🟡 Medium · rotation via in-place reversals
+- [54. Spiral Matrix](https://leetcode.com/problems/spiral-matrix) — 🟡 Medium · layer-by-layer matrix index manipulation
+- [73. Set Matrix Zeroes](https://leetcode.com/problems/set-matrix-zeroes) — 🟡 Medium · in-place matrix modification
+- [1886. Determine Whether Matrix Can Be Obtained By Rotation](https://leetcode.com/problems/determine-whether-matrix-can-be-obtained-by-rotation) — 🟢 Easy · direct application of matrix rotation

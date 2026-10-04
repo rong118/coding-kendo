@@ -1,5 +1,7 @@
 # 865. Smallest Subtree with all the Deepest Nodes
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/smallest-subtree-with-all-the-deepest-nodes/)
 
@@ -52,39 +54,46 @@ Constraints:
 ## Tags
 - tree
 
+## Approach
+**Key idea:** If the left and right subtrees have equal height, the deepest nodes are split across both sides, so the current node is the answer; otherwise all deepest nodes are in the taller subtree, so recurse there.
+
+1. Define `height(node)` = number of nodes on the longest path down (0 for `None`).
+2. At the current node, compute the heights of its left and right subtrees.
+3. If they are equal, return the current node.
+4. Otherwise recurse into the taller side.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
- // same with lc1123
-class Solution {
-public:
-    int _height(TreeNode* root){
-        if(root == NULL) return 0;
-        return 1 + max(_height(root->left), _height(root->right));
-    }
-    
-    TreeNode* subtreeWithAllDeepest(TreeNode* root) {
-        if(root == NULL) return NULL;
-        int lh = _height(root->left);
-        int rh = _height(root->right);
-        if (lh == rh) return root;
-        if(lh > rh){
-            return subtreeWithAllDeepest(root->left);
-        }else{
-            return subtreeWithAllDeepest(root->right);
-        }   
-    }
-};
+```python
+from typing import Optional
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def subtreeWithAllDeepest(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        def height(node: Optional[TreeNode]) -> int:
+            if not node:
+                return 0
+            return 1 + max(height(node.left), height(node.right))
+
+        node = root
+        while node:
+            lh, rh = height(node.left), height(node.right)
+            if lh == rh:
+                return node
+            node = node.left if lh > rh else node.right
+        return None
 ```
 
 ## Time Complexity Analysis
+> Time complexity  : O(n · h) — each step down recomputes subtree heights; O(n log n) for a balanced tree, O(n²) worst case (skewed). A single post-order pass returning (depth, node) brings this to O(n), see [1123](./1123_lowest_common_ancestor_of_deepest_leaves.md).
+>
+> Space complexity : O(h) — recursion stack of the height computation
+
+## Related Problems
+- [1123. Lowest Common Ancestor of Deepest Leaves](./1123_lowest_common_ancestor_of_deepest_leaves.md) — 🟡 Medium · identical problem, includes the O(n) approach
+- [236. Lowest Common Ancestor of a Binary Tree](./236_lowest_common_ancestor_of_a_binary_tree.md) — 🟡 Medium · classic LCA via post-order recursion
+- [104. Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree) — 🟢 Easy · the height helper used here

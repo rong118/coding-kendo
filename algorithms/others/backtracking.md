@@ -20,93 +20,55 @@ Here's a high-level approach to solving it using backtracking:
 - If placing a queen in any column of a row is not possible (because it would be threatened), backtrack to the previous row and move the queen to the next possible column.
 - Repeat until all queens are placed or all configurations have been tried.
 
-### C++ Implementation
-```c++
-#include <iostream>
-#include <vector>
+### Python Implementation
+```python
+class NQueens:
+    def __init__(self, n: int):
+        self.size = n
+        self.board = [[0] * n for _ in range(n)]
 
-using namespace std;
+    def solve(self) -> None:
+        self.place_queen(0)
 
-class NQueens {
-public:
-    NQueens(int n) : size(n), board(n, vector<int>(n, 0)) {}
+    def print_solution(self) -> None:
+        for row in self.board:
+            print(" ".join("Q" if cell else "." for cell in row))
+        print()
 
-    void solve() {
-        placeQueen(0);
-    }
+    def is_safe(self, row: int, col: int) -> bool:
+        # Check the column
+        if any(self.board[i][col] for i in range(row)):
+            return False
+        # Check the upper left diagonal
+        i, j = row, col
+        while i >= 0 and j >= 0:
+            if self.board[i][j]:
+                return False
+            i, j = i - 1, j - 1
+        # Check the upper right diagonal
+        i, j = row, col
+        while i >= 0 and j < self.size:
+            if self.board[i][j]:
+                return False
+            i, j = i - 1, j + 1
+        return True
 
-private:
-    int size;
-    vector<vector<int>> board;
+    def place_queen(self, row: int) -> bool:
+        if row == self.size:
+            self.print_solution()
+            return True
 
-    void printSolution() {
-        for (const auto& row : board) {
-            for (int cell : row) {
-                cout << (cell ? "Q" : ".") << " ";
-            }
-            cout << endl;
-        }
-        cout << endl;
-    }
+        found_solution = False
+        for col in range(self.size):
+            if self.is_safe(row, col):
+                self.board[row][col] = 1  # Place the queen
+                # Recursively place queens in the next row
+                found_solution = self.place_queen(row + 1) or found_solution
+                self.board[row][col] = 0  # Backtrack and remove the queen
+        return found_solution
 
-    bool isSafe(int row, int col) {
-        // Check the column
-        for (int i = 0; i < row; ++i) {
-            if (board[i][col]) {
-                return false;
-            }
-        }
 
-        // Check the upper left diagonal
-        for (int i = row, j = col; i >= 0 && j >= 0; --i, --j) {
-            if (board[i][j]) {
-                return false;
-            }
-        }
-
-        // Check the upper right diagonal
-        for (int i = row, j = col; i >= 0 && j < size; --i, ++j) {
-            if (board[i][j]) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    bool placeQueen(int row) {
-        if (row == size) {
-            printSolution();
-            return true;
-        }
-
-        bool foundSolution = false;
-
-        for (int col = 0; col < size; ++col) {
-            if (isSafe(row, col)) {
-                board[row][col] = 1; // Place the queen
-
-                // Recursively place queens in the next row
-                foundSolution = placeQueen(row + 1) || foundSolution;
-
-                board[row][col] = 0; // Backtrack and remove the queen
-            }
-        }
-
-        return foundSolution;
-    }
-};
-
-int main() {
-    int n;
-    cout << "Enter the value of N for the N-Queens problem: ";
-    cin >> n;
-
-    NQueens nQueens(n);
-    nQueens.solve();
-
-    return 0;
-}
+NQueens(4).solve()
 ```
 
 ### Runtime Complexity

@@ -1,5 +1,7 @@
 # 1008. Construct Binary Search Tree from Preorder Traversal
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/)
 
@@ -34,41 +36,48 @@ Constraints:
 ## Tags
 - tree
 
-## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-    int idx;
-public:
-    TreeNode* bstFromPreorder(vector<int>& preorder) {
-        idx = 0;
-        return _helper(preorder, INT_MIN, INT_MAX);
-    }
+## Approach
+**Key idea:** In preorder the first value is the root, and the values that belong to each subtree are exactly those that fit the bounds set by the BST property — so one left-to-right pass with bounds rebuilds the tree.
 
-    TreeNode* _helper(vector<int>& m, int lower, int upper){
-        if(preorder.empty()) return NULL;
-        if(idx >= m.size()) return NULL;
-        int v = m[idx];
-        if(v < lower || v > upper) {return NULL;}
-        TreeNode* n = new TreeNode(v);
-        idx++;
-        n->left = _helper(m, lower, v);
-        n->right = _helper(m, v, upper);
-        return n;
-    }
-};
+1. Keep a shared index into `preorder`, starting at 0.
+2. `build(lower, upper)`: if the index is past the end or the next value is outside `(lower, upper)`, return `None`.
+3. Otherwise create a node from that value and advance the index.
+4. Build its left subtree with bounds `(lower, val)` and its right subtree with `(val, upper)`.
+5. Call `build(-inf, +inf)` for the root.
+
+## Code Implementation
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def bstFromPreorder(self, preorder: list[int]) -> Optional[TreeNode]:
+        idx = 0
+
+        def build(lower: float, upper: float) -> Optional[TreeNode]:
+            nonlocal idx
+            if idx == len(preorder) or not (lower < preorder[idx] < upper):
+                return None
+            val = preorder[idx]
+            idx += 1
+            node = TreeNode(val)
+            node.left = build(lower, val)
+            node.right = build(val, upper)
+            return node
+
+        return build(float('-inf'), float('inf'))
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(n)
+> Time complexity  : O(n) — each value is consumed once
+>
+> Space complexity : O(n) — the output tree; recursion uses O(h)
+
+## Related Problems
+- [449. Serialize and Deserialize BST](./449_serialize_and_deserialize_BST.md) — 🟡 Medium · same bounded preorder rebuild
+- [105. Construct Binary Tree from Preorder and Inorder Traversal](./105_construct_binary_tree_from_preorder_and_inorder_traversal.md) — 🟡 Medium · rebuild a general tree from traversals
+- [889. Construct Binary Tree from Preorder and Postorder Traversal](./889_construct_binary_tree_from_preorder_and_postorder_traversal.md) — 🟡 Medium · rebuild from traversals
+- [108. Convert Sorted Array to Binary Search Tree](./108_convert_sorted_array_to_binary_search_tree.md) — 🟢 Easy · build a BST from a sorted sequence

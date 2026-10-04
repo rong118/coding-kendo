@@ -1,5 +1,7 @@
 # 108. Convert Sorted Array to Binary Search Tree
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/)
 
@@ -36,37 +38,43 @@ Constraints:
 ## Tags
 - tree
 
-## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    TreeNode* sortedArrayToBST(vector<int>& nums) {
-        return _helper(nums, 0, nums.size() - 1);
-    }
+## Approach
+**Key idea:** The middle element of a sorted range splits it into two halves of (almost) equal size, so making it the root and recursing on each half yields a height-balanced BST.
 
-    TreeNode* _helper(vector<int>& nums, int start, int end){
-        if(start > end) { return NULL;}
-        int mid = (start + end)/2;
-        
-        TreeNode* root = new TreeNode(nums[mid]);
-        root->left = _helper(nums, start, mid - 1);
-        root->right = _helper(nums, mid + 1, end);
-        return root;
-    }
-};
+1. Recurse on an index range `[lo, hi]`, starting with the whole array.
+2. If `lo > hi`, the range is empty — return `None`.
+3. Make `nums[mid]` the root, where `mid = (lo + hi) // 2`.
+4. Build the left subtree from `[lo, mid - 1]` and the right subtree from `[mid + 1, hi]`.
+
+## Code Implementation
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def sortedArrayToBST(self, nums: list[int]) -> Optional[TreeNode]:
+        def build(lo: int, hi: int) -> Optional[TreeNode]:
+            if lo > hi:
+                return None
+            mid = (lo + hi) // 2
+            root = TreeNode(nums[mid])
+            root.left = build(lo, mid - 1)
+            root.right = build(mid + 1, hi)
+            return root
+
+        return build(0, len(nums) - 1)
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(n)
+> Time complexity  : O(n)
+>
+> Space complexity : O(log n) — recursion depth of a balanced tree (O(n) including the output tree)
+
+## Related Problems
+- [1382. Balance a Binary Search Tree](./1382_balance_a_binary_search_tree.md) — 🟡 Medium · inorder to a sorted array, then the same middle-root build
+- [1008. Construct Binary Search Tree from Preorder Traversal](./1008_construct_binary_search_tree_from_preorder_traversal.md) — 🟡 Medium · building a BST from a traversal
+- [109. Convert Sorted List to Binary Search Tree](https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree) — 🟡 Medium · same idea on a linked list
+- [96. Unique Binary Search Trees](./96_unique_binary_search_trees.md) — 🟡 Medium · choosing a root splits values into left/right subtrees

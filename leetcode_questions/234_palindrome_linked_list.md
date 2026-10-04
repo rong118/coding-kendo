@@ -1,5 +1,7 @@
 # 234. Palindrome Linked List
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/palindrome-linked-list/)
 
@@ -27,6 +29,14 @@ Constraints:
 
 ## Tags
 - linkedlist
+
+## Approach
+**Key idea:** Reverse the second half of the list in place, then a palindrome reads the same walking forward from the head and from the reversed tail.
+
+1. Use slow/fast pointers to find the middle (`slow` ends at the start of the second half).
+2. Reverse the list starting at `slow`; `prev` becomes the head of the reversed half.
+3. Walk `head` and `prev` together, returning `False` on the first mismatch.
+4. If the reversed half is exhausted without a mismatch, return `True`.
 
 ## Code Implementation
 ```python
@@ -68,3 +78,9 @@ class Solution:
 > Time complexity  : O(n) — find middle, reverse, compare each traverse at most n nodes
 >
 > Space complexity : O(1) — in-place reversal, no extra storage
+
+## Related Problems
+- [206. Reverse Linked List](./206_reverse_linked_list.md) — 🟢 Easy · the in-place reversal used in step 2
+- [876. Middle of the Linked List](https://leetcode.com/problems/middle-of-the-linked-list) — 🟢 Easy · fast/slow pointer to find the middle
+- [125. Valid Palindrome](./125_valid_palindrome.md) — 🟢 Easy · palindrome check with two pointers on a string
+- [143. Reorder List](https://leetcode.com/problems/reorder-list) — 🟡 Medium · same find-middle + reverse-half technique

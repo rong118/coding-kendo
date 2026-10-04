@@ -1,5 +1,7 @@
 # 142. Linked List Cycle II
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/linked-list-cycle-ii/)
 
@@ -43,6 +45,14 @@ Constraints:
 ## Tags
 - linkedlist
 
+## Approach
+**Key idea:** With Floyd's tortoise and hare, once the pointers meet inside the cycle, the distance from the head to the cycle entry equals the distance from the meeting point to the entry (mod the cycle length).
+
+1. Move `slow` one step and `fast` two steps at a time.
+2. If `fast` reaches the end, there is no cycle — return `None`.
+3. When `slow` and `fast` meet, restart a pointer from `head`.
+4. Advance both pointers one step at a time; the node where they meet is the cycle entry.
+
 ## Code Implementation
 ```python
 from typing import Optional
@@ -75,3 +85,8 @@ class Solution:
 > Time complexity  : O(n) — phase 1 visits ≤ n nodes, phase 2 visits ≤ n nodes
 >
 > Space complexity : O(1) — only two pointers
+
+## Related Problems
+- [141. Linked List Cycle](./141_linked_list_cycle.md) — 🟢 Easy · phase 1 of the same Floyd algorithm
+- [287. Find the Duplicate Number](./287_find_the_duplicate_number.md) — 🟡 Medium · cycle entry detection on an index-linked array
+- [160. Intersection of Two Linked Lists](./160_intersection_of_two_linked_lists.md) — 🟢 Easy · two pointers converging on a shared node

@@ -1,5 +1,7 @@
 # 5. Longest Palindromic Substring
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/longest-palindromic-substring/)
 
@@ -28,6 +30,14 @@ Constraints:
 - string
 - dynamic programming
 
+## Approach
+**Key idea:** Every palindrome mirrors around a center, and there are only `2n - 1` centers (each character and each gap between two characters), so expanding outward from each center finds every maximal palindrome.
+
+1. For each index `i`, treat `i` as an odd-length center and `(i, i + 1)` as an even-length center.
+2. Expand outward while both ends are in bounds and the characters match.
+3. The substring between the last matching ends is the longest palindrome for that center.
+4. Keep whichever palindrome found so far is longest.
+
 ## Code Implementation
 ```python
 class Solution:
@@ -54,3 +64,9 @@ class Solution:
 > Time complexity  : O(n^2)
 >
 > Space complexity : O(1)
+
+## Related Problems
+- [647. Palindromic Substrings](https://leetcode.com/problems/palindromic-substrings) — 🟡 Medium · same expand-around-center counting
+- [516. Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence) — 🟡 Medium · palindrome DP over subsequences
+- [409. Longest Palindrome](./409_longest_palindrome.md) — 🟢 Easy · building the longest palindrome from character counts
+- [125. Valid Palindrome](./125_valid_palindrome.md) — 🟢 Easy · two-pointer palindrome check

@@ -1,5 +1,7 @@
 # 729. My Calendar I
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/my-calendar-i/)
 
@@ -37,6 +39,15 @@ Constraints:
 ## Tags
 - treemap
 
+## Approach
+**Key idea:** Keep booked intervals sorted by start; since none overlap, a new interval can only collide with its immediate predecessor or successor.
+
+1. Store bookings in a `SortedDict` mapping `start → end`.
+2. Use `bisect_left(start)` to find where the new interval would be inserted.
+3. If the previous interval ends after `start`, it overlaps — reject.
+4. If the next interval starts before `end`, it overlaps — reject.
+5. Otherwise insert `start → end` and accept.
+
 ## Code Implementation
 ```python
 from sortedcontainers import SortedDict
@@ -71,3 +82,9 @@ class MyCalendar:
 > Time complexity  : O(log n) per book — bisect_left and insertion on SortedDict are O(log n)
 >
 > Space complexity : O(n) — stores all booked intervals
+
+## Related Problems
+- [731. My Calendar II](https://leetcode.com/problems/my-calendar-ii) — 🟡 Medium · allow double but not triple bookings
+- [732. My Calendar III](https://leetcode.com/problems/my-calendar-iii) — 🔴 Hard · maximum overlap count
+- [57. Insert Interval](./57_insert_interval.md) — 🟡 Medium · insert into sorted non-overlapping intervals
+- [56. Merge Intervals](./56_merge_intervals.md) — 🟡 Medium · interval overlap checks

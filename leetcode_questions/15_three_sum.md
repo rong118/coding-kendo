@@ -1,5 +1,7 @@
 # 15. 3Sum
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/3sum/)
 
@@ -51,6 +53,15 @@ Constraints:
 - array
 - two pointers
 
+## Approach
+**Key idea:** After sorting, fixing the first number turns the problem into a sorted Two Sum, which two pointers solve in linear time; skipping equal neighbours removes duplicate triplets.
+
+1. Sort `nums`.
+2. For each index `i`, skip it if `nums[i]` equals the previous value (same first number already tried).
+3. Set `left = i + 1`, `right = n - 1` and look at `nums[i] + nums[left] + nums[right]`.
+4. If the sum is too small move `left` right; if too large move `right` left.
+5. On a zero sum, record the triplet, skip over equal values on both sides, then move both pointers inward.
+
 ## Code Implementation
 ```python
 def threeSum(nums):
@@ -91,4 +102,10 @@ def threeSum(nums):
 ## Time Complexity Analysis
 > Time complexity  : O(n^2)
 >
-> Space complexity : O(n)
+> Space complexity : O(n) — sorting (Python's Timsort); output not counted
+
+## Related Problems
+- [1. Two Sum](./1_two_sum.md) — 🟢 Easy · the pair-sum subproblem 3Sum reduces to
+- [167. Two Sum II - Input Array Is Sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted) — 🟡 Medium · the exact two-pointer inner loop
+- [16. 3Sum Closest](https://leetcode.com/problems/3sum-closest) — 🟡 Medium · same sort + two pointers, tracking the closest sum
+- [18. 4Sum](https://leetcode.com/problems/4sum) — 🟡 Medium · one more fixed index on top of 3Sum

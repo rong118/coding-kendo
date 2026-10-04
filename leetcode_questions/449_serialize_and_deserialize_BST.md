@@ -1,5 +1,7 @@
 # 449. Serialize and Deserialize BST
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/serialize-and-deserialize-bst/)
 
@@ -30,77 +32,69 @@ Constraints:
 ## Tags
 - tree
 
+## Approach
+**Key idea:** A BST's preorder alone determines its shape, because each value's position follows from the `(lower, upper)` bounds of the BST property — so no null markers are needed.
+
+1. `serialize`: write the preorder values joined by `/` (an empty tree is `""`).
+2. `deserialize`: split the string into integers and keep a shared index into them.
+3. Build recursively with bounds `(lower, upper)`: if the next value falls outside the bounds, this subtree is empty.
+4. Otherwise create the node, advance the index, build the left subtree with bounds `(lower, val)` and the right with `(val, upper)`.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
-class Codec {
-public:
-    int idx = 0;
-    // Encodes a tree to a single string.
-    // Per BST, we don't need to store empty node into string but comparing value to decide node end during deserialize
-    string serialize(TreeNode* root) {
-        if(root == NULL) return "";
-        string res = to_string(root->val);
-        if(root->left != NULL) res += "/" + serialize(root->left);
-        if(root->right != NULL) res += "/" + serialize(root->right);
-        return res;
-    }
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Codec:
+    def serialize(self, root: Optional[TreeNode]) -> str:
+        """Encodes a tree to a single string (preorder, no null markers)."""
+        vals = []
 
-    // Decodes your encoded data to tree.
-    // Use <lower upper>
-    TreeNode* deserialize(string data) {
-        if(data == "") return NULL;
-        //cout<< data <<endl;
-        idx = 0; // reset idx
-        vector<string> m;
-        
-        _split(data, m, '/');
-        return _helper(m, INT_MIN, INT_MAX);
-    }
+        def preorder(node: Optional[TreeNode]) -> None:
+            if node:
+                vals.append(str(node.val))
+                preorder(node.left)
+                preorder(node.right)
 
-    // c++ pain point + 1 vs python/java
-    void _split(const std::string& str,  vector<string>& cont, char delim = '/'){
-        std::size_t current, previous = 0;
-        current = str.find(delim);
-        while (current != std::string::npos) {
-            cont.push_back(str.substr(previous, current - previous));
-            previous = current + 1;
-            current = str.find(delim, previous);
-        }
-        cont.push_back(str.substr(previous, current - previous));
-    }
+        preorder(root)
+        return "/".join(vals)
 
-    TreeNode* _helper(vector<string>& m, int lower, int upper){
-        if(idx >= m.size()) { return NULL;}
-        string s = m[idx];
-        // cout << "# " << s << endl;
-        if(stoi(s) < lower || stoi(s) > upper) { return NULL; }
-        TreeNode* root = new TreeNode(stoi(s));
-        idx++;
-        root->left  = _helper(m, lower, stoi(s));
-        root->right = _helper(m, stoi(s), upper);
+    def deserialize(self, data: str) -> Optional[TreeNode]:
+        """Decodes your encoded data to tree."""
+        vals = [int(v) for v in data.split("/")] if data else []
+        idx = 0
 
-        return root;
-    }
-};
+        def build(lower: float, upper: float) -> Optional[TreeNode]:
+            nonlocal idx
+            if idx == len(vals) or not (lower <= vals[idx] <= upper):
+                return None
+            val = vals[idx]
+            idx += 1
+            node = TreeNode(val)
+            node.left = build(lower, val)
+            node.right = build(val, upper)
+            return node
+
+        return build(float('-inf'), float('inf'))
 
 
-// Your Codec object will be instantiated and called as such:
-// Codec* ser = new Codec();
-// Codec* deser = new Codec();
-// string tree = ser->serialize(root);
-// TreeNode* ans = deser->deserialize(tree);
-// return ans;
+# Your Codec object will be instantiated and called as such:
+# ser = Codec()
+# deser = Codec()
+# tree = ser.serialize(root)
+# ans = deser.deserialize(tree)
+# return ans
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(n)
+> Time complexity  : O(n) — each node is written and rebuilt once
+>
+> Space complexity : O(n) — the encoded string and value list (recursion uses O(h))
+
+## Related Problems
+- [297. Serialize and Deserialize Binary Tree](./297_serialize_and_deserialize_binary_tree.md) — 🔴 Hard · general tree needs null markers
+- [1008. Construct Binary Search Tree from Preorder Traversal](./1008_construct_binary_search_tree_from_preorder_traversal.md) — 🟡 Medium · same bounded preorder rebuild
+- [428. Serialize and Deserialize N-ary Tree](./428_serialize_and_deserialize_nary_tree.md) — 🔴 Hard · serialization of a different tree shape

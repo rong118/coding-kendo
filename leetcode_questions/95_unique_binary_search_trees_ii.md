@@ -1,5 +1,7 @@
 # 95. Unique Binary Search Trees II
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/unique-binary-search-trees-ii/)
 
@@ -27,54 +29,47 @@ Constraints:
 - tree
 - dfs
 
+## Approach
+**Key idea:** Picking `i` as the root of a BST on `[start, end]` forces `[start, i - 1]` into the left subtree and `[i + 1, end]` into the right, so every tree is a root combined with any left subtree and any right subtree built recursively.
+
+1. Define `build(start, end)` that returns every BST using values `start..end`.
+2. If `start > end`, return `[None]` (the single empty tree).
+3. For each root value `i` in the range, recursively build all left subtrees from `[start, i - 1]` and all right subtrees from `[i + 1, end]`.
+4. For every (left, right) pair, create a new root `i` with those children and add it to the result.
+5. Return `build(1, n)`.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    vector<TreeNode*> generateTrees(int n) {
-        vector<TreeNode*> m = _helper(1, n);
-        return m;
-    }
-    
-    vector<TreeNode*> _helper(int start, int end){
-        vector<TreeNode*> m;
-        if(start > end) return {NULL};
-        if(start == end) {
-            TreeNode* root = new TreeNode(start);
-            return {root};
-        }
-        
-        for(int i = start; i <= end; i++){
-            vector<TreeNode*> l = _helper(start, i - 1);
-            vector<TreeNode*> r = _helper(i + 1, end);
-            for(int j = 0; j < l.size(); j++){
-                for(int k = 0; k < r.size(); k++){
-                    TreeNode* root = new TreeNode(i);
-                    root->left = l[j];
-                    root->right = r[k];
-                    m.push_back(root);
-                }
-            }
-        }
-        
-        return m;
-    }
-};
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def generateTrees(self, n: int) -> list[Optional[TreeNode]]:
+        def build(start: int, end: int) -> list[Optional[TreeNode]]:
+            if start > end:
+                return [None]
+
+            trees = []
+            for i in range(start, end + 1):
+                lefts = build(start, i - 1)
+                rights = build(i + 1, end)
+                for left in lefts:
+                    for right in rights:
+                        trees.append(TreeNode(i, left, right))
+            return trees
+
+        return build(1, n)
 ```
 
 ## Time Complexity Analysis
-Difficult part : check catalan number 
+> Time complexity  : O(n · G(n)) ≈ O(4^n / √n), where G(n) is the nth Catalan number (the number of unique BSTs)
+>
+> Space complexity : O(n · G(n)) ≈ O(4^n / √n) — G(n) trees of up to n nodes each
 
-Running time  : O(~ c^n)
-running space : O(~ n*Tree())
+## Related Problems
+- [96. Unique Binary Search Trees](./96_unique_binary_search_trees.md) — 🟡 Medium · count these trees instead of building them (Catalan DP)
+- [108. Convert Sorted Array to Binary Search Tree](./108_convert_sorted_array_to_binary_search_tree.md) — 🟢 Easy · pick a root, recurse on left and right ranges
+- [894. All Possible Full Binary Trees](https://leetcode.com/problems/all-possible-full-binary-trees) — 🟡 Medium · same combine-all-left-and-right-subtrees recursion

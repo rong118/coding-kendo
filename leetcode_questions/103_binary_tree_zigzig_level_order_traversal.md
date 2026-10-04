@@ -1,5 +1,7 @@
 # 103. Binary Tree Zigzag Level Order Traversal
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 > link
 
@@ -31,71 +33,88 @@ Constraints:
 - tree
 - bfs
 
+## Approach
+**Key idea:** This is a normal level-order traversal; the only twist is that every odd level is read right to left.
+
+1. BFS: put the root in a queue and process the tree one level at a time (the queue size tells you how many nodes are on the level).
+2. Collect the level's values left to right while pushing each node's children.
+3. Reverse the level if its index is odd, then add it to the answer.
+4. DFS alternative: pass the depth down; on even depths append the value, on odd depths prepend it.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    // bfs
-    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
-        vector<vector<int> > ans;
-        vector<int> tmp;
-        queue<TreeNode*> que;
-        TreeNode* flagNode = new TreeNode(INT_MAX); 
-        if(root == NULL) return ans;
-        que.push(root);
-        que.push(flagNode);
-        while(1){
-            root = que.front(); que.pop();
-            if(root->val == INT_MAX){
-                if(ans.size() % 2 == 1) {
-                    reverse(tmp.begin(), tmp.end());
-                }
-                ans.push_back(tmp);
-                if(que.empty()) break;
-                que.push(flagNode);
-                tmp.clear();
-            }else{
-                tmp.push_back(root->val);
-                if(root->left != NULL)
-                    que.push(root->left);
-                if(root->right != NULL)
-                    que.push(root->right);
-            }
-        }
+### Approach 1: BFS
 
-        return ans;
-    }
+```python
+from collections import deque
+from typing import Optional
 
-    // dfs & recursive
-    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
-        vector<vector<int> > ans;
-        dfs(root, ans, 0);
-        return ans;
-    }
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 
-    void dfs(TreeNode* root, vector<vector<int> >& ret, int height){
-        if(root == NULL) return;
-        if(height == ret.size()) ret.push_back({});
-        if(height % 2 == 0) ret[height].push_back(root->val);
-        if(height % 2 == 1) ret[height].insert(ret[height].begin(), root->val);
-        if(root->left != NULL)
-            dfs(root->left, ret, height + 1);
-        if(root->right != NULL)
-            dfs(root->right, ret, height + 1);
-    }
-};
+class Solution:
+    def zigzagLevelOrder(self, root: Optional[TreeNode]) -> list[list[int]]:
+        if not root:
+            return []
+        ans = []
+        q = deque([root])
+        while q:
+            level = []
+            for _ in range(len(q)):
+                node = q.popleft()
+                level.append(node.val)
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+            if len(ans) % 2 == 1:
+                level.reverse()
+            ans.append(level)
+        return ans
+```
+
+### Approach 2: DFS (recursive)
+
+```python
+from collections import deque
+from typing import Optional
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def zigzagLevelOrder(self, root: Optional[TreeNode]) -> list[list[int]]:
+        ans: list[deque[int]] = []
+
+        def dfs(node: Optional[TreeNode], depth: int) -> None:
+            if not node:
+                return
+            if depth == len(ans):
+                ans.append(deque())
+            if depth % 2 == 0:
+                ans[depth].append(node.val)
+            else:
+                ans[depth].appendleft(node.val)
+            dfs(node.left, depth + 1)
+            dfs(node.right, depth + 1)
+
+        dfs(root, 0)
+        return [list(level) for level in ans]
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
+> Time complexity  : O(n) — every node is visited once
+>
+> Space complexity : O(n) — the queue holds up to one full level (BFS); recursion stack O(h) plus the output (DFS)
+
+## Related Problems
+- [102. Binary Tree Level Order Traversal](./102_binary_tree_level_order_traversal.md) — 🟡 Medium · the same BFS without the zigzag
+- [107. Binary Tree Level Order Traversal II](./107_binary_tree_level_order_traversal_II.md) — 🟡 Medium · level order, bottom-up
+- [314. Binary Tree Vertical Order Traversal](./314_binary_tree_vertical_order_traversal.md) — 🟡 Medium · BFS that groups nodes by column

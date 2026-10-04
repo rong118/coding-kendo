@@ -1,5 +1,7 @@
 # 98. Validate Binary Search Tree
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/validate-binary-search-tree/)
 
@@ -35,55 +37,61 @@ Constraints:
 - tree
 - bst
 
+## Approach
+**Key idea:** Every node must lie strictly inside an open interval set by its ancestors; equivalently, an in-order traversal of a valid BST is strictly increasing.
+
+1. Recursive: start with the bounds `(-inf, +inf)` at the root.
+2. If a node's value is not strictly between its bounds, the tree is invalid.
+3. Recurse left with the upper bound tightened to the node's value, and right with the lower bound raised to it.
+4. Iterative: do an in-order traversal with an explicit stack, remembering the previously visited value.
+5. If any value is `<=` the previous one, return `False`; otherwise the tree is valid.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
+### Approach 1: Recursive bounds
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        def valid(node: Optional[TreeNode], low: float, high: float) -> bool:
+            if not node:
+                return True
+            if not (low < node.val < high):
+                return False
+            return valid(node.left, low, node.val) and valid(node.right, node.val, high)
 
-// recursive
-class Solution {
-public:
-    bool isValidBST(TreeNode* root) {
-        return _valid(root, LONG_MIN, LONG_MAX);
-    }
-    
-    bool _valid(TreeNode* root, long minVal, long maxVal) {
-        if (root == NULL) return true;
-        if (root->val >= maxVal || root->val <= minVal) return false;
-        return _valid(root->left, minVal, root->val) && _valid(root->right, root->val, maxVal);
-    }
-};
+        return valid(root, float('-inf'), float('inf'))
+```
 
-// iterative
-class Solution {
-public:
-    bool isValidBST(TreeNode* root) {
-        TreeNode* pre = NULL;
-        stack<TreeNode*> stk;
-        while(root != NULL || !stk.empty()){
-            while(root != NULL){
-                stk.push(root);
-                root = root->left;
-            }
-            root = stk.pop();
-            if(pre != NULL && root->val <= pre->val){ return false;}
-            pre = root;
-            root = root->right;
-        }
-        return true;
-    }
-};
+### Approach 2: Iterative in-order
+```python
+class Solution:
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        stack = []
+        prev = None
+        node = root
+        while node or stack:
+            while node:
+                stack.append(node)
+                node = node.left
+            node = stack.pop()
+            if prev is not None and node.val <= prev:
+                return False
+            prev = node.val
+            node = node.right
+        return True
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(1)
+> Time complexity  : O(n) — each node is visited once
+>
+> Space complexity : O(h) — recursion / explicit stack, where h is the tree height (O(n) worst case)
+
+## Related Problems
+- [94. Binary Tree Inorder Traversal](./94_binary_tree_inorder_traversal.md) — 🟢 Easy · in-order traversal of a BST is sorted
+- [99. Recover Binary Search Tree](./99_recover_binary_search_tree.md) — 🟡 Medium · find in-order violations in a BST
+- [173. Binary Search Tree Iterator](./173_binary_search_tree_iterator.md) — 🟡 Medium · iterative in-order with a stack

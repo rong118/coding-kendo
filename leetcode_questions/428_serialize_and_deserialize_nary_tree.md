@@ -1,5 +1,7 @@
 # 428. Serialize and Deserialize N-ary Tree
 
+**Difficulty:** 🔴 Hard
+
 ## Question link
 (https://leetcode.com/problems/serialize-and-deserialize-n-ary-tree/)
 
@@ -24,59 +26,59 @@ List
 ## Tags
 - tree
 
+## Approach
+**Key idea:** Write each node in preorder as its value followed by its number of children. When reading back, the count tells you exactly how many subtrees to build under each node, so no brackets or null markers are needed.
+
+1. `serialize`: preorder DFS; for each node append `val` and `len(children)`, then serialize each child.
+2. Join the tokens with spaces (an empty tree becomes an empty string).
+3. `deserialize`: split into tokens and read them through a local iterator, so the codec keeps no state between calls.
+4. Read a value and a child count, create the node, then build that many children recursively, in order.
+
 ## Code Implementation
-```c++
-class Codec {
-    int idx = 0;
-public:
-    string serialize(Node* root){
-        idx = 0;
-        string s;
-        dfs(root, s);
-        return s;
-    }
+```python
+from typing import Optional
 
-    void dfs(Node* root, string& l){
-        if(root == NULL) return;
-        l += to_string(root->val);
-        l += " ";
-        l += to_string(root->children.size());
-        l += " ";
-        for(int i = 0; i < root->children; i++){
-            dfs(root->children[i], l);
-        }
-    }
+# Definition for a Node.
+# class Node:
+#     def __init__(self, val: Optional[int] = None, children: Optional[list['Node']] = None):
+#         self.val = val
+#         self.children = children if children is not None else []
 
-    Node* deserialize(string data) {
-        vector<string> m;
-        
-        _split_space(data, m);
-        return _helper(m);
-    }
+class Codec:
+    def serialize(self, root: 'Node') -> str:
+        # Preorder: each node is written as "val childCount"
+        out = []
 
-    //
-    void _split_space(string& s, vector<string>& m){
-        stringstream ss(s);
-        string word;
-        while (ss >> word) {
-            m.push_back(m)
-        }
-    }
+        def dfs(node: 'Node') -> None:
+            out.append(str(node.val))
+            out.append(str(len(node.children)))
+            for child in node.children:
+                dfs(child)
 
-    TreeNode* _helper(vector<string>& m){
-        string v = m[idx++];
-        string children_num = m[idx++];
-        TreeNode* root = NULL;
-        root = new TreeNode(stoi(v));
-        for(int i = 0; i < stoi(children_num); i++){
-            root->children.push_back(_helper(m));
-        }
+        if root:
+            dfs(root)
+        return ' '.join(out)
 
-        return root;
-    }
-}
+    def deserialize(self, data: str) -> 'Node':
+        if not data:
+            return None
+        tokens = iter(data.split())
+
+        def build() -> 'Node':
+            node = Node(int(next(tokens)))
+            for _ in range(int(next(tokens))):
+                node.children.append(build())
+            return node
+
+        return build()
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(n)
+> Time complexity  : O(n) — each node is written and read once
+>
+> Space complexity : O(n) — the token list plus the recursion stack
+
+## Related Problems
+- [297. Serialize and Deserialize Binary Tree](./297_serialize_and_deserialize_binary_tree.md) — 🔴 Hard · binary-tree version with null markers
+- [449. Serialize and Deserialize BST](./449_serialize_and_deserialize_BST.md) — 🟡 Medium · compact encoding using tree structure
+- [589. N-ary Tree Preorder Traversal](https://leetcode.com/problems/n-ary-tree-preorder-traversal) — 🟢 Easy · the preorder traversal used here

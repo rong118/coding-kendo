@@ -1,5 +1,7 @@
 # 895. Maximum Frequency Stack
 
+**Difficulty:** 🔴 Hard
+
 ## Question link
 (https://leetcode.com/problems/maximum-frequency-stack/)
 
@@ -41,6 +43,15 @@ Constraints:
 ## Tags
 - stack
 
+## Approach
+**Key idea:** Keep a separate stack for each frequency level. When a value reaches frequency `f`, push it onto stack `f`. The top of the highest-frequency stack is then the most frequent value, and the most recent one if there is a tie.
+
+1. `freq[val]` counts each value; `group[f]` is a stack of values that reached frequency `f`; `max_freq` tracks the highest level.
+2. `push`: increment `freq[val]` to `f`, update `max_freq`, and push `val` onto `group[f]`.
+3. `pop`: pop from `group[max_freq]` and decrement that value's frequency.
+4. If `group[max_freq]` is now empty, decrement `max_freq`.
+5. Copies of the value at lower levels stay in place, so later pops still find it there.
+
 ## Code Implementation
 ```python
 class FreqStack:
@@ -69,3 +80,8 @@ class FreqStack:
 > Time complexity  : O(1) for both push and pop
 >
 > Space complexity : O(n)
+
+## Related Problems
+- [716. Max Stack](./716_max_stack.md) — 🔴 Hard · stack that pops by a priority
+- [155. Min Stack](./155_min_stack.md) — 🟡 Medium · stack with O(1) extra queries
+- [460. LFU Cache](https://leetcode.com/problems/lfu-cache) — 🔴 Hard · buckets keyed by frequency

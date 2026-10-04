@@ -1,5 +1,7 @@
 # 438. Find All Anagrams in a String
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/find-all-anagrams-in-a-string/)
 
@@ -42,6 +44,14 @@ Constraints:
 - string
 - hashMap
 
+## Approach
+**Key idea:** Two strings are anagrams exactly when their letter counts match, so slide a fixed-size window of length `len(p)` over `s` and compare its counts with `p`'s.
+
+1. Count the letters of `p`.
+2. Move a right edge across `s`, adding each new character to the window count.
+3. Once the window is longer than `len(p)`, remove the character that falls off the left (deleting zero counts so the comparison stays exact).
+4. Whenever the window count equals `p`'s count, record the window's start index `i - len(p) + 1`.
+
 ## Code Implementation
 ```python
 from collections import Counter
@@ -69,3 +79,9 @@ class Solution:
 > Time complexity  : O(n)
 >
 > Space complexity : O(1) — at most 26 lowercase letters
+
+## Related Problems
+- [567. Permutation in String](https://leetcode.com/problems/permutation-in-string) — 🟡 Medium · same fixed-size window, boolean answer
+- [76. Minimum Window Substring](./76_minimum_window_substring.md) — 🔴 Hard · variable-size window with count matching
+- [242. Valid Anagram](./242_valid_anagram.md) — 🟢 Easy · anagram check via letter counts
+- [49. Group Anagrams](./49_group_anagrams.md) — 🟡 Medium · grouping strings by letter counts

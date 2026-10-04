@@ -1,5 +1,7 @@
 # 107. Binary Tree Level Order Traversal II
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 > link
 
@@ -31,52 +33,52 @@ Constraints:
 - tree
 - bfs
 
-## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    //bfs
-    vector<vector<int>> levelOrderBottom(TreeNode* root) {
-        vector<vector<int> > ans;
-        vector<int> tmp;
-        queue<TreeNode*> que;
-        TreeNode* flagNode=new TreeNode(INT_MAX); 
-        if(root == NULL) return ans;
-        que.push(root);
-        que.push(flagNode);
-        while(1){
-            root = que.front(); que.pop();
-            if(root->val == INT_MAX){
-                ans.push_back(tmp);
-                if(que.empty()) break;
-                que.push(flagNode);
-                tmp.clear();
-            }else{
-                tmp.push_back(root->val);
-                if(root->left != NULL)
-                    que.push(root->left);
-                if(root->right != NULL)
-                    que.push(root->right);
-            }
-        }
+## Approach
+**Key idea:** A bottom-up level order is just a normal top-down BFS level order, reversed at the end.
 
-        reverse(ans.begin(), ans.end());
-        return ans;
-    }
-};
+1. Return `[]` for an empty tree; otherwise start a queue with the root.
+2. While the queue is non-empty, pop exactly the number of nodes currently in it — that is one level.
+3. Record each popped node's value and enqueue its non-null children.
+4. Append the level's values to the answer.
+5. Reverse the answer so the deepest level comes first.
+
+## Code Implementation
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+from collections import deque
+
+class Solution:
+    def levelOrderBottom(self, root: Optional[TreeNode]) -> list[list[int]]:
+        if not root:
+            return []
+
+        ans = []
+        queue = deque([root])
+        while queue:
+            level = []
+            for _ in range(len(queue)):
+                node = queue.popleft()
+                level.append(node.val)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            ans.append(level)
+
+        return ans[::-1]
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(n)
+> Time complexity  : O(n) — each node is enqueued and dequeued once
+>
+> Space complexity : O(n) — the queue and the output
+
+## Related Problems
+- [102. Binary Tree Level Order Traversal](./102_binary_tree_level_order_traversal.md) — 🟡 Medium · the same BFS without the final reverse
+- [103. Binary Tree Zigzag Level Order Traversal](./103_binary_tree_zigzig_level_order_traversal.md) — 🟡 Medium · level-order BFS with alternating direction
+- [637. Average of Levels in Binary Tree](https://leetcode.com/problems/average-of-levels-in-binary-tree) — 🟢 Easy · per-level BFS aggregation

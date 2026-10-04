@@ -1,5 +1,7 @@
 # 19. Remove Nth Node From End of List
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/remove-nth-node-from-end-of-list/)
 
@@ -34,6 +36,14 @@ Constraints:
 ## Tags
 - linkedlist
 
+## Approach
+**Key idea:** If one pointer runs `n + 1` nodes ahead of another, then when the leading pointer falls off the end, the trailing pointer sits right before the node to delete.
+
+1. Add a dummy node before `head` so removing the head itself needs no special case.
+2. Start `first` and `second` at the dummy and advance `first` by `n + 1` steps.
+3. Move both pointers one step at a time until `first` is `None`.
+4. Unlink the target with `second.next = second.next.next` and return `dummy.next`.
+
 ## Code Implementation
 ```python
 from typing import Optional
@@ -66,3 +76,9 @@ class Solution:
 > Time complexity  : O(n) — single pass with gap pointer
 >
 > Space complexity : O(1) — dummy + two pointers
+
+## Related Problems
+- [203. Remove Linked List Elements](./203_remove_linked_list_elements.md) — 🟢 Easy · dummy-head trick for deleting nodes
+- [876. Middle of the Linked List](https://leetcode.com/problems/middle-of-the-linked-list) — 🟢 Easy · two pointers at different speeds/offsets
+- [141. Linked List Cycle](./141_linked_list_cycle.md) — 🟢 Easy · fast/slow pointer pattern
+- [61. Rotate List](https://leetcode.com/problems/rotate-list) — 🟡 Medium · locating the k-th node from the end

@@ -1,5 +1,7 @@
 # 1168. Optimize Water Distribution in a Village
 
+**Difficulty:** 🔴 Hard
+
 ## Question link
 > (https://leetcode.com/problems/optimize-water-distribution-in-a-village/)
 
@@ -36,71 +38,50 @@ Constraints:
 - graph
 - mst
 
+## Approach
+**Key idea:** Add a virtual node 0 for the water source and model building a well at house `i` as an edge `(0, i)` with cost `wells[i-1]`. The answer is then the minimum spanning tree of this `n + 1`-node graph.
+
+1. Build an adjacency list: edges from node 0 to every house with the well cost, plus both directions of every pipe.
+2. Run Prim's algorithm from node 0 with a min-heap of `(cost, node)`.
+3. Pop the cheapest edge; skip it if the node is already in the tree, otherwise add the node and its cost to the total.
+4. Push all edges from the new node to unvisited neighbors.
+5. Stop once all `n + 1` nodes are in the tree and return the total.
+
 ## Code Implementation
-```c++
-class Solution {
-public:
-    int minCostToSupplyWater(int n, vector<int> wells, vector<vector<int>> pipes){
-        unordered_map<int, unordered_map<int, int>> g;
-        for(int i = 1; i <= n; i++){
-            if(g.find(i) == g.end()){
-                unordered_map<int, int> tmp;
-                g[i] = tmp;
-            }
-            g[0][i] = wells[i - 1];
-        }
+```python
+import heapq
 
-        // 建图 c++ default value in map ???
-        for(int i = 0; i < pipes.size(); i++){
-            vector<int> edge = pipes[i]; 
-            if(g.find(edge[0]) == g.end()){
-                unordered_map<int, int> tmp;
-                g[edge[0]] = tmp;
-            }
-            if(g[edge[0]].find(edge[1]) == g[edge[0]].end()){
-                g[edge[0]][edge[1] = INT_MAX;
-            }
-            int minFrom0To1 = g[edge[0]][edge[1];
-            g[edge[0]][edge[1]] = min(edge[2], minFrom0To1);
+class Solution:
+    def minCostToSupplyWater(self, n: int, wells: list[int], pipes: list[list[int]]) -> int:
+        # Virtual node 0 is the water source: building a well at house i = edge (0, i)
+        graph = [[] for _ in range(n + 1)]
+        for i, cost in enumerate(wells, start=1):
+            graph[0].append((cost, i))
+        for u, v, cost in pipes:
+            graph[u].append((cost, v))
+            graph[v].append((cost, u))
 
-            if(g.find(edge[1]) == g.end()){
-                unordered_map<int, int> tmp;
-                g[edge[1]] = tmp;
-            }
-            if(g[edge[1]].find(edge[0]) == g[edge[1]].end()){
-                g[edge[1]][edge[0] = INT_MAX;
-            }
-
-            int minFrom1To0 = g[edge[1]][edge[0];
-            g[edge[1]][edge[0] = min(edge[2], minFrom1To0);
-        }
-        
-        int res = 0;
-        auto comp = [] (vector<int> &a, vector<int> &b) -> bool { return a[1] < b[1]; };
-        priority_queue<vector<int>, vector<vector<int>> decltype(comp) > pq (comp);
-        unordered_set<int> v;
-        pq.push({0, 0});
-        while(!pq.isEmpty()){
-            vector<int> cur = pq.front(); pq.pop();
-            int curNode = cur[0], dis = cur[2];
-            if(v.find(curNode) != v.end()) continue;
-
-            v.insert(curNode);
-            res += dis;
-            for(auto itr = g[curNode].begin(); itr != g[curNode].end(); itr++){
-                int nei = itr->first;
-                if(v.find(nei) == v.end()){
-                    pq.push({nei, g[curNode][nei]});
-                }
-            }
-        }
-
-        return res;
-    }
-}
-
-
+        visited = set()
+        heap = [(0, 0)]
+        total = 0
+        while heap and len(visited) < n + 1:
+            cost, node = heapq.heappop(heap)
+            if node in visited:
+                continue
+            visited.add(node)
+            total += cost
+            for edge in graph[node]:
+                if edge[1] not in visited:
+                    heapq.heappush(heap, edge)
+        return total
 ```
 
 ## Time Complexity Analysis
-Running time  : O(Elog(v))
+> Time complexity  : O((n + m) log(n + m)) — Prim with a heap, m = pipes.length
+>
+> Space complexity : O(n + m) — adjacency list and heap
+
+## Related Problems
+- [1135. Connecting Cities With Minimum Cost](./1135_connecting_cities_with_minimum_cost.md) — 🟡 Medium · plain MST over given edges
+- [1584. Min Cost to Connect All Points](./1584_min_cost_to_connect_all_points.md) — 🟡 Medium · MST on a complete graph with Prim's
+- [1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree](./1489_find_critical_and_pseudo_critical_edges_in_minimum_spanning_tree.md) — 🔴 Hard · MST edge analysis

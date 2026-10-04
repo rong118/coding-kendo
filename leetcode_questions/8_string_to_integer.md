@@ -1,5 +1,7 @@
 # 8. String to Integer (atoi)
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/string-to-integer-atoi/)
 
@@ -45,6 +47,14 @@ Constraints:
 ## Tags
 - string
 
+## Approach
+**Key idea:** Parse the string left to right in the exact order the spec describes — whitespace, optional sign, digits — and clamp once at the end (Python ints don't overflow).
+
+1. Strip leading spaces; if nothing is left, return `0`.
+2. If the first character is `+` or `-`, record the sign and skip it.
+3. Read consecutive digits, building `num = num * 10 + digit`; stop at the first non-digit.
+4. Apply the sign and clamp the result into `[-2^31, 2^31 - 1]`.
+
 ## Code Implementation
 ```python
 class Solution:
@@ -73,3 +83,8 @@ class Solution:
 > Time complexity  : O(n)
 >
 > Space complexity : O(1)
+
+## Related Problems
+- [7. Reverse Integer](https://leetcode.com/problems/reverse-integer) — 🟡 Medium · digit-by-digit building with 32-bit overflow handling
+- [65. Valid Number](https://leetcode.com/problems/valid-number) — 🔴 Hard · stricter character-by-character numeric parsing
+- [58. Length of Last Word](./58_length_of_last_word.md) — 🟢 Easy · scanning a string while skipping spaces

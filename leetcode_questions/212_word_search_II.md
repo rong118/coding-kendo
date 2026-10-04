@@ -1,4 +1,6 @@
-# Word Search II
+# 212. Word Search II
+
+**Difficulty:** 🔴 Hard
 
 ## Question link
 (https://leetcode.com/problems/word-search-ii/)
@@ -39,108 +41,62 @@ Constraints:
 - tire (用在空间优化)
 - 从每一个位置暴力展开向4个方向，同时用Trie的searchPrefix来做减枝
 
-## Code
-```c++
-class TrieNode {
-public:
-    vector<TrieNode*> children;
-    bool isWord;
-    TrieNode(){
-        children.resize(26, NULL);
-        isWord = false;
-    }
-};
+## Approach
+**Key idea:** Put all words in a trie and DFS from every cell, walking the trie alongside the board — as soon as the current path is not a prefix of any word, prune.
 
-class Trie {
-private:
-    TrieNode* root;
+1. Insert every word into a trie; mark the end node with the word itself.
+2. From each cell, start a DFS with the trie root.
+3. At each step, move to the trie child for the cell's letter; if there is none, stop (prefix pruning).
+4. If the trie node ends a word, record it and clear the mark so it is not reported twice.
+5. Mark the cell as visited, recurse into the 4 neighbors, then restore the cell (backtrack).
 
-public:
-    Trie(){
-        root = new TrieNode();
-    }
+## Code Implementation
+```python
+class TrieNode:
+    def __init__(self):
+        self.children: dict[str, "TrieNode"] = {}
+        self.word: Optional[str] = None
 
-    void add(string word){
-        TrieNode* node = root;
-        for(char c : word){
-            if(node->children[c - 'a'] == NULL){
-                node->children[c - 'a'] = new TrieNode();
-            }
-            node = node->children[c - 'a'];
-        }
-        node->isWord = true;
-    }
 
-    bool search(string word){
-        TrieNode* node = root;
-        for(char c : word){
-            if(node->children[c - 'a'] == NULL){
-                return false;
-            }
-            node = node->children[c - 'a'];
-        }
+class Solution:
+    def findWords(self, board: list[list[str]], words: list[str]) -> list[str]:
+        root = TrieNode()
+        for w in words:
+            node = root
+            for c in w:
+                node = node.children.setdefault(c, TrieNode())
+            node.word = w
 
-        return node->isWord;
-    }
+        m, n = len(board), len(board[0])
+        found = []
 
-    bool searchPrefix(string word){
-        TrieNode* node = root;
-        for(char c : word){
-            if(node->children[c - 'a'] == NULL){
-                return false;
-            }
-            node = node->children[c - 'a'];
-        }
+        def dfs(x: int, y: int, parent: TrieNode) -> None:
+            c = board[x][y]
+            node = parent.children.get(c)
+            if not node:
+                return  # no word has this prefix — prune
+            if node.word:
+                found.append(node.word)
+                node.word = None  # avoid duplicates
+            board[x][y] = "#"  # mark visited
+            for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < m and 0 <= ny < n and board[nx][ny] != "#":
+                    dfs(nx, ny, node)
+            board[x][y] = c  # backtrack
 
-        return true;
-    }
-};
-
-class Solution {
-private:
-    std::unordered_set<string> s;
-    std::vector<string> ans;
-public:
-    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
-        int M = board.size();
-        int N = board[0].size();
-        Trie* trie = new Trie();
-        for(string word : words){
-            trie->add(word);
-        }
-        vector<vector<bool> > visited(M, vector<bool>(N, false));
-
-        string tmp;
-        for(int i = 0; i < M; i++){
-            for(int j = 0; j < N; j++){
-                dfs(board, visited, tmp, i, j , trie);
-            }
-        }
-
-        for (auto it = s.begin(); it != s.end(); it++) {
-            ans.push_back(*it);
-        }
-
-        return ans;
-    }
-
-    void dfs(vector<vector<char>>& board, vector<vector<bool> > visited, string str, 
-    int x, int y, Trie* trie){
-        if(x < 0 || x >= board.size() || y < 0 || y >= board[0].size()) return;
-        if(visited[x][y]) return;
-        str += board[x][y];
-        if(!trie->searchPrefix(str)) return; //减枝
-        if(trie->search(str)) s.insert(str);
-        visited[x][y] = true;
-        vector<vector<int> > dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-        for(int i = 0; i < dirs.size(); i ++){
-            dfs(board, visited, str, x + dirs[i][0], y + dirs[i][1], trie);
-        }
-        visited[x][y] = false;
-        return;
-    }
-};
+        for i in range(m):
+            for j in range(n):
+                dfs(i, j, root)
+        return found
 ```
 
 ## Time Complexity Analysis
-- O(M * N)
+> Time complexity  : O(M * N * 3^L) — L is the max word length (≤ 10); each DFS branches into at most 3 unvisited neighbors
+>
+> Space complexity : O(W * L) — trie over all W words, plus O(L) recursion depth
+
+## Related Problems
+- [79. Word Search](https://leetcode.com/problems/word-search) — 🟡 Medium · the single-word backtracking version
+- [208. Implement Trie (Prefix Tree)](./208_implement_trie.md) — 🟡 Medium · the trie used for prefix pruning
+- [211. Design Add and Search Words Data Structure](./211_design_add_search_words_data_structure.md) — 🟡 Medium · DFS through a trie

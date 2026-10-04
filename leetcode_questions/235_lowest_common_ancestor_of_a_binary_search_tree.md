@@ -1,5 +1,7 @@
 # 235. Lowest Common Ancestor of a Binary Search Tree
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
 
@@ -42,33 +44,40 @@ Constraints:
 - tree
 - bst
 
-## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
+## Approach
+**Key idea:** In a BST, if `p` and `q` are both smaller than the current node the LCA is in the left subtree, and if both are larger it is in the right subtree; otherwise the current node is where they split, so it is the LCA.
 
-class Solution {
-public:
-    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if(root == NULL) return NULL;
-        if(root->val > p->val && root->val > q->val){
-            return lowestCommonAncestor(root->left, p, q);
-        }
-        if(root->val < p->val && root->val < q->val){
-            return lowestCommonAncestor(root->right, p, q);
-        }
-        return root;
-    }
-};
+1. Start at the root.
+2. If both `p.val` and `q.val` are less than `root.val`, recurse into the left subtree.
+3. If both are greater than `root.val`, recurse into the right subtree.
+4. Otherwise `p` and `q` are on different sides (or one of them is `root`), so return `root`.
+
+## Code Implementation
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if not root:
+            return None
+        if p.val < root.val and q.val < root.val:
+            return self.lowestCommonAncestor(root.left, p, q)
+        if p.val > root.val and q.val > root.val:
+            return self.lowestCommonAncestor(root.right, p, q)
+        return root
 ```
 
 ## Time Complexity Analysis
-Running time  : O(logn) => O(n)
-running space : O(n)
+> Time complexity  : O(h) — one root-to-node path; O(log n) for a balanced BST, O(n) in the worst case
+>
+> Space complexity : O(h) — recursion stack
+
+## Related Problems
+- [236. Lowest Common Ancestor of a Binary Tree](./236_lowest_common_ancestor_of_a_binary_tree.md) — 🟡 Medium · same question without BST ordering
+- [1650. Lowest Common Ancestor of a Binary Tree III](./1650_lowest_common_ancestor_of_a_binary_tree_iii.md) — 🟡 Medium · LCA using parent pointers
+- [270. Closest Binary Search Tree Value](./270_closest_binary_search_tree_value.md) — 🟢 Easy · walks one BST path guided by value comparisons

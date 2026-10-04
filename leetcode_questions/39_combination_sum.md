@@ -1,5 +1,7 @@
 # 39. Combination Sum
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/combination-sum/description/)
 
@@ -50,45 +52,45 @@ Constraints:
 - dfs
 - backtracking
 
+## Approach
+**Key idea:** Build combinations in non-decreasing index order — each recursive call may only pick candidates from `start` onward — so every multiset is generated exactly once; sorting lets the loop stop as soon as a candidate exceeds the remaining target.
+
+1. Sort `candidates`.
+2. Backtrack with a current `path`, a `start` index, and the `remain`ing target.
+3. If `remain == 0`, save a copy of `path`.
+4. Otherwise try each candidate from `start` on; stop the loop once a candidate is larger than `remain`.
+5. Recurse with the same index `i` (the number can be reused), then pop it to undo the choice.
+
 ## Code Implementation
-```c++
-class Solution {
-public:
-    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        vector<int> tmp;
-        vector<vector<int>> ans;
-        sort(candidates.begin(), candidates.end());
-        helper(candidates, 0, target, tmp, ans);
+```python
+class Solution:
+    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
+        candidates.sort()
+        ans: list[list[int]] = []
+        path: list[int] = []
 
-        return ans;
-    }
+        def backtrack(start: int, remain: int) -> None:
+            if remain == 0:
+                ans.append(path[:])
+                return
+            for i in range(start, len(candidates)):
+                if candidates[i] > remain:
+                    break  # sorted, so every later candidate is too big as well
+                path.append(candidates[i])
+                backtrack(i, remain - candidates[i])  # i, not i + 1: reuse allowed
+                path.pop()
 
-    void helper(vector<int>& candidates, 
-                int start,
-                int target, 
-                vector<int>& tmp, 
-                vector<vector<int>>& ans)
-    {
-        if(target == 0){ 
-            ans.push_back(tmp);
-            return;
-        }
-        for(int i = start; i < candidates.size(); i++){
-            if(target - candidates[i] >= 0){
-                tmp.push_back(candidates[i]);
-                helper(candidates, i, target - candidates[i], tmp, ans);
-                tmp.pop_back();
-            }else{
-                return;
-            }
-        }
-        return;
-    }
-
-};
+        backtrack(0, target)
+        return ans
 ```
 
 ## Time Complexity Analysis
-> Time complexity  : O(n^m) ==> n is candidates length and m is the number of possible combinations that add up to target
+> Time complexity  : O(n^(t/m + 1)) — n candidates, t = target, m = smallest candidate (max depth is t/m)
 >
-> Space complexity : O(m)
+> Space complexity : O(t/m) — recursion depth and current path; output not counted
+
+## Related Problems
+- [40. Combination Sum II](https://leetcode.com/problems/combination-sum-ii) — 🟡 Medium · each number used at most once, with duplicates in input
+- [216. Combination Sum III](https://leetcode.com/problems/combination-sum-iii) — 🟡 Medium · same backtracking with a fixed combination size
+- [377. Combination Sum IV](https://leetcode.com/problems/combination-sum-iv) — 🟡 Medium · counts ordered combinations with DP instead
+- [46. Permutations](https://leetcode.com/problems/permutations) — 🟡 Medium · classic backtracking template

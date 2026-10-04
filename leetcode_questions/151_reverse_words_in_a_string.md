@@ -1,5 +1,7 @@
 # 151. Reverse Words in a String
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/reverse-words-in-a-string/)
 
@@ -44,6 +46,13 @@ Constraints:
 - string
 - two-pointers
 
+## Approach
+**Key idea:** `str.split()` with no argument splits on any run of whitespace and drops leading/trailing spaces, so it yields exactly the words; reversing and joining with one space gives the answer.
+
+1. Split `s` into words with `s.split()`.
+2. Reverse the list of words.
+3. Join them with a single space.
+
 ## Code Implementation
 ```python
 class Solution:
@@ -59,3 +68,8 @@ class Solution:
 > Time complexity  : O(n) — split and join each traverse the string once
 >
 > Space complexity : O(n) — split creates a list of word strings
+
+## Related Problems
+- [344. Reverse String](./344_reverse_string.md) — 🟢 Easy · in-place reversal with two pointers
+- [58. Length of Last Word](./58_length_of_last_word.md) — 🟢 Easy · word parsing around extra spaces
+- [186. Reverse Words in a String II](https://leetcode.com/problems/reverse-words-in-a-string-ii) — 🟡 Medium · in-place version: reverse all, then each word

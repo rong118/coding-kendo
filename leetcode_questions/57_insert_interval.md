@@ -1,5 +1,7 @@
 # 57. Insert Interval
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/insert-interval/)
 
@@ -38,37 +40,38 @@ Constraints:
 - Array
 - Sort
 
+## Approach
+**Key idea:** Adding the new interval and sorting by start turns the problem into a standard interval merge: once sorted, any overlapping intervals are adjacent.
+
+1. Append `newInterval` to `intervals` and sort by start.
+2. Keep a running interval `cur`, starting with the first one.
+3. For each next interval: if it starts after `cur` ends, push `cur` to the answer and start a new `cur`.
+4. Otherwise it overlaps, so extend `cur`'s end to the larger of the two ends.
+5. Push the final `cur` after the loop.
+
 ## Code Implementation
-```c++
-class Solution {
-public:
-    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
-        intervals.push_back(newInterval);
-        sort(intervals.begin(), intervals.end());
-        vector<vector<int>> ans;
-        vector<int> cur = intervals[0];
-        for(int i = 1; i < intervals.size(); i++){
-            if(intervals[i][1] <= cur[1]){
-                // Do nothing
-            }else{
-                if(intervals[i][0] > cur[1]){
-                    ans.push_back(cur);
-                    cur = intervals[i];
-                }else{
-                    cur[1] = intervals[i][1];
-                }
-            }
-        }
-
-        //push last cur into ans
-        ans.push_back(cur);
-
-        return ans;
-    }
-};
+```python
+class Solution:
+    def insert(self, intervals: list[list[int]], newInterval: list[int]) -> list[list[int]]:
+        intervals = sorted(intervals + [newInterval])
+        ans = []
+        cur = intervals[0][:]
+        for start, end in intervals[1:]:
+            if start > cur[1]:
+                ans.append(cur)
+                cur = [start, end]
+            else:
+                cur[1] = max(cur[1], end)
+        ans.append(cur)
+        return ans
 ```
 
 ## Time Complexity Analysis
-> Time complexity  : O()
+> Time complexity  : O(n log n) — dominated by the sort
 >
-> Space complexity : O()
+> Space complexity : O(n) — sorted copy and output list
+
+## Related Problems
+- [56. Merge Intervals](./56_merge_intervals.md) — 🟡 Medium · the same sort-and-merge sweep
+- [729. My Calendar I](./729_my_calendar_i.md) — 🟡 Medium · detecting overlap when inserting an interval
+- [435. Non-overlapping Intervals](https://leetcode.com/problems/non-overlapping-intervals) — 🟡 Medium · interval overlap after sorting

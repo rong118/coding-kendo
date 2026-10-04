@@ -1,5 +1,7 @@
 # 225. Implement Stack using Queues
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/implement-stack-using-queues/)
 
@@ -44,6 +46,14 @@ Constraints:
 - stack
 - queue
 
+## Approach
+**Key idea:** Keep the queue in stack order — newest element at the front — by rotating all older elements behind each newly pushed one.
+
+1. `push(x)`: append `x` to the back of the queue.
+2. Then pop from the front and re-append `len(q) - 1` times, so `x` moves to the front.
+3. `pop()` / `top()`: the front of the queue is the top of the stack.
+4. `empty()`: the stack is empty when the queue is empty.
+
 ## Code Implementation
 ```python
 from collections import deque
@@ -72,3 +82,8 @@ class MyStack:
 > Time complexity  : O(n) for push (rotate n-1 elements); O(1) for pop, top, empty
 >
 > Space complexity : O(n) — elements stored in the queue
+
+## Related Problems
+- [232. Implement Queue using Stacks](./232_implement_queue_using_stacks.md) — 🟢 Easy · the mirror problem
+- [155. Min Stack](./155_min_stack.md) — 🟡 Medium · stack design with an extra operation
+- [716. Max Stack](./716_max_stack.md) — 🔴 Hard · stack design with an extra operation

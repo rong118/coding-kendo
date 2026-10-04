@@ -1,5 +1,7 @@
 # 125. Valid Palindrome
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/valid-palindrome/)
 
@@ -41,6 +43,14 @@ Constraints:
 ## Tags
 - string
 
+## Approach
+**Key idea:** Compare characters from both ends inward, skipping anything that is not alphanumeric, so no cleaned copy of the string is needed.
+
+1. Put `l` at the start and `r` at the end of `s`.
+2. Advance `l` past non-alphanumeric characters, and move `r` back past them.
+3. Compare `s[l].lower()` with `s[r].lower()`; if they differ, return `False`.
+4. Move both pointers inward and repeat until they meet, then return `True`.
+
 ## Code Implementation
 ```python
 class Solution:
@@ -62,3 +72,9 @@ class Solution:
 > Time complexity  : O(n)
 >
 > Space complexity : O(1)
+
+## Related Problems
+- [680. Valid Palindrome II](https://leetcode.com/problems/valid-palindrome-ii) — 🟢 Easy · same two-pointer check allowing one deletion
+- [234. Palindrome Linked List](./234_palindrome_linked_list.md) — 🟢 Easy · palindrome check on a linked list
+- [344. Reverse String](./344_reverse_string.md) — 🟢 Easy · two pointers swapping from both ends
+- [5. Longest Palindromic Substring](./5_longest_palindromic_substring.md) — 🟡 Medium · palindromes via expansion around centers

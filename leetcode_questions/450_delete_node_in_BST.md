@@ -1,5 +1,7 @@
 # 450. Delete Node in a BST
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/delete-node-in-a-bst/)
 
@@ -46,47 +48,54 @@ Follow up: Could you solve it with time complexity O(height of tree)?
 - tree
 - bst
 
+## Approach
+**Key idea:** Use the BST property to walk to the key; a node with two children can be replaced by its in-order successor (the smallest value in its right subtree), which keeps the tree ordered.
+
+1. If `key` is smaller or larger than `root.val`, recurse into the left or right subtree and reattach the result.
+2. When the node is found and it has at most one child, return that child (or `None`) in its place.
+3. With two children, find the minimum of the right subtree and copy its value into the node.
+4. Recursively delete that successor value from the right subtree.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    TreeNode* deleteNode(TreeNode* root, int key) {
-        // find key
-        if(root == NULL) return NULL;
-        if(key < root->val){
-            root->left = deleteNode(root->left, key);
-        }else if(key > root->val){
-            root->right = deleteNode(root->right, key);
-        }else{
-            // root->val == key, delete
-            if(root->left  == NULL) return root->right;
-            if(root->right == NULL) return root->left;
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 
-            root->val = _findMin(root->right);
-            root->right = deleteNode(root->right, root->val);
-        }
+from typing import Optional
 
-        return root;
-    }
 
-    int _findMin(TreeNode* node){
-        while(node->left != NULL) node = node->left;
-        return node->val;
-    }
-};
+class Solution:
+    def deleteNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:
+        if not root:
+            return None
+        if key < root.val:
+            root.left = self.deleteNode(root.left, key)
+        elif key > root.val:
+            root.right = self.deleteNode(root.right, key)
+        else:
+            if not root.left:
+                return root.right
+            if not root.right:
+                return root.left
+            # Two children: copy the in-order successor, then delete it
+            succ = root.right
+            while succ.left:
+                succ = succ.left
+            root.val = succ.val
+            root.right = self.deleteNode(root.right, succ.val)
+        return root
 ```
 
 ## Time Complexity Analysis
-Running time  : O(log(n))
-running space : O(h)
+> Time complexity  : O(h) — h = tree height (O(log n) balanced, O(n) worst case)
+>
+> Space complexity : O(h) — recursion stack
+
+## Related Problems
+- [701. Insert into a Binary Search Tree](https://leetcode.com/problems/insert-into-a-binary-search-tree) — 🟡 Medium · the matching BST insert operation
+- [700. Search in a Binary Search Tree](https://leetcode.com/problems/search-in-a-binary-search-tree) — 🟢 Easy · the search step of deletion
+- [98. Validate Binary Search Tree](./98_validate_binary_search_tree.md) — 🟡 Medium · the BST invariant deletion must preserve

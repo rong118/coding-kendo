@@ -1,5 +1,7 @@
 # 261 Graph Valid Tree
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/graph-valid-tree/description/)
 
@@ -17,79 +19,75 @@ Note: you can assume that no duplicate edges will appear inedges. Since all edge
 - dfs
 - union find
 
+## Approach
+**Key idea:** A graph on `n` nodes is a tree exactly when it has `n - 1` edges and no cycle (equivalently, it is connected and acyclic).
+
+1. If the number of edges is not `n - 1`, it cannot be a tree.
+2. Union Find: for each edge, find the roots of both endpoints; if they already share a root, the edge closes a cycle.
+3. Otherwise, union the two components and continue. With `n - 1` edges and no cycle, the graph is connected.
+4. DFS: build an adjacency list and traverse from node 0, remembering each node's parent.
+5. Reaching an already-visited node that is not the parent means a cycle; at the end every node must have been visited.
+
 ## Code Implementation
-```c++
-// Union Find
-class DSU {
-    vector<int> parent;
-    DSU(int n) {
-        parent.resize(n, 0);
-        for(int i = 0; i < parent.size(); i++){
-            parent[i] = i;
-        }
-    }
+### Approach 1: Union Find
+```python
+class Solution:
+    def validTree(self, n: int, edges: list[list[int]]) -> bool:
+        if len(edges) != n - 1:
+            return False
 
-    int _find(int x){
-        if(parent[x] != x)
-            parent[x] = _find(parent[x]);
-        return parent[x];
-    }
+        parent = list(range(n))
+        size = [1] * n
 
-    void _union(int x, int y){
-        parent[find(x)] = find(y);
-    }
-}
+        def find(x: int) -> int:
+            while parent[x] != x:
+                parent[x] = parent[parent[x]]  # path halving
+                x = parent[x]
+            return x
 
-class Solution {
-public:
-    bool validTree(int n, vector<pair<int, int>>& edges) {
-        DSU* dsu = new DSU(n);
-        for(auto t : edges){
-            if(dsu->find(t->first) == dsu->find(t->second))
-                return false;
-            dsu->union(t->first, t->second);
-        }
+        for a, b in edges:
+            ra, rb = find(a), find(b)
+            if ra == rb:
+                return False  # edge closes a cycle
+            if size[ra] < size[rb]:
+                ra, rb = rb, ra
+            parent[rb] = ra
+            size[ra] += size[rb]
+        return True
+```
 
-        return edges.size() == n - 1;
-    }
-};
+### Approach 2: DFS with parent
+```python
+class Solution:
+    def validTree(self, n: int, edges: list[list[int]]) -> bool:
+        graph = [[] for _ in range(n)]
+        for a, b in edges:
+            graph[a].append(b)
+            graph[b].append(a)
 
-// DFS with parent
-class Solution {
-public:
-    bool validTree(int n, vector<pair<int, int>>& edges) {
-        vector<vector<int>> g(n, {});
-        for(int i = 0; i < edges.size(); i++){
-            int s = edges[i][0];
-            int t = edges[i][1];
-            g[s].push_back(t);
-            g[t].push_back(s);
-        }
+        visited = [False] * n
+        visited[0] = True
+        stack = [(0, -1)]  # (node, parent)
+        while stack:
+            node, parent = stack.pop()
+            for nei in graph[node]:
+                if nei == parent:
+                    continue
+                if visited[nei]:
+                    return False  # reached a visited non-parent node: cycle
+                visited[nei] = True
+                stack.append((nei, node))
 
-        vector<int> v(n, 0);
-        if(hasCycle(g, 0, visited, -1)) return false;
-        for(int i = 0; i < n; i++){
-            if(!visited[i]) return false;
-        }
-        return true;
-    }
-
-    bool hasCycle(vector<vector<int>>& g, int s, vector<int>& v, int parent){
-        v[s] = true;
-        for(int i = 0; i < g[s].size(); i++){
-            int t = g[s][i];
-            if(!v[t]){
-                if(hasCycle(g, t, v, s)) return true;
-            } else{
-                if(v != p) return true;
-            }
-        }
-
-        return false;
-    }
-};
+        return all(visited)
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(n)
+> Time complexity  : O(n · α(n)) union find (≈ O(n)); O(n + e) DFS, where e is the number of edges
+>
+> Space complexity : O(n) union find; O(n + e) DFS (adjacency list)
+
+## Related Problems
+- [547. Number of Provinces](./547_number_of_provinces.md) — 🟡 Medium · connected components with union find / DFS
+- [323. Number of Connected Components in an Undirected Graph](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph) — 🟡 Medium · same union find setup
+- [207. Course Schedule](./207_course_schedule.md) — 🟡 Medium · cycle detection in a (directed) graph
+- [305. Number of Islands II](./305_number_of_island_ii.md) — 🔴 Hard · incremental union find

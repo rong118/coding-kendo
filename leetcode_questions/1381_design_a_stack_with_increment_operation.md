@@ -1,5 +1,7 @@
 # 1381. Design a Stack With Increment Operation
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/design-a-stack-with-increment-operation/)
 
@@ -45,6 +47,15 @@ Constraints:
 ## Tags
 - stack
 
+## Approach
+**Key idea:** Instead of adding `val` to the bottom `k` elements immediately, record it lazily at index `k - 1` and pass it down to the element below whenever that index is popped.
+
+1. Keep the values in `stack` and a parallel `inc` list of pending increments.
+2. `push(x)`: if there is room, append `x` and a `0` increment.
+3. `increment(k, val)`: add `val` to `inc[min(k, size) - 1]` — it applies to that element and everything below it.
+4. `pop()`: return the top value plus its pending increment, after carrying that increment down to `inc[i - 1]`.
+5. Return `-1` when popping an empty stack.
+
 ## Code Implementation
 ```python
 class CustomStack:
@@ -78,3 +89,8 @@ class CustomStack:
 > Time complexity  : O(1) for all operations
 >
 > Space complexity : O(n)
+
+## Related Problems
+- [155. Min Stack](./155_min_stack.md) — 🟡 Medium · stack with extra per-element bookkeeping
+- [716. Max Stack](./716_max_stack.md) — 🔴 Hard · stack design with an extra operation
+- [895. Maximum Frequency Stack](./895_maximum_frequency_stack.md) — 🔴 Hard · custom stack design

@@ -1,5 +1,7 @@
 # 27. Remove Element
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/remove-element/)
 
@@ -45,6 +47,14 @@ Constraints:
 - two pointers
 
 
+## Approach
+**Key idea:** Use a slow write pointer and a fast read pointer — every element that isn't `val` is copied forward, so the first `i` slots end up holding exactly the kept elements.
+
+1. Set the write index `i = 0`.
+2. Scan every index `j` with the read pointer.
+3. If `A[j] != val`, copy it to `A[i]` and advance `i`.
+4. Return `i`, the count of kept elements.
+
 ## Code Implementation
 ```python
 def removeElement(A, val):
@@ -61,3 +71,8 @@ def removeElement(A, val):
 > Time complexity  : O(n)
 >
 > Space complexity : O(1)
+
+## Related Problems
+- [26. Remove Duplicates from Sorted Array](./26_remove_duplicates_from_sorted_array.md) — 🟢 Easy · same slow/fast in-place compaction
+- [283. Move Zeroes](https://leetcode.com/problems/move-zeroes) — 🟢 Easy · in-place compaction keeping non-target elements
+- [75. Sort Colors](./75_sort_colors.md) — 🟡 Medium · in-place partitioning with pointers

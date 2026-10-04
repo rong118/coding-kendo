@@ -1,4 +1,6 @@
-# 2127. Maximum Employees to Be Invited to a Meeting  ???? (TODO)
+# 2127. Maximum Employees to Be Invited to a Meeting
+
+**Difficulty:** 🔴 Hard
 
 ## Question link
 (https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/)
@@ -75,91 +77,66 @@ Constraints:
 - graph
 - topologic sort
 
+## Approach
+**Key idea:** `i -> favorite[i]` is a functional graph: each component is one cycle with chains feeding into it. A cycle of length ≥ 3 must be seated alone, while every mutual pair (cycle of length 2) can bring the longest chain into each side, and all such pair-groups fit at the table together.
+
+1. Compute indegrees and run Kahn's topological sort to strip every node that is not on a cycle.
+2. While stripping, record `depth[v]` = longest chain of people ending at `v` (including `v`).
+3. Walk each remaining cycle once to get its length.
+4. For a cycle of length 2 `(a, b)`, add `depth[a] + depth[b]` to a running total; for longer cycles keep the maximum length.
+5. Return the larger of the longest cycle and the total over all mutual pairs.
+
 ## Code Implementation
-```c++
-// 有向图找环
-class Solution {
-    int N = 0;
-    unordered_map<int, vector<int>> g;
-    int singleMaxCyc = 0;
-    vector<vector<int>> pairs;
-    vector<int> f;
-public:
-    int maximumInvitations(vector<int>& favorite) {
-        f = favorite;
-        N = f.size();
-        // build graph
-        for(int i = 0; i < N; i++){
-            int p =  f[i];
-            if(g.find(p) == g.end()) {
-                g[p] = {};
-            }
-            g[p].push_back(i);
-        }
+```python
+from collections import deque
 
-        // cycle count size
-        _countCycle();
-        return max(singleMaxCyc, _countSizeTwo());
-    }
 
-    void _countCycle(){
-        vector<bool> visited(N, false);
-        vector<bool> recStk(N, false);
-        for(int i = 0; i < N; i++){
-            _isCycUtil(i, recStk, visited, 0);
-        }
-    }
+class Solution:
+    def maximumInvitations(self, favorite: list[int]) -> int:
+        n = len(favorite)
+        indegree = [0] * n
+        for f in favorite:
+            indegree[f] += 1
 
-    void _isCycUtil(int i, vector<bool>& recStk, vector<bool>& visited, int count){
-        if(recStk[i]){
-            singleMaxCyc = max(singleMaxCyc, count);
-            if(count == 2) pairs.push_back({i, f[i]});
-            return;
-        }
+        # Peel off nodes that are not on a cycle (Kahn's), tracking the
+        # longest chain of people that ends at each node.
+        depth = [1] * n
+        q = deque(i for i in range(n) if indegree[i] == 0)
+        while q:
+            u = q.popleft()
+            v = favorite[u]
+            depth[v] = max(depth[v], depth[u] + 1)
+            indegree[v] -= 1
+            if indegree[v] == 0:
+                q.append(v)
 
-        if(visited[i]) return;
-        visited[i] = true;
-        recStk[i]  = true;
-        vector<int> nei = g[i];
-        for(int c : nei){
-            _isCycUtil(c, recStk, visited, count + 1);
-        }
-        recStk[i]  = false;
-    }
+        # Every remaining node (indegree > 0) lies on a cycle.
+        longest_cycle = 0
+        pairs_total = 0
+        for i in range(n):
+            if indegree[i] == 0:
+                continue
+            length, j = 0, i
+            while indegree[j]:
+                indegree[j] = 0  # mark visited
+                length += 1
+                j = favorite[j]
+            if length == 2:
+                # Mutual pair: both chains hanging off it can sit in a row,
+                # and all such groups can share the table.
+                pairs_total += depth[i] + depth[favorite[i]]
+            else:
+                longest_cycle = max(longest_cycle, length)
 
-    unordered_map<int, int> m;
-    int _countSizeTwo(){
-        vector<bool> visited(N, false);
-        int res = 0;
-        for(vector<int> pair : pairs){
-            int a = pair[0]; int b = pair[1];
-            m[a] = 0;
-            m[b] = 0;
-            visited[a] = true;
-            _dfs(b, visited, 0, b);
-            visited[a] = false;
-
-            visited[b] = true;
-            _dfs(a, visited, 0, a);
-            visited[b] = false;
-
-            res += 2 + m[a] + m[b];
-        }
-        
-        return res;
-    }
-
-    void _dfs(int cur, vector<bool>& visited, int len, int start){
-        if(visited[cur]) return;
-        m[start] = max(m[start], len);
-        visited[cur] = true;
-        for(int nei : g[cur]){
-            if(!visited[nei]){
-                _dfs(nei, visited, len + 1, start);
-            }
-        }
-    }
-};
+        return max(longest_cycle, pairs_total)
 ```
 
 ## Time Complexity Analysis
+> Time complexity  : O(n)
+>
+> Space complexity : O(n) — indegree, depth, and queue arrays
+
+## Related Problems
+- [2360. Longest Cycle in a Graph](https://leetcode.com/problems/longest-cycle-in-a-graph) — 🔴 Hard · cycle lengths in a functional graph
+- [802. Find Eventual Safe States](https://leetcode.com/problems/find-eventual-safe-states) — 🟡 Medium · Kahn's peeling to separate cycle nodes
+- [207. Course Schedule](./207_course_schedule.md) — 🟡 Medium · topological sort for cycle detection

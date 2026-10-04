@@ -1,5 +1,7 @@
 # 56. Merge Intervals
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/merge-intervals/)
 
@@ -32,36 +34,35 @@ Constraints:
 - Array
 - Sort
 
+## Approach
+**Key idea:** After sorting by start, any interval that overlaps the current merged block must come right after it, so a single left-to-right pass is enough.
+
+1. Sort the intervals by start (then end).
+2. Start the result with a copy of the first interval.
+3. For each next interval, if its start is greater than the end of the last merged interval, there is a gap, so append it as a new block.
+4. Otherwise it overlaps (touching counts), so extend the last block's end to `max(end, current_end)`.
+5. Return the merged list.
+
 ## Code Implementation
-```c++
-class Solution {
-public:
-    vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        sort(intervals.begin(), intervals.end());
-        vector<vector<int>> ans;
-        vector<int> cur = intervals[0];
-        for(int i = 1; i < intervals.size(); i++){
-            if(intervals[i][1] <= cur[1]){
-                // Do nothing
-            }else{
-                if(intervals[i][0] > cur[1]){
-                    ans.push_back(cur);
-                    cur = intervals[i];
-                }else{
-                    cur[1] = intervals[i][1];
-                }
-            }
-        }
-
-        //push last cur into ans
-        ans.push_back(cur);
-
-        return ans;
-    }
-};
+```python
+class Solution:
+    def merge(self, intervals: list[list[int]]) -> list[list[int]]:
+        intervals.sort()
+        merged = [intervals[0][:]]
+        for start, end in intervals[1:]:
+            if start > merged[-1][1]:
+                merged.append([start, end])
+            else:
+                merged[-1][1] = max(merged[-1][1], end)
+        return merged
 ```
 
 ## Time Complexity Analysis
-> Time complexity  : O(nlog(n))
+> Time complexity  : O(n log n) — dominated by sorting
 >
-> Space complexity : O(n)
+> Space complexity : O(n) — output list (plus sort space)
+
+## Related Problems
+- [57. Insert Interval](./57_insert_interval.md) — 🟡 Medium · merge one new interval into sorted intervals
+- [729. My Calendar I](./729_my_calendar_i.md) — 🟡 Medium · interval overlap checks
+- [252. Meeting Rooms](https://leetcode.com/problems/meeting-rooms) — 🟢 Easy · sort by start and check adjacent overlaps

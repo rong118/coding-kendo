@@ -1,5 +1,7 @@
 # 889. Construct Binary Tree from Preorder and Postorder Traversal
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/)
 
@@ -33,43 +35,51 @@ Constraints:
 ## Tags
 - tree
 
+## Approach
+**Key idea:** `preorder[0]` is the root and `preorder[1]` is the root of the left subtree. In postorder, that left root is the last node of the left subtree, so its position tells you how big the left subtree is.
+
+1. Map each value to its index in `postorder` for O(1) lookups.
+2. Recursively build from a preorder range `[pre_l, pre_r]` and the matching postorder start `post_l`.
+3. The first preorder value is the root; if the range has one node, return it as a leaf.
+4. Find `preorder[pre_l + 1]` in postorder: `left_size = index - post_l + 1`.
+5. Build the left subtree from the next `left_size` preorder values and the right subtree from the rest.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    TreeNode* constructFromPrePost(vector<int>& preorder, vector<int>& postorder) {
-        unordered_map<int, int> m;
-        for(int i = 0; i < postorder.size(); i++){
-            m[postorder[i]] = i;
-        }
+```python
+from typing import Optional
 
-        return _helper(0, preorder.size() - 1, 0, postorder.size() - 1, preorder, postorder, m);
-    }
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 
-    TreeNode* _helper(int preLeft, int preRight, int postLeft, int postRight, vector<int>& preorder, vector<int>& postorder, unordered_map<int, int>& m){
-        if(preLeft > preRight || postLeft > postRight) {return NULL;}
-        if(preLeft == preRight) return new TreeNode(preorder[preLeft]); // otherwise cannot 
-        TreeNode* root = new TreeNode(preorder[preLeft]);
-        int index = m[preorder[preLeft + 1]];
-        int leftTreeSize = index - postLeft + 1;
-        root->left  = _helper(preLeft + 1, preLeft + leftTreeSize, postLeft, postLeft + leftTreeSize - 1, preorder, postorder, m);
-        root->right = _helper(preLeft + leftTreeSize + 1, preRight, postLeft + leftTreeSize, postRight - 1, preorder, postorder, m);
-        return root;
-    }
-};
+class Solution:
+    def constructFromPrePost(self, preorder: list[int], postorder: list[int]) -> Optional[TreeNode]:
+        post_idx = {v: i for i, v in enumerate(postorder)}
+
+        def build(pre_l: int, pre_r: int, post_l: int) -> Optional[TreeNode]:
+            if pre_l > pre_r:
+                return None
+            root = TreeNode(preorder[pre_l])
+            if pre_l == pre_r:
+                return root
+            # The left child's root is the last node of the left subtree in postorder
+            left_size = post_idx[preorder[pre_l + 1]] - post_l + 1
+            root.left = build(pre_l + 1, pre_l + left_size, post_l)
+            root.right = build(pre_l + left_size + 1, pre_r, post_l + left_size)
+            return root
+
+        return build(0, len(preorder) - 1, 0)
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(n)
+> Time complexity  : O(n) — each node is created once, with O(1) index lookups
+>
+> Space complexity : O(n) — the index map, plus O(h) recursion stack
+
+## Related Problems
+- [105. Construct Binary Tree from Preorder and Inorder Traversal](./105_construct_binary_tree_from_preorder_and_inorder_traversal.md) — 🟡 Medium · same divide-by-subtree-size idea with inorder
+- [106. Construct Binary Tree from Inorder and Postorder Traversal](./106_construct_binary_tree_from_inorder_and_postorder_traversal.md) — 🟡 Medium · same technique, different traversal pair
+- [1008. Construct Binary Search Tree from Preorder Traversal](./1008_construct_binary_search_tree_from_preorder_traversal.md) — 🟡 Medium · rebuild a tree from one traversal using BST order

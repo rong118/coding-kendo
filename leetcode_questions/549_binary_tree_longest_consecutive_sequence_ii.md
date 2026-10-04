@@ -1,5 +1,7 @@
 # 549 Binary Tree Longest Consecutive Sequence II
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/binary-tree-longest-consecutive-sequence-ii/)
 
@@ -39,40 +41,58 @@ Note: All the values of tree nodes are in the range of [-1e7, 1e7].
 - tree
 - dfs
 
+## Approach
+**Key idea:** Every consecutive path has a top node where it turns (child, parent, child). At that node the best path joins the longest increasing chain going down one side with the longest decreasing chain going down the other: `inc + dec - 1`.
+
+1. Run a post-order DFS that returns `(inc, dec)` for each node: the longest increasing and decreasing downward paths that start at it.
+2. Start both at 1 (the node itself).
+3. For each child, if `child.val == node.val + 1` extend `inc` with the child's `inc`; if `child.val == node.val - 1` extend `dec` with the child's `dec`.
+4. Update the answer with `inc + dec - 1` (the node is counted in both chains).
+5. Return the best length after visiting every node.
+
 ## Code Implementation
-```c++
-class Solution {
-    int maxval = 0;
-    int longestConsecutive(TreeNode* root){
-        _longestPath(root);
-        return maxval;
-    }
+```python
+from typing import Optional
 
-    vector<int> _longestPath(TreeNode* root){
-        if(root == NULL) return {0, 0};
-        int inc = 1, dcr = 1;
-        if(root->left != NULL){
-            vector<int> l = _longestPath(root->left);
-            if(root->val == root->left->val + 1){
-                dcr = l[1] + 1;
-            }else if(root->val == root->left->val - 1){
-                inc = l[0] + 1;
-            }
-        }
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 
-        if(root->right != NULL){
-            vector<int> r = _longestPath(root->left);
-            if(root->val == root->right->val + 1){
-                dcr = max(dcr, r[1] + 1);
-            }else if(root->val == root->right->val - 1){
-                inc = max(inc, r[0] + 1);
-            }
+class Solution:
+    def longestConsecutive(self, root: Optional[TreeNode]) -> int:
+        best = 0
 
-        }
-        maxval = max(maxval, dcr + inc - 1);
-        return {inc, dcr};
-    }
-}
+        def dfs(node: Optional[TreeNode]) -> tuple[int, int]:
+            # (inc, dec): longest increasing / decreasing downward path starting at node
+            nonlocal best
+            if not node:
+                return 0, 0
+            inc = dec = 1
+            for child in (node.left, node.right):
+                if not child:
+                    continue
+                c_inc, c_dec = dfs(child)
+                if child.val == node.val + 1:
+                    inc = max(inc, c_inc + 1)
+                elif child.val == node.val - 1:
+                    dec = max(dec, c_dec + 1)
+            best = max(best, inc + dec - 1)
+            return inc, dec
+
+        dfs(root)
+        return best
 ```
 
 ## Time Complexity Analysis
+> Time complexity  : O(n) — each node is visited once
+>
+> Space complexity : O(h) — recursion stack, where h is the tree height
+
+## Related Problems
+- [128. Longest Consecutive Sequence](./128_longest_consecutive_sequence.md) — 🟡 Medium · longest consecutive run in an unsorted array
+- [298. Binary Tree Longest Consecutive Sequence](https://leetcode.com/problems/binary-tree-longest-consecutive-sequence) — 🟡 Medium · increasing parent-to-child paths only
+- [124. Binary Tree Maximum Path Sum](./124_binary_tree_maximum_path_sum.md) — 🔴 Hard · same idea of joining two downward chains at a turning node
+- [1372. Longest ZigZag Path in a Binary Tree](./1372_longest_zigzag_path_in_a_binary_tree.md) — 🟡 Medium · DFS returning per-direction path lengths
