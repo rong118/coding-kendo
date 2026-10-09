@@ -1,5 +1,7 @@
 # 622. Design Circular Queue
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/design-circular-queue/)
 
@@ -49,6 +51,15 @@ Constraints:
 ## Tags
 - queue
 
+## Approach
+**Key idea:** Use a fixed array of size `k` with `front` and `rear` indices that wrap around using `% k`. A separate `size` counter tells empty and full apart.
+
+1. Allocate `q = [0] * k`, with `front = 0`, `rear = -1`, and `size = 0`.
+2. `enQueue`: if the queue is full, return `False`; otherwise move `rear` forward with wrap-around, store the value, and increase `size`.
+3. `deQueue`: if the queue is empty, return `False`; otherwise move `front` forward with wrap-around and decrease `size`.
+4. `Front` / `Rear` return `q[front]` / `q[rear]`, or `-1` when the queue is empty.
+5. `isEmpty` is `size == 0` and `isFull` is `size == k`.
+
 ## Code Implementation
 ```python
 class MyCircularQueue:
@@ -91,3 +102,8 @@ class MyCircularQueue:
 > Time complexity  : O(1) for all operations
 >
 > Space complexity : O(k) — fixed-size array for ring buffer
+
+## Related Problems
+- [641. Design Circular Deque](./641_design_circular_deque.md) — 🟡 Medium · same ring buffer with both ends
+- [232. Implement Queue using Stacks](./232_implement_queue_using_stacks.md) — 🟢 Easy · build a queue from other structures
+- [225. Implement Stack using Queues](./225_implement_stack_using_queue.md) — 🟢 Easy · design a basic container

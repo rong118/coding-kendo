@@ -1,5 +1,7 @@
 # 1644. Lowest Common Ancestor of a Binary Tree II
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree-ii/)
 
@@ -44,34 +46,52 @@ Follow up: Can you find the LCA traversing the tree, without checking nodes exis
 - tree
 - bst
 
+## Approach
+**Key idea:** The classic LCA recursion assumes both nodes exist, so first verify that `p` and `q` are both in the tree, then run the standard LCA search.
+
+1. DFS to check that `p` exists in the tree; do the same for `q`. If either is missing, return `None`.
+2. Run the standard LCA: if the current node is `None`, `p`, or `q`, return it.
+3. Recurse into the left and right subtrees.
+4. If both sides return a node, the current node is the LCA; otherwise pass up whichever side is non-null.
+
 ## Code Implementation
-```c++
-TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-    if(_dfs(root, p) && _dfs(root, q)){
-        return _lca(root, p, q);
-    }else{
-        return NULL;
-    }
-}
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> Optional[TreeNode]:
+        def exists(node: Optional[TreeNode], target: TreeNode) -> bool:
+            if not node:
+                return False
+            if node is target:
+                return True
+            return exists(node.left, target) or exists(node.right, target)
 
-bool _dfs(TreeNode* root, TreeNode* target){
-    if(root == NULL ) return false;
-    if(root == target) return true;
-    return _dfs(root->left, target) && _dfs(root->right, target);
-     
-}
+        def lca(node: Optional[TreeNode]) -> Optional[TreeNode]:
+            if not node or node is p or node is q:
+                return node
+            left = lca(node.left)
+            right = lca(node.right)
+            if left and right:
+                return node
+            return left or right
 
-TreeNode* _lca(TreeNode* root, TreeNode* p, TreeNode* q) {
-    if(root == NULL || root == p || root == q) return root;
-    TreeNode* l = _lca(root->left, p, q);
-    TreeNode* r = _lca(root->right, p, q);
-    if(l != NULL && r != NULL) return root;
-    if(l == NULL && r != NULL) return r;
-    if(l != NULL && r == NULL) return l;
-    return NULL;
-}
+        if exists(root, p) and exists(root, q):
+            return lca(root)
+        return None
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(n)
+> Time complexity  : O(n) — at most three full traversals
+>
+> Space complexity : O(h) — recursion depth, where h is the tree height (O(n) worst case)
+
+## Related Problems
+- [236. Lowest Common Ancestor of a Binary Tree](./236_lowest_common_ancestor_of_a_binary_tree.md) — 🟡 Medium · the base LCA where both nodes exist
+- [1650. Lowest Common Ancestor of a Binary Tree III](./1650_lowest_common_ancestor_of_a_binary_tree_iii.md) — 🟡 Medium · LCA using parent pointers
+- [1676. Lowest Common Ancestor of a Binary Tree IV](./1676_lowest_common_ancestor_of_a_binary_tree_iv.md) — 🟡 Medium · LCA of many nodes
+- [235. Lowest Common Ancestor of a Binary Search Tree](./235_lowest_common_ancestor_of_a_binary_search_tree.md) — 🟡 Medium · LCA using BST ordering

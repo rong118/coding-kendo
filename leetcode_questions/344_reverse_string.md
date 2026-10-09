@@ -1,5 +1,7 @@
 # 344. Reverse String
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/reverse-string/)
 
@@ -29,6 +31,14 @@ Constraints:
 - string
 - two-pointers
 
+## Approach
+**Key idea:** Reversing is just swapping mirror positions, so two pointers walking inward from both ends finish it in place.
+
+1. Set `l = 0` and `r = len(s) - 1`.
+2. While `l < r`, swap `s[l]` and `s[r]`.
+3. Move `l` right and `r` left.
+4. Stop when the pointers meet; the middle element (if any) stays put.
+
 ## Code Implementation
 ```python
 class Solution:
@@ -47,3 +57,8 @@ class Solution:
 > Time complexity  : O(n) — each character swapped once
 >
 > Space complexity : O(1) — in-place with two pointer variables
+
+## Related Problems
+- [125. Valid Palindrome](./125_valid_palindrome.md) — 🟢 Easy · two pointers from both ends
+- [151. Reverse Words in a String](./151_reverse_words_in_a_string.md) — 🟡 Medium · string reversal applied to words
+- [206. Reverse Linked List](./206_reverse_linked_list.md) — 🟢 Easy · reversal on a linked list

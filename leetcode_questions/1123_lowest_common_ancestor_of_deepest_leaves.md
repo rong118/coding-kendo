@@ -1,5 +1,7 @@
 # 1123. Lowest Common Ancestor of Deepest Leaves
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/)
 
@@ -47,60 +49,73 @@ Constraints:
 
 Note: This question is the same as 865: https://leetcode.com/problems/smallest-subtree-with-all-the-deepest-nodes/
 
-![Image]()
-
-
 <br/>
 
-Example
-> example's description
-
-List
-- item1
-- item2
-- item3
-
-n<sup>power</sup> 
 ## Tags
+- tree
+- dfs
+
+
+## Approach
+**Key idea:** A node is the answer exactly when its left and right subtrees reach the same maximum depth; otherwise the answer lies in the deeper subtree.
+
+1. Approach 1 (top-down): compute the heights of the left and right subtrees; if equal return the node, else recurse into the taller side. Heights are recomputed at every level, so it is O(n²) in the worst case.
+2. Approach 2 (bottom-up): a post-order DFS returns a pair `(lca, depth)` for each subtree, where `depth` is the deepest level reached.
+3. For a null child return `(None, depth)`; for a node, get the pairs from both children.
+4. If both depths are equal, this node is the LCA of the deepest leaves: return `(node, depth)`. Otherwise pass up the pair from the deeper side.
 
 ## Code Implementation
-```c++
-class Solution {
-public:    
-    // O(n^2)
-    TreeNode* lcaDeepestLeaves(TreeNode* root) {
-        if(root == NULL) return NULL;
-        int lh = _height(root->left);
-        int rh = _height(root->right);
-        if (lh == rh) return root;
-        if(lh > rh){
-            return lcaDeepestLeaves(root->left);
-        }else{
-            return lcaDeepestLeaves(root->right);
-        }   
-    }
+### Approach 1: Compare subtree heights — O(n²)
+```python
+from typing import Optional
 
-    int _height(TreeNode* root){
-        if(root == NULL) return 0;
-        return 1 + max(_height(root->left), _height(root->right));
-    }
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def lcaDeepestLeaves(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        def height(node: Optional[TreeNode]) -> int:
+            if not node:
+                return 0
+            return 1 + max(height(node.left), height(node.right))
 
-    // O(n)
-    TreeNode* lcaDeepestLeaves(TreeNode* root) {
-        pair<TreeNode*, int> p = _getLCA(root, 0);
-        return p.first;
-    }
+        node = root
+        while node:
+            lh, rh = height(node.left), height(node.right)
+            if lh == rh:
+                return node
+            node = node.left if lh > rh else node.right
+        return None
+```
 
-    pair<TreeNode*, int> _getLCA(TreeNode* root, int d){
-        if(root == NULL) return {NULL, d};
-        pair<TreeNode*, int> l = _getLCA(root->left, d + 1);
-        pair<TreeNode*, int> r = _getLCA(root->right, d + 1);
-        if(l.second == r.second) return l;
-        return l.second > r.second ? l : r;
-    }
-};
+### Approach 2: Post-order DFS returning (lca, depth) — O(n)
+```python
+from typing import Optional
+
+class Solution:
+    def lcaDeepestLeaves(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        def dfs(node: Optional[TreeNode], d: int) -> tuple[Optional[TreeNode], int]:
+            if not node:
+                return None, d
+            l_node, l_depth = dfs(node.left, d + 1)
+            r_node, r_depth = dfs(node.right, d + 1)
+            if l_depth == r_depth:
+                return node, l_depth
+            return (l_node, l_depth) if l_depth > r_depth else (r_node, r_depth)
+
+        return dfs(root, 0)[0]
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(n)
+> Time complexity  : O(n) for Approach 2 (each node visited once); Approach 1 is O(n · h), O(n²) worst case
+>
+> Space complexity : O(h) — recursion stack, O(n) worst case for a skewed tree
+
+## Related Problems
+- [865. Smallest Subtree with all the Deepest Nodes](./865_smallest_subtree_with_all_the_deepest_nodes.md) — 🟡 Medium · identical problem
+- [236. Lowest Common Ancestor of a Binary Tree](./236_lowest_common_ancestor_of_a_binary_tree.md) — 🟡 Medium · classic LCA via post-order recursion
+- [1644. Lowest Common Ancestor of a Binary Tree II](./1644_lowest_common_ancestor_of_a_binary_tree_ii.md) — 🟡 Medium · LCA variant returning extra info from DFS
+- [1676. Lowest Common Ancestor of a Binary Tree IV](./1676_lowest_common_ancestor_of_a_binary_tree_iv.md) — 🟡 Medium · LCA of a set of nodes

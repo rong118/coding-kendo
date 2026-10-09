@@ -1,5 +1,7 @@
 # 236. Lowest Common Ancestor of a Binary Tree
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/)
 
@@ -45,56 +47,74 @@ Constraints:
 - tree
 - bst
 
+## Approach
+**Key idea:** A node is the LCA when `p` and `q` are found in different subtrees under it, or when it is one of them and the other is below it. Recursion can report upward where each target was found.
+
+1. **Recursive:** if `root` is `None`, `p`, or `q`, return `root`.
+2. Search the left and right subtrees.
+3. If both sides return a node, `p` and `q` are split across `root`, so `root` is the LCA.
+4. Otherwise return whichever side is non-empty; it holds the LCA (or the only target found so far).
+5. **Parent map:** record each node's parent with a DFS, collect all ancestors of `p` in a set, then walk up from `q` until reaching one of them.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
-class Solution {
-public:
-    // recusive
-    // check left and right subtree and return LCA
-    // divide and conquer
-    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if(root == NULL || root == p || root == q) return root;
-        TreeNode* l = lowestCommonAncestor(root->left, p, q);
-        TreeNode* r = lowestCommonAncestor(root->right, p, q);
-        if(l != NULL && r != NULL) return root;
-        if(l == NULL && r != NULL) return r;
-        if(l != NULL && r == NULL) return l;
-        return NULL;
-    }
+### Approach 1: Recursive (divide and conquer)
 
-    // iterative by build a parent map
-    unordered_map<TreeNode*, TreeNode*> parent;
-    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        _dfs(null, root);
-        set<TreeNode*> ancestors;
-        while(p != NULL){
-            ancestors.push(p);
-            p = parent[p];
-        }
-        while(ancestors.find(q) == ancestors.end()){
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if root is None or root is p or root is q:
+            return root
+        left = self.lowestCommonAncestor(root.left, p, q)
+        right = self.lowestCommonAncestor(root.right, p, q)
+        if left and right:
+            return root
+        return left or right
+```
+
+### Approach 2: Parent map
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        parent = {root: None}
+        stack = [root]
+        while stack:
+            node = stack.pop()
+            for child in (node.left, node.right):
+                if child:
+                    parent[child] = node
+                    stack.append(child)
+
+        ancestors = set()
+        while p:
+            ancestors.add(p)
+            p = parent[p]
+        while q not in ancestors:
             q = parent[q]
-        }
-        return q;
-    } 
-
-    _dfs(TreeNode* parentNode, TreeNode* cur){
-        if(cur == nullptr) return;
-        parent.put(cur, parentNode);
-        dfs(cur, cur->left);
-        dfs(cur, cur->right);
-    }
-};
+        return q
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(n)
+> Time complexity  : O(n) — each node is visited once
+>
+> Space complexity : O(n) — recursion stack O(h), parent map O(n)
+
+## Related Problems
+- [235. Lowest Common Ancestor of a Binary Search Tree](./235_lowest_common_ancestor_of_a_binary_search_tree.md) — 🟡 Medium · BST ordering finds the split point directly
+- [1644. Lowest Common Ancestor of a Binary Tree II](./1644_lowest_common_ancestor_of_a_binary_tree_ii.md) — 🟡 Medium · p or q may not exist
+- [1650. Lowest Common Ancestor of a Binary Tree III](./1650_lowest_common_ancestor_of_a_binary_tree_iii.md) — 🟡 Medium · nodes have parent pointers
+- [1676. Lowest Common Ancestor of a Binary Tree IV](./1676_lowest_common_ancestor_of_a_binary_tree_iv.md) — 🟡 Medium · LCA of many nodes

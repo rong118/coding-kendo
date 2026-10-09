@@ -8,29 +8,15 @@ One of the most efficient algorithms to compute the GCD is the Euclidean algorit
 b and (a mod b).
 
 ### Implementation
-```c++
-#include <iostream>
-using namespace std;
+```python
+def gcd(a: int, b: int) -> int:
+    """Return the GCD of two numbers using the Euclidean algorithm."""
+    while b != 0:
+        a, b = b, a % b
+    return a
 
-// Function to return the GCD of two numbers using the Euclidean algorithm
-int gcd(int a, int b) {
-    while (b != 0) {
-        int temp = b;
-        b = a % b;
-        a = temp;
-    }
-    return a;
-}
 
-int main() {
-    int num1, num2;
-    cout << "Enter two integers: ";
-    cin >> num1 >> num2;
-
-    cout << "GCD of " << num1 << " and " << num2 << " is " << gcd(num1, num2) << endl;
-
-    return 0;
-}
+print(gcd(8, 12))  # 4
 ```
 
 ### LeetCode

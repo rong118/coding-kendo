@@ -1,5 +1,7 @@
 # 189. Rotate Array
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/rotate-array/)
 
@@ -42,6 +44,14 @@ Constraints:
 - array
 - in-place
 
+## Approach
+**Key idea:** Rotating right by `k` moves the last `k` elements to the front; reversing the whole array and then reversing each of the two parts restores their internal order in place.
+
+1. Reduce `k` modulo `n`, since rotating by `n` is a no-op.
+2. Reverse the entire array.
+3. Reverse the first `k` elements.
+4. Reverse the remaining `n - k` elements.
+
 ## Code Implementation
 ```python
 def rotate(nums, k):
@@ -62,3 +72,9 @@ def rotate(nums, k):
 > Time complexity  : O(n)
 >
 > Space complexity : O(1)
+
+## Related Problems
+- [61. Rotate List](https://leetcode.com/problems/rotate-list) — 🟡 Medium · same rotation on a linked list
+- [151. Reverse Words in a String](./151_reverse_words_in_a_string.md) — 🟡 Medium · reverse-the-whole-then-the-parts trick
+- [344. Reverse String](./344_reverse_string.md) — 🟢 Easy · the two-pointer reverse helper
+- [48. Rotate Image](./48_rotate_image.md) — 🟡 Medium · in-place rotation via reversals/transposes

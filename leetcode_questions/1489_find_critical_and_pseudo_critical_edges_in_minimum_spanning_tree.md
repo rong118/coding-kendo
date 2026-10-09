@@ -1,5 +1,7 @@
 # 1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree
 
+**Difficulty:** 🔴 Hard
+
 ## Question link
 (https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/)
 
@@ -50,104 +52,65 @@ Constraints:
 - graph
 - mst
 
+## Approach
+**Key idea:** An edge is critical if removing it makes the MST heavier (or disconnects the graph). A non-critical edge is pseudo-critical if forcing it into the tree still gives the same MST weight.
+
+1. Tag each edge with its original index and sort the edges by weight for Kruskal's algorithm.
+2. Run Kruskal once to get the base MST weight.
+3. For each edge, rerun Kruskal without it; if the graph can't be connected or the weight goes up, the edge is critical.
+4. Otherwise, rerun Kruskal with that edge added first; if the weight still equals the base, the edge is pseudo-critical.
+5. Return `[critical, pseudo_critical]`.
+
 ## Code Implementation
-```c++
-class DSU {
-    vector<int> parent;
-public:
-    DSU(int N){
-        parent.resize(N, 0);
-        for(int i = 0; i < N; i++) parent[i] = i;
-    }
+```python
+class Solution:
+    def findCriticalAndPseudoCriticalEdges(self, n: int, edges: list[list[int]]) -> list[list[int]]:
+        # (weight, a, b, original index), sorted by weight for Kruskal
+        indexed = sorted((w, a, b, i) for i, (a, b, w) in enumerate(edges))
 
-    int _find(int x){
-        if(parent[x] != x) parent[x] = _find(parent[x]);
-        return parent[x];
-    }
+        def mst(skip: int = -1, force: int = -1) -> int:
+            """Kruskal MST weight, skipping / forcing an edge (by sorted position); -1 if disconnected."""
+            parent = list(range(n))
 
-    void _union(int x, int y){
-        parent[_find(x)] = parent[_find(y)];
-    }
-};
+            def find(x: int) -> int:
+                while parent[x] != x:
+                    parent[x] = parent[parent[x]]  # path halving
+                    x = parent[x]
+                return x
 
-class Solution {
-public:
-    vector<vector<int>> findCriticalAndPseudoCriticalEdges(int n, vector<vector<int>>& edges) {
-        // Mark edges id
-        for(int i = 0; i < edges.size(); i++){
-            edges[i].push_back(i);
-        }
-        // Sort for kruscal algorithm
-        sort(edges.begin(), edges.end(), 
-            [](const vector<int> & a, const vector<int> & b) -> bool{ 
-            return a[2] < b[2]; 
-        });
-        
-        int w = _mst(n, edges, -1, -1);
-        unordered_set<int> crit;
-        unordered_set<int> ncrit;
-        
-        // Find critical
-        // Disable i edge and see if mst value become larger or mst broken(-1)
-        for(int i = 0; i < edges.size(); i++){
-            int wr = _mst(n, edges, i, -1);
-            if(wr > w || wr == -1){
-                crit.insert(edges[i][3]);
-            }
-        }
-        
-        // Find non-critical
-        // Link i edge in graph and see if mst value keep same
-        for(int i = 0; i < edges.size(); i++){
-            if(crit.find(edges[i][3]) != crit.end()) continue;
-            int wr = _mst(n, edges, -1, i);
-            if(wr == w){
-                ncrit.insert(edges[i][3]);
-            }
-        }
-        
-        // Output
-        vector<vector<int> > ans = {{}, {}};
-        for(auto itr = crit.begin(); itr != crit.end(); itr++){
-            ans[0].push_back(*itr);
-        }
-        
-        for(auto itr = ncrit.begin(); itr != ncrit.end(); itr++){
-            ans[1].push_back(*itr);
-        }
-        
-        return ans;
-    }
-    
-    // MST => kruscal algorithm
-    int _mst(int N, vector<vector<int>>& connections, int disable, int link){
-        DSU* dsu = new DSU(N + 1);
-        int res = 0;
-        int count = N;
-        if(link != -1){
-            vector<int> c = connections[link];
-            int x = dsu->_find(c[0]);
-            int y = dsu->_find(c[1]);
-            dsu->_union(c[0], c[1]);
-            res += c[2];
-            count--;
-        }
+            total, components = 0, n
+            if force != -1:
+                w, a, b, _ = indexed[force]
+                parent[find(a)] = find(b)
+                total += w
+                components -= 1
+            for j, (w, a, b, _) in enumerate(indexed):
+                if j == skip or j == force:
+                    continue
+                ra, rb = find(a), find(b)
+                if ra != rb:
+                    parent[ra] = rb
+                    total += w
+                    components -= 1
+            return total if components == 1 else -1
 
-        for(int i = 0; i < connections.size(); i++){
-            if(i == disable || i == link) continue;
-            vector<int> c = connections[i];
-            int x = dsu->_find(c[0]);
-            int y = dsu->_find(c[1]);
-            if(x != y){
-                dsu->_union(c[0], c[1]);
-                res += c[2];
-                count--;
-            }
-        }
-
-        return count == 1 ? res : -1;
-    }
-};
+        base = mst()
+        critical, pseudo = [], []
+        for j, (_, _, _, idx) in enumerate(indexed):
+            without = mst(skip=j)
+            if without == -1 or without > base:
+                critical.append(idx)  # every MST needs this edge
+            elif mst(force=j) == base:
+                pseudo.append(idx)    # some MSTs use it, but not all
+        return [critical, pseudo]
 ```
 
 ## Time Complexity Analysis
+> Time complexity  : O(E log E + E^2 · α(V)) — one sort, then up to two Kruskal passes of O(E · α(V)) for each of the E edges
+>
+> Space complexity : O(V + E) — the sorted edge list and the union-find array
+
+## Related Problems
+- [1135. Connecting Cities With Minimum Cost](./1135_connecting_cities_with_minimum_cost.md) — 🟡 Medium · the basic Kruskal / Prim MST
+- [1584. Min Cost to Connect All Points](./1584_min_cost_to_connect_all_points.md) — 🟡 Medium · MST on a complete graph
+- [1192. Critical Connections in a Network](./1192_critical_connections_in_a_network.md) — 🔴 Hard · finds edges whose removal disconnects the graph

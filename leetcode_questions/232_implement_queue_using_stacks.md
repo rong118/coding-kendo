@@ -1,5 +1,7 @@
 # 232. Implement Queue using Stacks
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/implement-queue-using-stacks/)
 
@@ -44,6 +46,14 @@ Constraints:
 - queue
 - stack
 
+## Approach
+**Key idea:** Pouring one stack into another reverses its order, so the oldest element ends up on top of the second stack; only refill it when it is empty so each element moves once.
+
+1. `push` always appends to the `input` stack.
+2. `pop` / `peek` first call `_transfer`: if `output` is empty, move every element from `input` to `output`.
+3. The top of `output` is now the front of the queue — pop or peek it.
+4. `empty` is true only when both stacks are empty.
+
 ## Code Implementation
 ```python
 class MyQueue:
@@ -77,3 +87,8 @@ class MyQueue:
 > Time complexity  : O(1) amortized — each element is pushed twice and popped twice across both stacks
 >
 > Space complexity : O(n) — elements stored across the two stacks
+
+## Related Problems
+- [225. Implement Stack using Queues](./225_implement_stack_using_queue.md) — 🟢 Easy · the mirror-image design problem
+- [155. Min Stack](./155_min_stack.md) — 🟡 Medium · augmenting a stack with a second stack
+- [622. Design Circular Queue](./622_design_circular_queue.md) — 🟡 Medium · another queue design, using a fixed array

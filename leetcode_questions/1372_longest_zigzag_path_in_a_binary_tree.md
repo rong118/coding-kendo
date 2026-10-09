@@ -1,5 +1,7 @@
 # 1372. Longest ZigZag Path in a Binary Tree
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/)
 
@@ -45,37 +47,45 @@ Constraints:
 - tree
 - dfs
 
+## Approach
+**Key idea:** For each node, the longest zigzag that starts by going left is 1 + the longest zigzag from its left child that continues by going right (and symmetrically for right), so one post-order DFS computes both directions for every node.
+
+1. Let `dfs(node, is_left)` return the number of nodes on the zigzag path starting at `node`, given that `node` was entered by a left move (`is_left`) or a right move.
+2. For a null node return `0`.
+3. Compute `left = dfs(node.left, True)` and `right = dfs(node.right, False)`; these equal the edge counts of the zigzags from `node` going left and going right, so update the global answer with both.
+4. Return `1 + right` if `node` was entered by a left move (the next move must be right), otherwise `1 + left`.
+5. Run it from the root and return the best length found.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-    int res = 0;
-public:
-    int longestZigZag(TreeNode* root) {
-        _dfs(root, true);
-        _dfs(root, false);
-        return res;
-    }
-    
-    int _dfs(TreeNode* node, bool isLeft){
-        if(root == NULL) return 0;
-        int left = dfs(root->left, true);
-        int right = dfs(root->right, false);
-        res = max(res, max(left, right));
-        return isLeft ? 1 + right : 1 + left;
-    }
-};
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def longestZigZag(self, root: Optional[TreeNode]) -> int:
+        self.res = 0
+
+        def dfs(node: Optional[TreeNode], is_left: bool) -> int:
+            if not node:
+                return 0
+            left = dfs(node.left, True)     # zigzag from node going left
+            right = dfs(node.right, False)  # zigzag from node going right
+            self.res = max(self.res, left, right)
+            return 1 + right if is_left else 1 + left
+
+        dfs(root, True)
+        return self.res
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
+> Time complexity  : O(n)
+>
+> Space complexity : O(h) — recursion depth, where h is the tree height (O(n) worst case)
+
+## Related Problems
+- [124. Binary Tree Maximum Path Sum](./124_binary_tree_maximum_path_sum.md) — 🔴 Hard · post-order DFS returning a one-sided path while tracking a global best
+- [549. Binary Tree Longest Consecutive Sequence II](./549_binary_tree_longest_consecutive_sequence_ii.md) — 🟡 Medium · per-node directional path lengths combined in one DFS
+- [103. Binary Tree Zigzag Level Order Traversal](./103_binary_tree_zigzig_level_order_traversal.md) — 🟡 Medium · alternating direction in a tree

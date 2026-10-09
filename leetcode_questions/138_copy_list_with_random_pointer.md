@@ -1,5 +1,7 @@
 # 138. Copy List with Random Pointer
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/copy-list-with-random-pointer/)
 
@@ -36,6 +38,15 @@ Constraints:
 
 ## Tags
 - linkedlist
+
+## Approach
+**Key idea:** A copy's `random` pointer must point to the copy of the original's `random` target, so we need a way to map original nodes to their copies: either a hash map, or by placing each copy right after its original.
+
+1. **Hash map:** first pass creates a copy of every node and stores `old -> new`.
+2. Second pass sets `new.next = map[old.next]` and `new.random = map[old.random]`.
+3. **Interweaving (O(1) space):** insert each copy right after its original (`A -> A' -> B -> B'`).
+4. For each original `cur`, set `cur.next.random = cur.random.next` (the copy of the random target).
+5. Split the list back into the original and the copied list, and return the copy's head.
 
 ## Code Implementation
 ```python
@@ -108,3 +119,7 @@ class Solution:
 > Time complexity  : O(n) — each approach visits every node a constant number of times
 >
 > Space complexity : O(n) hash map approach; O(1) interweaving approach
+
+## Related Problems
+- [133. Clone Graph](https://leetcode.com/problems/clone-graph) — 🟡 Medium · deep copy with an old-to-new node map
+- [1485. Clone Binary Tree With Random Pointer](https://leetcode.com/problems/clone-binary-tree-with-random-pointer) — 🟡 Medium · same random-pointer cloning on a tree

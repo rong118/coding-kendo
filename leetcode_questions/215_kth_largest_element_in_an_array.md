@@ -1,5 +1,7 @@
 # 215. Kth Largest Element in an Array
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/kth-largest-element-in-an-array/)
 
@@ -28,6 +30,14 @@ Constraints:
 ## Tags
 - heap
 
+## Approach
+**Key idea:** A min-heap capped at size `k` always holds the `k` largest values seen so far, and its smallest element (the root) is the `k`th largest.
+
+1. Create an empty min-heap.
+2. Push each number onto the heap.
+3. Whenever the heap grows past `k` elements, pop the smallest.
+4. After processing all numbers, return the heap root.
+
 ## Code Implementation
 ```python
 import heapq
@@ -49,3 +59,9 @@ class Solution:
 > Time complexity  : O(n log k) — each push/pop on a heap of size ≤ k is O(log k)
 >
 > Space complexity : O(k) — the heap holds at most k elements
+
+## Related Problems
+- [703. Kth Largest Element in a Stream](./703_kth_largest_element_in_a_stream.md) — 🟢 Easy · same size-k min-heap on a stream
+- [347. Top K Frequent Elements](./347_top_k_frequent_elements.md) — 🟡 Medium · size-k heap over frequencies
+- [973. K Closest Points to Origin](https://leetcode.com/problems/k-closest-points-to-origin) — 🟡 Medium · top-k selection with a heap
+- [912. Sort an Array](./912_sort_an_array.md) — 🟡 Medium · quicksort partitioning behind quickselect

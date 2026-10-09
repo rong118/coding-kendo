@@ -1,5 +1,7 @@
 # 94. Binary Tree Inorder Traversal
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/binary-tree-inorder-traversal/)
 
@@ -41,52 +43,61 @@ Constraints:
 ## Tags
 - tree
 
+## Approach
+**Key idea:** Inorder means left subtree, then the node, then the right subtree; this can be done with recursion or by simulating the call stack with an explicit stack.
+
+1. **Recursive:** visit `left`, append `node.val`, visit `right`; stop at `None`.
+2. **Iterative:** starting from `root`, push nodes while walking left until reaching `None`.
+3. Pop the top node — it is the next in inorder — and append its value.
+4. Move to that node's right child and repeat until both the current node and the stack are empty.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    vector<int> inorderTraversal(TreeNode* root) {
-        vector<int> res;
-        helper(root, res);
-        return res;
-    }
+### Approach 1: Recursive
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def inorderTraversal(self, root: Optional[TreeNode]) -> list[int]:
+        res = []
 
-    // recursive
-    void helper(TreeNode* root, vector<int>& ans){
-        if(root == NULL) return;
-        helper(root->left, ans);
-        ans.push_back(root->val);
-        helper(root->right, ans);
-    }
+        def helper(node: Optional[TreeNode]) -> None:
+            if not node:
+                return
+            helper(node.left)
+            res.append(node.val)
+            helper(node.right)
 
-    // iterative ++
-    void helper(TreeNode* root, vector<int>& ans){
-        stack<TreeNode*> stk;
-        while(root != NULL || !stk.empty()){
-            while(root != NULL){
-                stk.push(root);
-                root = root->left;
-            }
+        helper(root)
+        return res
+```
 
-            root = stk.top();
-            stk.pop();
-            ans.push_back(root->val);
-            root = root->right;
-        }
-    }
-};
+### Approach 2: Iterative (Stack)
+```python
+class Solution:
+    def inorderTraversal(self, root: Optional[TreeNode]) -> list[int]:
+        res = []
+        stack = []
+        while root or stack:
+            while root:
+                stack.append(root)
+                root = root.left
+            root = stack.pop()
+            res.append(root.val)
+            root = root.right
+        return res
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
+> Time complexity  : O(n) — every node is visited once
+>
+> Space complexity : O(h) — recursion / explicit stack, where h is the tree height (O(n) worst case)
+
+## Related Problems
+- [144. Binary Tree Preorder Traversal](./144_binary_tree_preorder_traversal.md) — 🟢 Easy · same DFS, different visit order
+- [145. Binary Tree Postorder Traversal](./145_binary_tree_postorder_traversal.md) — 🟢 Easy · same DFS, different visit order
+- [173. Binary Search Tree Iterator](./173_binary_search_tree_iterator.md) — 🟡 Medium · the iterative stack traversal, made lazy
+- [98. Validate Binary Search Tree](./98_validate_binary_search_tree.md) — 🟡 Medium · inorder of a BST is sorted

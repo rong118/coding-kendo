@@ -1,5 +1,7 @@
 # 92. Reverse Linked List II
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/reverse-linked-list-ii/)
 
@@ -27,6 +29,15 @@ Constraints:
 
 ## Tags
 - linkedlist
+
+## Approach
+**Key idea:** Walk to the node just before position `left`, then repeatedly take the node after the current one and move it to the front of the segment. After `right - left` moves the segment is reversed in place.
+
+1. Put a dummy node before `head` so that `left = 1` needs no special case.
+2. Move `pre` forward `left - 1` steps; it now sits just before the segment.
+3. Let `cur = pre.next` (the first node of the segment, which ends up last).
+4. Repeat `right - left` times: unlink `nxt = cur.next` and insert it right after `pre`.
+5. Return `dummy.next`.
 
 ## Code Implementation
 ```python
@@ -61,3 +72,8 @@ class Solution:
 > Time complexity  : O(n) — single pass, reversing at most n nodes
 >
 > Space complexity : O(1) — in-place pointer manipulation
+
+## Related Problems
+- [206. Reverse Linked List](./206_reverse_linked_list.md) — 🟢 Easy · reverse the whole list
+- [25. Reverse Nodes in k-Group](./25_reverse_nodes_in_k_group.md) — 🔴 Hard · reverse segments in place repeatedly
+- [234. Palindrome Linked List](./234_palindrome_linked_list.md) — 🟢 Easy · reverse part of a list in place

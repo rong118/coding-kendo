@@ -1,5 +1,7 @@
 # 1707. Maximum XOR With an Element From Array
 
+**Difficulty:** 🔴 Hard
+
 ## Question link
 (https://leetcode.com/problems/maximum-xor-with-an-element-from-array/)
 
@@ -36,82 +38,57 @@ Constraints:
 - trie
 - bitwise
 
+## Approach
+**Key idea:** Answer queries offline in increasing order of `m`, inserting only the numbers `<= m` into a binary trie; then the maximum XOR is found greedily by taking the opposite bit at each level whenever possible.
+
+1. Sort `nums`, and sort query indices by their limit `m`.
+2. For each query, insert into the trie every remaining number `<= m` (bits from high to low).
+3. If the trie is still empty, the answer is `-1`.
+4. Otherwise walk the trie from the highest bit: prefer the child with the opposite bit of `x` (that bit becomes 1 in the XOR), else take the same bit.
+5. Store the XOR at the query's original index.
+
 ## Code Implementation
-```c++
-bool comp(vector<int> &v1,vector<int> &v2)
-{
-    return v1[1]<v2[1];
-}
+```python
+class Solution:
+    def maximizeXor(self, nums: list[int], queries: list[list[int]]) -> list[int]:
+        BITS = 30  # 10^9 < 2^30
+        nums.sort()
+        order = sorted(range(len(queries)), key=lambda i: queries[i][1])
 
-class TrieNode {
-public:
-    vector<TrieNode*> children;
-    int value;
-    TrieNode(){
-        children.resize(2, NULL);
-        value = 0;
-    }
+        root = {}
+        ans = [-1] * len(queries)
+        j = 0
+        for qi in order:
+            x, m = queries[qi]
+            # Insert every number <= m into the trie
+            while j < len(nums) and nums[j] <= m:
+                node = root
+                for b in range(BITS - 1, -1, -1):
+                    node = node.setdefault((nums[j] >> b) & 1, {})
+                j += 1
 
-    void addNum(TrieNode* root, int num){
-        TrieNode* cur = root;
-        for(int i = 31; i >= 0; i--){
-            int curBit = (num >> i) & 1;
-            if(cur->children[curBit] == NULL){
-                cur->children[curBit] = new TrieNode();
-            }
-            cur = cur->children[curBit];
-        }
-        cur->value = num;
-    }
+            if not root:
+                continue  # no number <= m, answer stays -1
 
-    int findMaxXor(TrieNode* root, int num){
-        TrieNode* cur = root;
-        for(int i = 31; i >= 0; i--){
-            int curBit = (num >> i) & 1;
-            int otherChoice = curBit == 1 ? 0 : 1;
-            if(cur->children[otherChoice] != NULL){
-                cur = cur->children[otherChoice];
-            }else if(cur->children[curBit] != NULL){
-                cur = cur->children[curBit];
-            }else{
-                return -1;
-            }
-        }
-
-        return num ^ cur->value;
-    }
-};
-
-class Solution {
-public:
-    vector<int> maximizeXor(vector<int>& arr, vector<vector<int>>& queries) {
-       vector<int> ans(queries.size());
-        vector<vector<int>> query = queries;
-        for(int i=0;i<query.size();i++)
-        {
-            // simply inserting query number so that we can put in order in ans as we are sorting the array
-            query[i].push_back(i);
-        }
-        sort(arr.begin(),arr.end());
-        sort(query.begin(),query.end(),comp);
-
-        TrieNode * root = new TrieNode();
-        int j = 0;
-
-        for(int i = 0; i < query.size(); i++){
-            vector<int> v = query[i];       
-            int x = v[1];
-            while(j<arr.size() && arr[j]<=x){
-                root->addNum(root, arr[j]);
-                j++;
-            }
-              
-            ans[v[2]] = root->findMaxXor(root, v[0]);
-        }
-
-        return ans;
-    }
-};
+            # Greedily pick the opposite bit at each level
+            node, xor = root, 0
+            for b in range(BITS - 1, -1, -1):
+                bit = (x >> b) & 1
+                if 1 - bit in node:
+                    xor |= 1 << b
+                    node = node[1 - bit]
+                else:
+                    node = node[bit]
+            ans[qi] = xor
+        return ans
 ```
 
 ## Time Complexity Analysis
+> Time complexity  : O(n log n + q log q + (n + q) · L) — sorting plus L = 30 trie steps per insert and query
+>
+> Space complexity : O(n · L + q) — trie nodes and the answer array
+
+## Related Problems
+- [421. Maximum XOR of Two Numbers in an Array](./421_maximum_xor_of_numbers_in_an_array.md) — 🟡 Medium · same greedy binary-trie XOR
+- [208. Implement Trie (Prefix Tree)](./208_implement_trie.md) — 🟡 Medium · trie fundamentals
+- [1938. Maximum Genetic Difference Query](https://leetcode.com/problems/maximum-genetic-difference-query) — 🔴 Hard · offline queries with a binary XOR trie

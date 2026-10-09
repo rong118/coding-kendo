@@ -1,5 +1,7 @@
 # 75. Sort Colors
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/sort-colors/)
 
@@ -31,6 +33,15 @@ Constraints:
 - Array
 - Sort
 
+## Approach
+**Key idea:** Dutch National Flag partitioning — keep `[0, low)` all 0s, `[low, mid)` all 1s and `(high, n-1]` all 2s, shrinking the unknown window `[mid, high]` in one pass.
+
+1. Start with `low = mid = 0` and `high = n - 1`.
+2. If `nums[mid]` is 0, swap it with `nums[low]` and advance both `low` and `mid`.
+3. If it is 1, it's already in the right region — just advance `mid`.
+4. If it is 2, swap it with `nums[high]` and decrement `high` (don't advance `mid`; the swapped-in value is still unchecked).
+5. Stop when `mid > high`.
+
 ## Code Implementation
 ```python
 # Dutch National Flag problem
@@ -53,3 +64,8 @@ def sortColors(nums):
 > Time complexity  : O(n)
 >
 > Space complexity : O(1)
+
+## Related Problems
+- [912. Sort an Array](./912_sort_an_array.md) — 🟡 Medium · general sorting; quicksort uses the same partition idea
+- [27. Remove Element](./27_remove_element.md) — 🟢 Easy · in-place partitioning with pointers
+- [215. Kth Largest Element in an Array](./215_kth_largest_element_in_an_array.md) — 🟡 Medium · quickselect relies on in-place partitioning

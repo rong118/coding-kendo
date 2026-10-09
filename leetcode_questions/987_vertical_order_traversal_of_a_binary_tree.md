@@ -1,5 +1,7 @@
 # 987. Vertical Order Traversal of a Binary Tree
 
+**Difficulty:** 🔴 Hard
+
 ## Question link
 (https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/)
 
@@ -72,52 +74,45 @@ Constraints:
 ## Tags
 - tree
 
+## Approach
+**Key idea:** Record every node's `(row, col)` position with a DFS, group nodes by column, then sort each column by `(row, value)` — that ordering is exactly "top to bottom, ties broken by value".
+
+1. DFS from the root at `(row 0, col 0)`; a left child goes to `(row + 1, col - 1)`, a right child to `(row + 1, col + 1)`.
+2. Append `(row, val)` to the list for the node's column.
+3. Visit the columns from smallest to largest.
+4. Sort each column's `(row, val)` pairs and output just the values.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+from collections import defaultdict
 
-// same as leetcode 314
-class Solution {
-public:
-    //dfs 
-    vector<vector<int>> verticalTraversal(TreeNode* root) {
-        map<int, vector<vector<int>>> colToNodes;
-        dfs(root, 0, 0, colToNodes);
-        vector<vector<int>> ans;
-        
-        for(auto it = colToNodes.begin(); it != colToNodes.end(); it++){
-            vector<vector<int>> t = it->second;
-            sort(t.begin(), t.end());
-            vector<int> tt;
-            for(int i = 0; i < t.size(); i++){
-                tt.push_back(t[i][1]);
-            }
-            ans.push_back(tt);
-        }
+class Solution:
+    def verticalTraversal(self, root: Optional[TreeNode]) -> list[list[int]]:
+        cols = defaultdict(list)  # col -> [(row, val), ...]
 
-        return ans;
-    }
-    
-    void dfs(TreeNode* root, int depth, int offset, map<int, vector<vector<int>>>& m){
-        if(root == NULL) return;
-        if(m.find(offset) == m.end()) m[offset] = {};
-        m[offset].push_back({depth, root->val});
-        dfs(root->left, depth + 1, offset -1, m);
-        dfs(root->right, depth + 1, offset + 1, m);
-    }
-};
+        def dfs(node: Optional[TreeNode], row: int, col: int) -> None:
+            if not node:
+                return
+            cols[col].append((row, node.val))
+            dfs(node.left, row + 1, col - 1)
+            dfs(node.right, row + 1, col + 1)
+
+        dfs(root, 0, 0)
+        return [[val for _, val in sorted(cols[c])] for c in sorted(cols)]
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(n)
+> Time complexity  : O(n log n) — sorting the nodes within columns (and the columns themselves)
+>
+> Space complexity : O(n)
+
+## Related Problems
+- [314. Binary Tree Vertical Order Traversal](./314_binary_tree_vertical_order_traversal.md) — 🟡 Medium · same column grouping, ties broken by BFS order instead of value
+- [102. Binary Tree Level Order Traversal](./102_binary_tree_level_order_traversal.md) — 🟡 Medium · grouping nodes by row instead of column
+- [103. Binary Tree Zigzag Level Order Traversal](./103_binary_tree_zigzig_level_order_traversal.md) — 🟡 Medium · grouping nodes by level with ordering rules

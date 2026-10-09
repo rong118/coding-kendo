@@ -1,5 +1,7 @@
 # 1171. Remove Zero Sum Consecutive Nodes from Linked List
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/)
 
@@ -38,6 +40,14 @@ Constraints:
 ## Tags
 - linkedlist
 - prefix-sum
+
+## Approach
+**Key idea:** If two nodes share the same prefix sum, the nodes strictly between them sum to zero — so linking each node directly to the node after the *last* occurrence of its prefix sum removes every zero-sum run.
+
+1. Add a dummy node with value `0` in front of `head`.
+2. First pass: compute running prefix sums and map each sum to the **last** node that reaches it.
+3. Second pass: recompute prefix sums from the dummy; for each node, set `next` to the node after `seen[prefix]`, skipping any zero-sum segment.
+4. Return `dummy.next`.
 
 ## Code Implementation
 ```python
@@ -79,3 +89,8 @@ class Solution:
 > Time complexity  : O(n) — two passes through the list
 >
 > Space complexity : O(n) — hash map stores at most n prefix sums
+
+## Related Problems
+- [560. Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k) — 🟡 Medium · repeated prefix sums mark a target-sum range
+- [203. Remove Linked List Elements](./203_remove_linked_list_elements.md) — 🟢 Easy · dummy-node deletion in a linked list
+- [82. Remove Duplicates from Sorted List II](./82_remove_duplicates_from_sorted_list_II.md) — 🟡 Medium · skipping whole runs of nodes

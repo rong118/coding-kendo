@@ -1,5 +1,7 @@
 # 173. Binary Search Tree Iterator
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/binary-search-tree-iterator/)
 
@@ -60,55 +62,48 @@ Could you implement next() and hasNext() to run in average O(1) time and use O(h
 ## Tags
 - tree
 
+## Approach
+**Key idea:** Run the iterative inorder traversal lazily — a stack holds the path of pending ancestors, so the top is always the next smallest value.
+
+1. On construction, push `root` and all of its left descendants onto the stack.
+2. `next()`: pop the top node; it is the smallest unvisited value.
+3. Before returning, push the popped node's right child and all of that child's left descendants.
+4. `hasNext()`: return whether the stack is non-empty.
+5. Each node is pushed and popped exactly once, so `next()` is O(1) amortized.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class BSTIterator {
-    stack<TreeNode*> stk;
-public:
-    BSTIterator(TreeNode* root) {
-        _pushAllLeft(root);
-    }
-    
-    // O(logn) = > O(n)
-    int next() {
-        TreeNode* t = stk.top();
-        stk.pop();
-        _pushAllLeft(t->right);
-        
-        return t->val;
-    }
-    
-    // O(1)
-    bool hasNext() {
-        return !stk.empty();
-    }
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class BSTIterator:
+    def __init__(self, root: Optional[TreeNode]):
+        self.stack: list[TreeNode] = []
+        self._push_all_left(root)
 
-    void _pushAllLeft(TreeNode* root){
-        while(root != NULL){
-            stk.push(root);
-            root = root->left;
-        }
-    }
-};
+    def next(self) -> int:
+        node = self.stack.pop()
+        self._push_all_left(node.right)
+        return node.val
 
-/**
- * Your BSTIterator object will be instantiated and called as such:
- * BSTIterator* obj = new BSTIterator(root);
- * int param_1 = obj->next();
- * bool param_2 = obj->hasNext();
- */
+    def hasNext(self) -> bool:
+        return bool(self.stack)
+
+    def _push_all_left(self, node: Optional[TreeNode]) -> None:
+        while node:
+            self.stack.append(node)
+            node = node.left
 ```
 
 ## Time Complexity Analysis
-\
+> Time complexity  : O(1) amortized for next(), O(1) for hasNext()
+>
+> Space complexity : O(h) — the stack holds at most one root-to-leaf path
+
+## Related Problems
+- [94. Binary Tree Inorder Traversal](./94_binary_tree_inorder_traversal.md) — 🟢 Easy · the same iterative inorder traversal
+- [98. Validate Binary Search Tree](./98_validate_binary_search_tree.md) — 🟡 Medium · inorder of a BST is sorted
+- [426. Convert Binary Search Tree to Sorted Doubly Linked List](./426_convert_binary_search_tree_to_sorted_doubly_linked_list.md) — 🟡 Medium · walk a BST in sorted order

@@ -1,5 +1,7 @@
 # 105. Construct Binary Tree from Preorder and Inorder Traversal
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
 
@@ -31,44 +33,52 @@ Constraints:
 ## Tags
 - tree
 
+## Approach
+**Key idea:** The next value in preorder is always the root of the current subtree, and its position in inorder splits the remaining values into the left and right subtrees.
+
+1. Build a hash map from value to index in `inorder` so each root can be found in O(1).
+2. Keep a pointer `pre_idx` into `preorder`, starting at 0.
+3. `helper(lo, hi)` builds the subtree for `inorder[lo..hi]`: return `None` if the range is empty.
+4. Otherwise take `preorder[pre_idx]` as the root, advance the pointer, and find its inorder index `mid`.
+5. Build the left subtree from `lo..mid-1` first (preorder visits left before right), then the right from `mid+1..hi`.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-    int preorderIdx = 0;
-public:
-    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        preorderIdx = 0;
-        unordered_map<int, int> m;
-        for(int i = 0; i < inorder.size(); i++) {
-            m[inorder[i]] = i;
-        }
+```python
+from typing import Optional
 
-        return _helper(0, inorder.size() - 1, preorder, inorder, m);
-    }
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 
-    TreeNode* _helper(int start, int end, vector<int>& preorder, vector<int>& inorder, unordered_map<int, int>& m){
-        if(start > end) return NULL;
-        int v = preorder[preorderIdx++];
-        int idx = m[v];
-        TreeNode* root = new TreeNode(v);
-        root->left  = _helper(start, idx - 1, preorder, inorder, m);
-        root->right = _helper(idx + 1, end, preorder, inorder, m);
-        return root;
-    }
-};
+class Solution:
+    def buildTree(self, preorder: list[int], inorder: list[int]) -> Optional[TreeNode]:
+        index = {val: i for i, val in enumerate(inorder)}
+        pre_idx = 0
+
+        def helper(lo: int, hi: int) -> Optional[TreeNode]:
+            nonlocal pre_idx
+            if lo > hi:
+                return None
+            val = preorder[pre_idx]
+            pre_idx += 1
+            root = TreeNode(val)
+            mid = index[val]
+            root.left = helper(lo, mid - 1)
+            root.right = helper(mid + 1, hi)
+            return root
+
+        return helper(0, len(inorder) - 1)
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(n)
+> Time complexity  : O(n) — each node is created once with O(1) index lookup
+>
+> Space complexity : O(n) — hash map plus recursion stack
+
+## Related Problems
+- [106. Construct Binary Tree from Inorder and Postorder Traversal](./106_construct_binary_tree_from_inorder_and_postorder_traversal.md) — 🟡 Medium · same split, roots read from the end of postorder
+- [889. Construct Binary Tree from Preorder and Postorder Traversal](./889_construct_binary_tree_from_preorder_and_postorder_traversal.md) — 🟡 Medium · rebuild a tree from two traversals
+- [1008. Construct Binary Search Tree from Preorder Traversal](./1008_construct_binary_search_tree_from_preorder_traversal.md) — 🟡 Medium · preorder root consumption with value bounds

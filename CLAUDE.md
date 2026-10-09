@@ -32,12 +32,15 @@ Each **data structure / algorithm** file follows this pattern:
 3. Runtime complexity analysis
 4. Linked LeetCode questions
 
-Each **LeetCode question** file follows this pattern:
-1. Question link (LeetCode URL)
-2. Question description with examples and constraints
-3. `## Tags` listing relevant topics
-4. `## Code Implementation` — Python solution
-5. `## Time Complexity Analysis` — Big-O for time and space
+Each **LeetCode question** file follows this pattern (see `leetcode_questions/leetcode_question_markdown_template.md`; `11_container_with_most_water.md` is the reference example):
+1. `**Difficulty:**` line under the title (🟢 Easy / 🟡 Medium / 🔴 Hard)
+2. Question link (LeetCode URL)
+3. Question description with examples and constraints
+4. `## Tags` listing relevant topics
+5. `## Approach` — a `**Key idea:**` sentence plus 3–6 numbered steps
+6. `## Code Implementation` — Python solution only (no other languages)
+7. `## Time Complexity Analysis` — Big-O for time and space
+8. `## Related Problems` — 2–4 links, local files (`./{id}_{slug}.md`) preferred over LeetCode URLs
 
 ## Adding New Content
 

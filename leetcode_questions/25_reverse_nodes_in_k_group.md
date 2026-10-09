@@ -1,5 +1,7 @@
 # 25. Reverse Nodes in k-Group
 
+**Difficulty:** 🔴 Hard
+
 ## Question link
 (https://leetcode.com/problems/reverse-nodes-in-k-group/)
 
@@ -30,6 +32,14 @@ Constraints:
 
 ## Tags
 - linkedlist
+
+## Approach
+**Key idea:** Solve the rest of the list recursively first, then reverse the current group of `k` nodes so its old head points at the already-processed remainder.
+
+1. Walk `k` nodes ahead from `head`; if the list runs out first, return `head` unchanged (the leftover tail stays as is).
+2. Recursively process the list starting at the `(k+1)`-th node; its returned head becomes `prev`.
+3. Reverse the current `k` nodes one by one, pointing each node at `prev`.
+4. After `k` steps, `prev` is the new head of this group — return it.
 
 ## Code Implementation
 ```python
@@ -67,3 +77,8 @@ class Solution:
 > Time complexity  : O(n) — each node visited twice (count + reverse)
 >
 > Space complexity : O(n/k) — recursion depth proportional to number of groups
+
+## Related Problems
+- [206. Reverse Linked List](./206_reverse_linked_list.md) — 🟢 Easy · the basic in-place reversal used per group
+- [92. Reverse Linked List II](./92_reverse_linked_list_II.md) — 🟡 Medium · reverse a sub-range of the list
+- [24. Swap Nodes in Pairs](https://leetcode.com/problems/swap-nodes-in-pairs) — 🟡 Medium · the k = 2 special case

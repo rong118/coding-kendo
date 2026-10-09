@@ -1,5 +1,7 @@
 # 144. Binary Tree Preorder Traversal
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/binary-tree-preorder-traversal/)
 
@@ -39,52 +41,68 @@ Constraints:
 ## Tags
 - tree
 
+## Approach
+**Key idea:** Preorder visits root, then left, then right. Recursion expresses this directly; iteratively, a stack works if you push the right child before the left so the left subtree is popped (visited) first.
+
+1. If the tree is empty, return an empty list.
+2. Recursive: record the node's value, then recurse into the left subtree, then the right subtree.
+3. Iterative: push the root onto a stack, then repeatedly pop a node and record its value.
+4. After popping, push its right child and then its left child (if present), so the left one comes off the stack next.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    vector<int> preorderTraversal(TreeNode* root) {
-        vector<int> res;
-        helper(root, res);
-        return res;
-    }
+### Approach 1: Recursive
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def preorderTraversal(self, root: Optional[TreeNode]) -> list[int]:
+        res = []
 
-    // recursive
-    void helper(TreeNode* root, vector<int>& ans){
-        if(root == NULL) return;
-        ans.push_back(root->val);
-        helper(root->left, ans);
-        helper(root->right, ans);
-    }
+        def dfs(node: Optional[TreeNode]) -> None:
+            if not node:
+                return
+            res.append(node.val)
+            dfs(node.left)
+            dfs(node.right)
 
-    // iterative
-    void helper(TreeNode* root, vector<int>& ans){
-        if(root == NULL) return;
-        stack<TreeNode*> stk;
-        stk.push(root);
-        while(!stk.empty()){
-            root = stk.top();
-            stk.pop();
-            ans.push_back(root->val);
-            if(root->right != NULL) 
-                stk.push(root->right);
-            if(root->left != NULL)
-                stk.push(root->left);
-        }
-    }
-};
+        dfs(root)
+        return res
+```
+
+### Approach 2: Iterative with a Stack
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def preorderTraversal(self, root: Optional[TreeNode]) -> list[int]:
+        if not root:
+            return []
+        res, stack = [], [root]
+        while stack:
+            node = stack.pop()
+            res.append(node.val)
+            # push right first so the left subtree is processed first
+            if node.right:
+                stack.append(node.right)
+            if node.left:
+                stack.append(node.left)
+        return res
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
+> Time complexity  : O(n)
+>
+> Space complexity : O(h) — recursion depth / stack size, where h is the tree height (O(n) worst case)
+
+## Related Problems
+- [94. Binary Tree Inorder Traversal](./94_binary_tree_inorder_traversal.md) — 🟢 Easy · same traversal family, recursive and stack-based
+- [145. Binary Tree Postorder Traversal](./145_binary_tree_postorder_traversal.md) — 🟢 Easy · same traversal family, recursive and stack-based
+- [102. Binary Tree Level Order Traversal](./102_binary_tree_level_order_traversal.md) — 🟡 Medium · BFS counterpart using a queue

@@ -1,5 +1,7 @@
 # 21. Merge Two Sorted Lists
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/merge-two-sorted-lists/)
 
@@ -37,6 +39,14 @@ Constraints:
 ## Tags
 - linkedlist
 
+## Approach
+**Key idea:** The smallest remaining node is always at the head of one of the two lists, so repeatedly splice the smaller head onto the result.
+
+1. Create a dummy node and a `tail` pointer to build the merged list.
+2. While both lists are non-empty, attach the node with the smaller value to `tail` and advance that list.
+3. Move `tail` forward after each attachment.
+4. When one list runs out, attach the rest of the other list (it is already sorted) and return `dummy.next`.
+
 ## Code Implementation
 ```python
 from typing import Optional
@@ -68,3 +78,8 @@ class Solution:
 > Time complexity  : O(m + n) — single pass through both lists
 >
 > Space complexity : O(1) — reuses existing nodes
+
+## Related Problems
+- [23. Merge k Sorted Lists](./23_merge_k_sorted_lists.md) — 🔴 Hard · generalizes the merge to k lists
+- [88. Merge Sorted Array](./88_merge_sorted_array.md) — 🟢 Easy · same merge step on arrays
+- [148. Sort List](https://leetcode.com/problems/sort-list) — 🟡 Medium · merge sort built on this merge

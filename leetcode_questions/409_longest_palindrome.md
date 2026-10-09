@@ -1,5 +1,7 @@
 # 409. Longest Palindrome
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/longest-palindrome/)
 
@@ -32,6 +34,14 @@ Constraints:
 - string
 - hashMap
 
+## Approach
+**Key idea:** A palindrome uses every letter in pairs mirrored around the centre, plus at most one unpaired letter in the middle.
+
+1. Count each character.
+2. Add `count // 2 * 2` (the even part) of every count to the answer.
+3. Remember whether any count was odd.
+4. If so, add 1 for a single centre character.
+
 ## Code Implementation
 ```python
 from collections import Counter
@@ -51,3 +61,8 @@ class Solution:
 > Time complexity  : O(n)
 >
 > Space complexity : O(1) — at most 52 uppercase/lowercase letters
+
+## Related Problems
+- [5. Longest Palindromic Substring](./5_longest_palindromic_substring.md) — 🟡 Medium · palindrome inside the string instead of built from it
+- [266. Palindrome Permutation](https://leetcode.com/problems/palindrome-permutation) — 🟢 Easy · same at-most-one-odd-count rule
+- [242. Valid Anagram](./242_valid_anagram.md) — 🟢 Easy · character counting with a hash map

@@ -1,5 +1,7 @@
 # 96. Unique Binary Search Trees
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/unique-binary-search-trees/)
 
@@ -29,48 +31,49 @@ Constraints:
 - tree
 - dp
 
+## Approach
+**Key idea:** Pick each value `i` as the root: the left subtree is any BST of the `i - 1` smaller values and the right subtree is any BST of the `n - i` larger values, so `G(n) = sum(G(i - 1) * G(n - i))` for `i = 1..n` (the Catalan numbers).
+
+1. Let `G(k)` be the number of unique BSTs with `k` nodes; `G(0) = G(1) = 1`.
+2. For each root choice `i`, multiply the counts of possible left and right subtrees.
+3. Sum over all roots to get `G(k)`.
+4. Compute it top-down with memoization (Approach 1) or bottom-up for `k = 2..n` (Approach 2), and return `G(n)`.
+
 ## Code Implementation
-```c++
-class Solution {
-public:
-    int numTrees(int n) {
-        vector<int> m(n + 1, 0);
-        return _dfs(n, m);
-    }
+### Approach 1: Memoized Recursion
+```python
+class Solution:
+    def numTrees(self, n: int) -> int:
+        memo = {0: 1, 1: 1}
 
-    int _dfs(int n, vector<int>& m){
-        if(n == 0 || n == 1) return 1;
-        if(m[n] != 0) return m[n];
-        int sum = 0;
-        for(int i = 1; i <= n; i++){
-            sum += _dfs(i - 1, m) * _dfs(n - i, m);
-        }
-        m[n] = sum;
-        return sum;
-    }
-};
+        def count(k: int) -> int:
+            if k in memo:
+                return memo[k]
+            memo[k] = sum(count(i - 1) * count(k - i) for i in range(1, k + 1))
+            return memo[k]
 
+        return count(n)
+```
 
-// dp
-// G(n) : the number of unique BST of array of length n.
-// F(i, n) : the number of unique BST of array of length n and i as root.
-// G(n) = sum(F(i, n)); (i from 1 to n);
-// F(i, n) = G(i -1 ) * G(n - i)
-// G(n) = sum(G(i -1 ) * G(n -i))
-int numTrees(int n){
-    vector<int> g(n + 1, 0);
-    g[0] = 1;
-    g[1] = 1;
-    for(int i = 2; i <= n; i++){
-        for(int j = 1; j <= i; j++){
-            g[i] += g[j - 1] * g[i - j]
-        }
-    }
-
-    return g[n]
-}
+### Approach 2: Bottom-up DP
+```python
+class Solution:
+    def numTrees(self, n: int) -> int:
+        # g[k] = number of unique BSTs with k nodes
+        g = [0] * (n + 1)
+        g[0] = 1
+        for i in range(1, n + 1):
+            for j in range(1, i + 1):  # j is the root
+                g[i] += g[j - 1] * g[i - j]
+        return g[n]
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n^2)
-running space : O(n)
+> Time complexity  : O(n^2)
+>
+> Space complexity : O(n)
+
+## Related Problems
+- [95. Unique Binary Search Trees II](./95_unique_binary_search_trees_ii.md) — 🟡 Medium · same root-split recursion, but builds the actual trees
+- [108. Convert Sorted Array to Binary Search Tree](./108_convert_sorted_array_to_binary_search_tree.md) — 🟢 Easy · choosing a root splits values into left/right subtrees
+- [98. Validate Binary Search Tree](./98_validate_binary_search_tree.md) — 🟡 Medium · BST ordering property

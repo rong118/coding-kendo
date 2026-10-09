@@ -16,151 +16,68 @@ This method is particularly useful for tasks that can be naturally divided into 
 
 Merge Sort is a classic example of a Divide and Conquer algorithm:
 
-```c++
-#include <iostream>
-#include <vector>
+```python
+def merge(arr: list[int], left: int, mid: int, right: int) -> None:
+    left_arr = arr[left:mid + 1]
+    right_arr = arr[mid + 1:right + 1]
 
-// Function to merge two subarrays
-void merge(std::vector<int>& arr, int left, int mid, int right) {
-    int n1 = mid - left + 1;
-    int n2 = right - mid;
+    # Merge the two sorted halves back into arr[left..right]
+    i = j = 0
+    k = left
+    while i < len(left_arr) and j < len(right_arr):
+        if left_arr[i] <= right_arr[j]:
+            arr[k] = left_arr[i]
+            i += 1
+        else:
+            arr[k] = right_arr[j]
+            j += 1
+        k += 1
 
-    // Create temporary arrays
-    std::vector<int> leftArr(n1);
-    std::vector<int> rightArr(n2);
+    # Copy whatever remains in either half
+    for x in left_arr[i:] + right_arr[j:]:
+        arr[k] = x
+        k += 1
 
-    // Copy data to temporary arrays
-    for (int i = 0; i < n1; i++)
-        leftArr[i] = arr[left + i];
-    for (int i = 0; i < n2; i++)
-        rightArr[i] = arr[mid + 1 + i];
 
-    // Merge the temporary arrays back into arr[left..right]
-    int i = 0; // Initial index of first subarray
-    int j = 0; // Initial index of second subarray
-    int k = left; // Initial index of merged subarray
+def merge_sort(arr: list[int], left: int, right: int) -> None:
+    if left < right:
+        mid = (left + right) // 2
+        merge_sort(arr, left, mid)       # Sort first half
+        merge_sort(arr, mid + 1, right)  # Sort second half
+        merge(arr, left, mid, right)     # Merge the sorted halves
 
-    while (i < n1 && j < n2) {
-        if (leftArr[i] <= rightArr[j]) {
-            arr[k] = leftArr[i];
-            i++;
-        } else {
-            arr[k] = rightArr[j];
-            j++;
-        }
-        k++;
-    }
 
-    // Copy the remaining elements of leftArr, if any
-    while (i < n1) {
-        arr[k] = leftArr[i];
-        i++;
-        k++;
-    }
-
-    // Copy the remaining elements of rightArr, if any
-    while (j < n2) {
-        arr[k] = rightArr[j];
-        j++;
-        k++;
-    }
-}
-
-// Function to implement Merge Sort
-void mergeSort(std::vector<int>& arr, int left, int right) {
-    if (left < right) {
-        // Find the middle point
-        int mid = left + (right - left) / 2;
-
-        // Sort first and second halves
-        mergeSort(arr, left, mid);
-        mergeSort(arr, mid + 1, right);
-
-        // Merge the sorted halves
-        merge(arr, left, mid, right);
-    }
-}
-
-int main() {
-    std::vector<int> arr = {12, 11, 13, 5, 6, 7};
-    int arr_size = arr.size();
-
-    std::cout << "Given array is \n";
-    for (int i = 0; i < arr_size; i++)
-        std::cout << arr[i] << " ";
-    std::cout << std::endl;
-
-    mergeSort(arr, 0, arr_size - 1);
-
-    std::cout << "\nSorted array is \n";
-    for (int i = 0; i < arr_size; i++)
-        std::cout << arr[i] << " ";
-    std::cout << std::endl;
-    return 0;
-}
+arr = [12, 11, 13, 5, 6, 7]
+print("Given array is", arr)
+merge_sort(arr, 0, len(arr) - 1)
+print("Sorted array is", arr)  # [5, 6, 7, 11, 12, 13]
 ```
 
 ### 2. Finding the maximum and minimum elements in an array:
 
-```c++
-#include <iostream>
-#include <vector>
-#include <limits.h>
+```python
+def find_min_max(arr: list[int], left: int, right: int) -> tuple[int, int]:
+    # If the array has only one element
+    if left == right:
+        return arr[left], arr[left]
 
-using namespace std;
+    # If the array has two elements
+    if right == left + 1:
+        return min(arr[left], arr[right]), max(arr[left], arr[right])
 
-// Struct to hold the results
-struct MinMax {
-    int min;
-    int max;
-};
+    # Divide the array into two halves
+    mid = (left + right) // 2
+    left_min, left_max = find_min_max(arr, left, mid)
+    right_min, right_max = find_min_max(arr, mid + 1, right)
 
-// Function to find the minimum and maximum using Divide and Conquer
-MinMax findMinMax(const vector<int>& arr, int left, int right) {
-    MinMax result, leftResult, rightResult;
+    # Combine the results
+    return min(left_min, right_min), max(left_max, right_max)
 
-    // If the array has only one element
-    if (left == right) {
-        result.min = arr[left];
-        result.max = arr[left];
-        return result;
-    }
 
-    // If the array has two elements
-    if (right == left + 1) {
-        if (arr[left] < arr[right]) {
-            result.min = arr[left];
-            result.max = arr[right];
-        } else {
-            result.min = arr[right];
-            result.max = arr[left];
-        }
-        return result;
-    }
-
-    // Divide the array into two halves
-    int mid = left + (right - left) / 2;
-    leftResult = findMinMax(arr, left, mid);
-    rightResult = findMinMax(arr, mid + 1, right);
-
-    // Combine the results
-    result.min = min(leftResult.min, rightResult.min);
-    result.max = max(leftResult.max, rightResult.max);
-
-    return result;
-}
-
-int main() {
-    vector<int> arr = {100, 11, 445, 1, 330, 3000};
-    int n = arr.size();
-
-    MinMax result = findMinMax(arr, 0, n - 1);
-
-    cout << "Minimum element is " << result.min << endl;
-    cout << "Maximum element is " << result.max << endl;
-
-    return 0;
-}
+arr = [100, 11, 445, 1, 330, 3000]
+lo, hi = find_min_max(arr, 0, len(arr) - 1)
+print("Minimum element is", lo)  # 1
+print("Maximum element is", hi)  # 3000
 ```
 
 ## Runtime Complexity

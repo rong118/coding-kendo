@@ -1,5 +1,7 @@
 # 28. Find the Index of the First Occurrence in a String
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/)
 
@@ -31,6 +33,14 @@ Constraints:
 - string
 - two-pointers
 
+## Approach
+**Key idea:** Slide a window of length `len(needle)` across `haystack` and return the first start position whose window equals `needle`.
+
+1. Let `n = len(haystack)` and `m = len(needle)`.
+2. For every start `i` from `0` to `n - m`, compare `haystack[i:i + m]` with `needle`.
+3. Return `i` on the first match.
+4. If no window matches, return `-1`.
+
 ## Code Implementation
 ```python
 class Solution:
@@ -48,3 +58,9 @@ class Solution:
 > Time complexity  : O(n * m) — worst case when many near-matches are checked; O(n + m) average with Python's fast substring slicing
 >
 > Space complexity : O(1) — no extra space used
+
+## Related Problems
+- [14. Longest Common Prefix](./14_longest_common_prefix.md) — 🟢 Easy · character-by-character string comparison
+- [459. Repeated Substring Pattern](https://leetcode.com/problems/repeated-substring-pattern) — 🟢 Easy · substring search on a string
+- [686. Repeated String Match](https://leetcode.com/problems/repeated-string-match) — 🟡 Medium · find a pattern inside a (repeated) text
+- [214. Shortest Palindrome](https://leetcode.com/problems/shortest-palindrome) — 🔴 Hard · KMP-style prefix matching

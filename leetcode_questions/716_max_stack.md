@@ -1,5 +1,7 @@
 # 716. Max Stack
 
+**Difficulty:** 🔴 Hard
+
 ## Question link
 (https://leetcode.com/problems/max-stack/)
 
@@ -32,6 +34,14 @@ Note:
 
 ## Tags
 - stack
+
+## Approach
+**Key idea:** Keep a second stack of running maximums alongside the main stack, so `peekMax` is O(1); `popMax` temporarily pops elements above the max into a buffer and re-pushes them so both stacks stay consistent.
+
+1. `push(x)`: push onto `stack`; also push onto `max_stack` if it is empty or `x >= max_stack[-1]` (keep `>=` so duplicate maxima are tracked).
+2. `pop()`: if the top equals `max_stack[-1]`, pop `max_stack` too; then pop and return the top of `stack`.
+3. `top()` / `peekMax()`: return the top of `stack` / `max_stack`.
+4. `popMax()`: pop `mx` from `max_stack`, move elements from `stack` into a buffer until `mx` is on top, remove it, then re-push the buffered elements with `push` and return `mx`.
 
 ## Code Implementation
 ```python
@@ -71,3 +81,8 @@ class MaxStack:
 > Time complexity  : O(1) for push, pop, top, peekMax; O(n) for popMax
 >
 > Space complexity : O(n)
+
+## Related Problems
+- [155. Min Stack](./155_min_stack.md) — 🟡 Medium · auxiliary stack tracking the running extreme
+- [895. Maximum Frequency Stack](./895_maximum_frequency_stack.md) — 🔴 Hard · stack design with a priority-style pop
+- [1381. Design a Stack With Increment Operation](./1381_design_a_stack_with_increment_operation.md) — 🟡 Medium · augmented stack design

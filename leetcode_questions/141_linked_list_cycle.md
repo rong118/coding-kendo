@@ -1,5 +1,7 @@
 # 141. Linked List Cycle
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/linked-list-cycle/)
 
@@ -43,6 +45,14 @@ Constraints:
 ## Tags
 - linkedlist
 
+## Approach
+**Key idea:** Floyd's tortoise and hare — a fast pointer moving two steps will eventually lap a slow pointer moving one step if and only if there is a cycle.
+
+1. Start `slow` and `fast` at `head`.
+2. While `fast` and `fast.next` exist, move `slow` one step and `fast` two steps.
+3. If they ever point to the same node, a cycle exists — return `True`.
+4. If `fast` reaches the end of the list, there is no cycle — return `False`.
+
 ## Code Implementation
 ```python
 from typing import Optional
@@ -69,3 +79,8 @@ class Solution:
 > Time complexity  : O(n) — at most one full traversal before fast catches slow
 >
 > Space complexity : O(1) — only two pointers
+
+## Related Problems
+- [142. Linked List Cycle II](./142_linked_list_cycle_II.md) — 🟡 Medium · also find where the cycle starts
+- [287. Find the Duplicate Number](./287_find_the_duplicate_number.md) — 🟡 Medium · Floyd's cycle detection on an array
+- [160. Intersection of Two Linked Lists](./160_intersection_of_two_linked_lists.md) — 🟢 Easy · two-pointer trick on linked lists

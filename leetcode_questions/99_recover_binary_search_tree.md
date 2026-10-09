@@ -1,4 +1,6 @@
-# Recover Binary Search Tree
+# 99. Recover Binary Search Tree
+
+**Difficulty:** 🟡 Medium
 
 ## Question link
 (https://leetcode.com/problems/recover-binary-search-tree/)
@@ -36,99 +38,94 @@ Follow up: A solution using O(n) space is pretty straight-forward. Could you dev
 - tree
 - bst
 
+## Approach
+**Key idea:** An in-order traversal of a BST is sorted, so swapping two nodes creates one or two "drops" (`prev.val > cur.val`); the first misplaced node is the `prev` of the first drop and the second is the `cur` of the last drop.
+
+1. Traverse the tree in order, remembering the previously visited node.
+2. At the first drop, record `prev` as `first`.
+3. At every drop, record the current node as `second` (handles both adjacent and distant swaps).
+4. After the traversal, swap the values of `first` and `second`.
+5. Approach 2 does the same scan over an explicit list of in-order nodes, trading O(n) space for simplicity.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
+### Approach 1: In-order with previous pointer
 
- // Using prev node comparsion, space O(1)
-class Solution {
-    TreeNode* prev = new TreeNode(INT_MIN);
-    TreeNode* first;
-    TreeNode* second;
-public:
-    void recoverTree(TreeNode* root) {
-        if(root == NULL) return;
-        _inorder(root);
-        
-        // swap value
-        if(first != NULL && second != NULL){
-            int temp = first->val;
-            first->val = second->val;
-            second->val = temp;
-        }
-    }
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 
-    void _inorder(TreeNode* root){
-        if(root == NULL) return;
-        _inorder(root->left);
-        if(prev->val > root->val){
-            if(first == NULL){
-                first = prev;
-            }
-            second =  root;
-        }
-        prev = root;
-        _inorder(root->right);
-    }
-};
+from typing import Optional
 
-// convert complete tree to list space O(n)
-class Solution {
-public:
-    void recoverTree(TreeNode* root) {
-        int first = INT_MAX;
-        int last  = INT_MAX;
-        
-        //serialize tree to list
-        vector<TreeNode*> list;
-        DFS(root, list);
-        
-        if(!list.empty()){
-            //find two swap value
-            for(int i = 0; i < list.size() - 1; i++){
-                if(list[i]->val > list[i + 1]->val){
-                    if(first == INT_MAX){
-                        first = i;
-                        last  = i + 1;
-                    }else{
-                        last = i + 1;
-                    }
-                }
-            }
-            
-            //found and swap val
-            if(first != INT_MAX && last != INT_MAX){
-                int t = list[first]->val;
-                list[first]->val = list[last]->val;
-                list[last]->val = t;
-            }
-        }
-        
-        return;
-    }
-    
-    void DFS(TreeNode* root, vector<TreeNode*>& list){
-        if(root==NULL) return;
-        
-        DFS(root->left, list);
-        list.push_back(root);
-        DFS(root->right, list);
-        
-        return;
-    }
-};
+
+class Solution:
+    def recoverTree(self, root: Optional[TreeNode]) -> None:
+        """Do not return anything, modify root in-place instead."""
+        self.prev: Optional[TreeNode] = None
+        self.first: Optional[TreeNode] = None
+        self.second: Optional[TreeNode] = None
+
+        def inorder(node: Optional[TreeNode]) -> None:
+            if not node:
+                return
+            inorder(node.left)
+            if self.prev and self.prev.val > node.val:
+                if not self.first:
+                    self.first = self.prev  # first inversion: the larger value
+                self.second = node          # last inversion: the smaller value
+            self.prev = node
+            inorder(node.right)
+
+        inorder(root)
+        if self.first and self.second:
+            self.first.val, self.second.val = self.second.val, self.first.val
+```
+
+### Approach 2: In-order list
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+from typing import Optional
+
+
+class Solution:
+    def recoverTree(self, root: Optional[TreeNode]) -> None:
+        """Do not return anything, modify root in-place instead."""
+        nodes: list[TreeNode] = []
+
+        def inorder(node: Optional[TreeNode]) -> None:
+            if not node:
+                return
+            inorder(node.left)
+            nodes.append(node)
+            inorder(node.right)
+
+        inorder(root)
+        first = last = -1
+        for i in range(len(nodes) - 1):
+            if nodes[i].val > nodes[i + 1].val:
+                if first == -1:
+                    first = i
+                last = i + 1
+        if first != -1:
+            nodes[first].val, nodes[last].val = nodes[last].val, nodes[first].val
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(1)
+> Time complexity  : O(n)
+>
+> Space complexity : O(h) for Approach 1 (recursion stack, h = tree height); O(n) for Approach 2 (list of nodes)
+
+## Related Problems
+- [98. Validate Binary Search Tree](./98_validate_binary_search_tree.md) — 🟡 Medium · same in-order "previous value" check
+- [94. Binary Tree Inorder Traversal](./94_binary_tree_inorder_traversal.md) — 🟢 Easy · the traversal this solution is built on
+- [173. Binary Search Tree Iterator](./173_binary_search_tree_iterator.md) — 🟡 Medium · in-order traversal of a BST yields sorted order

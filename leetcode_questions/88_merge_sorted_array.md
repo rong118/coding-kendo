@@ -1,5 +1,7 @@
 # 88. Merge Sorted Array
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/merge-sorted-array/)
 
@@ -46,6 +48,14 @@ Constraints:
 - array
 - two pointers
 
+## Approach
+**Key idea:** The free space is at the end of `nums1`, so filling it from the back with the largest remaining value never overwrites an element that hasn't been merged yet.
+
+1. Set `i = m - 1`, `j = n - 1` (last real elements) and `k = m + n - 1` (last slot).
+2. While `nums2` still has elements, copy the larger of `nums1[i]` and `nums2[j]` into `nums1[k]`.
+3. Move back the pointer you copied from, and move `k` back.
+4. Once `nums2` is used up, anything left in `nums1` is already in place.
+
 ## Code Implementation
 ```python
 def merge(nums1, m, nums2, n):
@@ -66,3 +76,8 @@ def merge(nums1, m, nums2, n):
 > Time complexity  : O(m + n)
 >
 > Space complexity : O(1)
+
+## Related Problems
+- [21. Merge Two Sorted Lists](./21_merge_two_sorted_lists.md) — 🟢 Easy · same merge step on linked lists
+- [977. Squares of a Sorted Array](https://leetcode.com/problems/squares-of-a-sorted-array) — 🟢 Easy · two pointers filling the output from the back
+- [4. Median of Two Sorted Arrays](./4_median_of_two_sorted_arrays.md) — 🔴 Hard · combines two sorted arrays

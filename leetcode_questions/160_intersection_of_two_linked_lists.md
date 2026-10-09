@@ -1,5 +1,7 @@
 # 160. Intersection of Two Linked Lists
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/intersection-of-two-linked-lists/)
 
@@ -41,6 +43,14 @@ Constraints:
 ## Tags
 - linkedlist
 
+## Approach
+**Key idea:** If each pointer walks its own list and then switches to the other list, both travel the same total distance (`a + c + b`) and reach the intersection at the same time, or both reach `None` together.
+
+1. Start pointer `a` at `headA` and pointer `b` at `headB`.
+2. Advance both one step at a time.
+3. When a pointer runs off the end of its list, send it to the head of the other list.
+4. Stop when `a == b`; this is the intersection node, or `None` if the lists never meet.
+
 ## Code Implementation
 ```python
 from typing import Optional
@@ -69,3 +79,8 @@ class Solution:
 > Time complexity  : O(m + n) — each pointer traverses both lists at most once
 >
 > Space complexity : O(1) — only two pointers
+
+## Related Problems
+- [1650. Lowest Common Ancestor of a Binary Tree III](./1650_lowest_common_ancestor_of_a_binary_tree_iii.md) — 🟡 Medium · same pointer-switching trick on parent pointers
+- [141. Linked List Cycle](./141_linked_list_cycle.md) — 🟢 Easy · two-pointer linked list traversal
+- [142. Linked List Cycle II](./142_linked_list_cycle_II.md) — 🟡 Medium · two pointers finding a meeting node

@@ -1,5 +1,7 @@
 # 1448. Count Good Nodes in Binary Tree
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/count-good-nodes-in-binary-tree/)
 
@@ -52,40 +54,48 @@ Constraints:
 - tree
 - dfs
 
+## Approach
+**Key idea:** A node is good exactly when its value is at least the maximum value seen on the path from the root, so a DFS only needs to carry that running maximum down.
+
+1. Start a DFS at the root with `path_max = -inf` (an explicit stack of `(node, path_max)` pairs avoids deep recursion).
+2. If `node.val >= path_max`, count the node and update `path_max = node.val`.
+3. Push both children with the (possibly updated) `path_max`.
+4. Return the total count once the stack is empty.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-    int count = 0;
-public:
-    int goodNodes(TreeNode* root) {
-        _helper(root, INT_MIN);
-        return count;
-    }
+```python
+from typing import Optional
 
-    void _helper(TreeNode* root, int p){
-        if(root == NULL) return;
-        if(root->val >= p){
-            count++;
-            p = root->val;
-        }
-
-        _helper(root->left, p);
-        _helper(root->right, p);
-    }
-};
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def goodNodes(self, root: TreeNode) -> int:
+        # iterative DFS: Python's recursion limit is too small for a 10^5-node skewed tree
+        count = 0
+        stack: list[tuple[Optional[TreeNode], float]] = [(root, float("-inf"))]
+        while stack:
+            node, path_max = stack.pop()
+            if not node:
+                continue
+            if node.val >= path_max:
+                count += 1
+                path_max = node.val
+            stack.append((node.left, path_max))
+            stack.append((node.right, path_max))
+        return count
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(1)
+> Time complexity  : O(n) — each node is visited once
+>
+> Space complexity : O(h) — explicit DFS stack; O(n) worst case for a skewed tree
+
+## Related Problems
+- [124. Binary Tree Maximum Path Sum](./124_binary_tree_maximum_path_sum.md) — 🔴 Hard · DFS carrying path information
+- [257. Binary Tree Paths](./257_binary_tree_paths.md) — 🟢 Easy · root-to-leaf path DFS
+- [98. Validate Binary Search Tree](./98_validate_binary_search_tree.md) — 🟡 Medium · passing bounds down a DFS
+- [1372. Longest ZigZag Path in a Binary Tree](./1372_longest_zigzag_path_in_a_binary_tree.md) — 🟡 Medium · DFS with state passed from parent

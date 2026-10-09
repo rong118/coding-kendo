@@ -1,4 +1,6 @@
-# 1120 Maximum Average Subtree
+# 1120. Maximum Average Subtree
+
+**Difficulty:** 🟡 Medium
 
 ## Question link
 (https://leetcode.com/problems/maximum-average-subtree/)
@@ -34,27 +36,51 @@ Note:
 ## Tags
 - tree
 
-## Code Implementation
-```c++
-class Solution{
-    double maxAvg = 0.0;
-public:
-    double maximumAverageSubtree(TreeNode* root){
-        _dfs(root)
-        return maxAvg;
-    }
+## Approach
+**Key idea:** A subtree's average needs its sum and node count, and both are just the children's values plus the current node — so one post-order pass computes every subtree's average.
 
-    pair<int, int> _dfs(TreeNode* root){
-        if(root == NULL) return {0, 0};
-        pair<int, int> left = _dfs(root->left);
-        pair<int, int> right = _dfs(root->right);
-        double r = (double)(left.first + right.first + root->val) / (double)(left.second + right.second + 1);
-        maxAvg = max(maxAvg, r);
-        return {left.first + right.first + root->val , left.second + right.second + 1};
-    }
-}
+1. DFS returns `(sum, count)` for each subtree; an empty subtree is `(0, 0)`.
+2. Combine the children: `sum = left_sum + right_sum + node.val`, `count = left_count + right_count + 1`.
+3. Update the best answer with `sum / count`.
+4. Return `(sum, count)` to the parent.
+
+## Code Implementation
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+from typing import Optional
+
+
+class Solution:
+    def maximumAverageSubtree(self, root: Optional[TreeNode]) -> float:
+        best = 0.0
+
+        def dfs(node: Optional[TreeNode]) -> tuple[int, int]:
+            """Return (sum, count) of the subtree rooted at node."""
+            nonlocal best
+            if not node:
+                return 0, 0
+            ls, lc = dfs(node.left)
+            rs, rc = dfs(node.right)
+            total, count = ls + rs + node.val, lc + rc + 1
+            best = max(best, total / count)
+            return total, count
+
+        dfs(root)
+        return best
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(1)
+> Time complexity  : O(n)
+>
+> Space complexity : O(h) — recursion stack, h = tree height
+
+## Related Problems
+- [124. Binary Tree Maximum Path Sum](./124_binary_tree_maximum_path_sum.md) — 🔴 Hard · post-order DFS with a global best
+- [1448. Count Good Nodes in Binary Tree](./1448_count_good_nodes_in_binary_tree.md) — 🟡 Medium · per-node check during DFS
+- [2265. Count Nodes Equal to Average of Subtree](https://leetcode.com/problems/count-nodes-equal-to-average-of-subtree) — 🟡 Medium · same (sum, count) post-order DFS

@@ -1,5 +1,7 @@
 # 1135. Connecting Cities With Minimum Cost
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/connecting-cities-with-minimum-cost/)
 
@@ -44,88 +46,76 @@ Note:
 - graph 
 - mst
 
+## Approach
+**Key idea:** The cheapest way to connect every city is a minimum spanning tree (MST). Prim's algorithm grows the tree from one city by always taking the cheapest edge out of it; Kruskal's algorithm adds the cheapest edges overall, skipping any edge that would form a cycle.
+
+1. Prim: build an adjacency list and push `(0, city 1)` onto a min-heap.
+2. Pop the cheapest entry; skip it if the city is already in the tree, otherwise add the city and its cost, and push its edges to cities not yet in the tree.
+3. Kruskal: sort the edges by cost and use union-find; take an edge only if its endpoints are in different components, then merge them.
+4. If not every city ends up connected (fewer than `n` visited, or more than one component left), return `-1`.
+
 ## Code Implementation
-```c++
-// prim algorithm Elog(V)
-class Solution {
-public:
-    int minumumCost(int N, vector<vector<int>> connections){
-        unordered_map<int, vector<int>> g;
-        auto comp = [] (vector<int> &a, vector<int> &b) -> bool { return a[2] < b[2]; };
-        priority_queue<vector<int>, vector<vector<int>> decltype(comp) > pq (comp);
-        unordered_set<int> v;
-        int costs = 0;
-        for(vector<int> edges : connections){ // build graph
-            int x = edge[0];
-            int y = edge[1];
-            int cost = edge[2];
-            if(g.find(x) == g.end()){ g[x] = {};}
-            g[x].push_back({y, cost});
+### Approach 1: Prim's algorithm
 
-            if(g.find(y) == g.end()){ g[y] = {};}
-            g[y].push_back({x, cost});
-        }
+```python
+import heapq
+from collections import defaultdict
 
-        pq.push({1, 1, 0});
-        while(!pq.isEmpty()){
-            vector<int> cur = pq.front(); pq.pop();
-            int x = cur[0], y = cur[1], cost = cur[2];
-            if(v.find(y) == v.end()){
-                v.insert(y);
-                costs += cost;
-                for(vector<int> n : g[y]){
-                    pq.push({y, n[0], n[1]});
-                }
-            }
-        }
 
-        return v.size() == N ? costs : -1;
-    }
-}
+class Solution:
+    def minimumCost(self, n: int, connections: list[list[int]]) -> int:
+        graph = defaultdict(list)
+        for x, y, cost in connections:
+            graph[x].append((cost, y))
+            graph[y].append((cost, x))
 
-// kruscal algorithm  Elog(E) E <= V
-class Solution {
-public:
-    int minumumCost(int N, vector<vector<int>> connections){
-        sort(connections.begin(), connections.end(), 
-            [](const vector<int> & a, const vector<int> & b) -> bool{ 
-            return a[2] < b[2]; 
-        });
-        DSU* dsu = new DSU(N + 1);
-        int res = 0;
-        int count = N;
-        for(vector<int> c : connections){
-            int x = dsu->_find(c[0]);
-            int y = dsu->_find(c[1]);
-            if(x != y){
-                dsu->_union(c[0], c[1]);
-                res += c[2];
-                count--;
-            }
-        }
+        visited = set()
+        total = 0
+        heap = [(0, 1)]  # (cost to reach city, city)
+        while heap and len(visited) < n:
+            cost, city = heapq.heappop(heap)
+            if city in visited:
+                continue
+            visited.add(city)
+            total += cost
+            for edge in graph[city]:
+                if edge[1] not in visited:
+                    heapq.heappush(heap, edge)
 
-        return count == 1 ? res : -1;
-    }
-};
+        return total if len(visited) == n else -1
+```
 
-class DSU {
-    vector<int> parent;
-public:
-    DSU(int N){
-        parent.resize(N, 0);
-        for(int i = 0; i < N; i++) parent[i] = i;
-    }
+### Approach 2: Kruskal's algorithm
 
-    int _find(int x){
-        if(parent[x] != x) parent[x] = _find(parent[x]);
-        return parent[x];
-    }
+```python
+class Solution:
+    def minimumCost(self, n: int, connections: list[list[int]]) -> int:
+        parent = list(range(n + 1))
 
-    void _union(int x, int y){
-        parent[_find(x)] = parent[_find(y)];
-    }
-};
+        def find(x: int) -> int:
+            while parent[x] != x:
+                parent[x] = parent[parent[x]]  # path halving
+                x = parent[x]
+            return x
+
+        total = 0
+        components = n
+        for x, y, cost in sorted(connections, key=lambda c: c[2]):
+            rx, ry = find(x), find(y)
+            if rx != ry:
+                parent[rx] = ry
+                total += cost
+                components -= 1
+
+        return total if components == 1 else -1
 ```
 
 ## Time Complexity Analysis
-Running time : Elog(V)
+> Time complexity  : O(E log E) — the heap operations (Prim) or the edge sort (Kruskal) dominate; E log E = O(E log V)
+>
+> Space complexity : O(V + E) — adjacency list and heap (Prim); O(V) union-find plus the sorted edge copy (Kruskal)
+
+## Related Problems
+- [1584. Min Cost to Connect All Points](./1584_min_cost_to_connect_all_points.md) — 🟡 Medium · MST on a complete graph of points
+- [1168. Optimize Water Distribution in a Village](./1168_optimize_water_distribution_in_a_village.md) — 🔴 Hard · MST with a virtual source node
+- [1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree](./1489_find_critical_and_pseudo_critical_edges_in_minimum_spanning_tree.md) — 🔴 Hard · reruns Kruskal to classify edges

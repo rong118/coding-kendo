@@ -1,5 +1,7 @@
 # 1650 Lowest Common Ancestor of a Binary Tree III
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree-iii/)
 
@@ -46,31 +48,42 @@ Constraints:
 - tree
 - linkedlist
 
-## Code Implementation
-```c++
-/*
-// Definition for a Node.
-class Node {
-public:
-    int val;
-    Node* left;
-    Node* right;
-    Node* parent;
-};
-*/
+## Approach
+**Key idea:** Following `parent` pointers turns each node's path to the root into a linked list, so the LCA is the intersection of two linked lists; switching each pointer to the other start when it runs out equalizes the path lengths.
 
-class Solution {
-public:
-    // space O(1) linkedlist 链表找交点
-    Node* lowestCommonAncestor(Node* p, Node * q) {
-        Node* a = p, *b = q;
-        while (a != b) {
-            a = (a == nullptr ? q : a->parent);
-            b = (b == nullptr ? p : b->parent);
-        }
-        return a;
-    }
-};
+1. Start pointer `a` at `p` and pointer `b` at `q`.
+2. Step each pointer to its parent; when a pointer passes the root (becomes `None`), restart it at the other node.
+3. After at most `depth(p) + depth(q)` steps both pointers have traveled the same distance and meet at the LCA.
+4. Return the node where they meet.
+
+## Code Implementation
+```python
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val):
+        self.val = val
+        self.left = None
+        self.right = None
+        self.parent = None
+"""
+
+class Solution:
+    def lowestCommonAncestor(self, p: 'Node', q: 'Node') -> 'Node':
+        a, b = p, q
+        while a is not b:
+            a = a.parent if a else q
+            b = b.parent if b else p
+        return a
 ```
 
 ## Time Complexity Analysis
+> Time complexity  : O(h) — each pointer walks at most the two root paths, where h is the tree height
+>
+> Space complexity : O(1) — only two pointers
+
+## Related Problems
+- [160. Intersection of Two Linked Lists](./160_intersection_of_two_linked_lists.md) — 🟢 Easy · the identical pointer-switching trick
+- [236. Lowest Common Ancestor of a Binary Tree](./236_lowest_common_ancestor_of_a_binary_tree.md) — 🟡 Medium · LCA without parent pointers
+- [1644. Lowest Common Ancestor of a Binary Tree II](./1644_lowest_common_ancestor_of_a_binary_tree_ii.md) — 🟡 Medium · LCA when p or q may be missing
+- [235. Lowest Common Ancestor of a Binary Search Tree](./235_lowest_common_ancestor_of_a_binary_search_tree.md) — 🟡 Medium · LCA using BST ordering

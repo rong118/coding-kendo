@@ -1,5 +1,7 @@
 # 1584. Min Cost to Connect All Points
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 > (https://leetcode.com/problems/min-cost-to-connect-all-points/)
 
@@ -40,37 +42,43 @@ Constraints:
 - graph
 - mst
 
+## Approach
+**Key idea:** The points form a complete graph weighted by Manhattan distance, and the answer is its minimum spanning tree. On a dense graph, array-based Prim's in O(n²) is the best fit and needs no heap.
+
+1. Keep `dist[i]`, the cheapest edge from point `i` to the tree so far (`0` for the start point, infinity elsewhere).
+2. Repeat `n` times: pick the unvisited point `u` with the smallest `dist`, mark it visited, and add `dist[u]` to the total.
+3. For every unvisited point `v`, update `dist[v]` with the Manhattan distance from `u` if it is smaller.
+4. Return the total cost.
+
 ## Code Implementation
-```c++
-// (MST) Prim native
-class Solution {
-public:
-    int minCostConnectPoints(vector<vector<int>>& points) {
-        int n = points.size();
-        vector<vector<int> > mat(n, vector<int>(n, 0));
-        for(int i = 0; i < n; i ++){
-            for(int j =0; j < n; j++){
-                mat[i][j] = abs(points[i][0] - points[j][0]) +
-                        abs(points[i][1] - points[j][1]);
-            }
-        }
-        vector<bool> visited(n, false);
-        vector<int> dis(n, INT_MAX);
-        dis[0] = 0;
-        for(int i =0; i < n; i++){
-            int nextClose = -1;
-            for(int j = 0; j < n; j++)
-                if(!visited[j] && (nextClose == -1 || dis[j] < dis[nextClose])) nextClose = j;
-            visited[nextClose] = true;
-            for(int y = 0; y < n; y++){
-                if(!visited[y]) dis[y] = min(dis[y], mat[nextClose][y]);
-            }
-        }
-        
-        return accumulate(dis.begin(), dis.end(), 0);
-    }
-};
+```python
+class Solution:
+    def minCostConnectPoints(self, points: list[list[int]]) -> int:
+        n = len(points)
+        dist = [float('inf')] * n
+        dist[0] = 0
+        visited = [False] * n
+        total = 0
+        for _ in range(n):
+            # Pick the closest point not yet in the tree
+            u = min((j for j in range(n) if not visited[j]), key=dist.__getitem__)
+            visited[u] = True
+            total += dist[u]
+            ux, uy = points[u]
+            for v in range(n):
+                if not visited[v]:
+                    d = abs(ux - points[v][0]) + abs(uy - points[v][1])
+                    if d < dist[v]:
+                        dist[v] = d
+        return total
 ```
 
 ## Time Complexity Analysis
-Running time  : O(V^2)
+> Time complexity  : O(n²) — n rounds, each scanning all points
+>
+> Space complexity : O(n) — distance and visited arrays (distances computed on the fly)
+
+## Related Problems
+- [1135. Connecting Cities With Minimum Cost](./1135_connecting_cities_with_minimum_cost.md) — 🟡 Medium · MST over a sparse edge list
+- [1168. Optimize Water Distribution in a Village](./1168_optimize_water_distribution_in_a_village.md) — 🔴 Hard · MST with a virtual source node
+- [1489. Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree](./1489_find_critical_and_pseudo_critical_edges_in_minimum_spanning_tree.md) — 🔴 Hard · MST edge analysis

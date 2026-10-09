@@ -1,5 +1,7 @@
 # 26. Remove Duplicates from Sorted Array
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/remove-duplicates-from-sorted-array/)
 
@@ -57,6 +59,13 @@ Constraints:
 - array
 - two pointers
 
+## Approach
+**Key idea:** Because the array is sorted, duplicates are adjacent, so a slow pointer can mark the end of the unique prefix while a fast pointer scans for the next new value.
+
+1. Let `i` point at the last unique element written (start at index 0).
+2. Scan `j` from index 1 to the end.
+3. When `nums[j]` differs from `nums[i]`, advance `i` and copy `nums[j]` into `nums[i]`.
+4. Return `i + 1`, the length of the unique prefix.
 
 ## Code Implementation
 ```python
@@ -77,3 +86,9 @@ def removeDuplicates(nums):
 > Time complexity  : O(n)
 >
 > Space complexity : O(1)
+
+## Related Problems
+- [27. Remove Element](./27_remove_element.md) — 🟢 Easy · same slow/fast in-place overwrite
+- [80. Remove Duplicates from Sorted Array II](https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii) — 🟡 Medium · allow each value up to twice
+- [83. Remove Duplicates from Sorted List](./83_remove_duplicates_from_sorted_list.md) — 🟢 Easy · same idea on a linked list
+- [88. Merge Sorted Array](./88_merge_sorted_array.md) — 🟢 Easy · in-place two-pointer array writing

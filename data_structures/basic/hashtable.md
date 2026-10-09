@@ -25,6 +25,7 @@ print(d["apple"], d.get("pear", 0))
 del d["banana"]
 "orange" in d            # membership
 for k, v in d.items():   # iterate
+    print(k, v)
 d.clear()
 ```
 

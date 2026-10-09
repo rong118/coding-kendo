@@ -1,5 +1,7 @@
 # 23. Merge k Sorted Lists
 
+**Difficulty:** 🔴 Hard
+
 ## Question link
 (https://leetcode.com/problems/merge-k-sorted-lists/)
 
@@ -48,6 +50,14 @@ Constraints:
 - linkedlist
 - heap
 
+## Approach
+**Key idea:** The next node of the merged list is always the smallest of the k current heads, so keep those heads in a min-heap and repeatedly pop the minimum.
+
+1. Push the head of every non-empty list onto a min-heap as `(val, list_index, node)`; the index breaks ties so nodes are never compared.
+2. Pop the smallest node and append it to the tail of the result (built from a dummy head).
+3. If the popped node has a `next`, push that node onto the heap.
+4. Repeat until the heap is empty, then return `dummy.next`.
+
 ## Code Implementation
 ```python
 import heapq
@@ -82,3 +92,8 @@ class Solution:
 > Time complexity  : O(N log k) — N total nodes across all lists, k lists in the heap
 >
 > Space complexity : O(k) — the heap holds at most k nodes
+
+## Related Problems
+- [21. Merge Two Sorted Lists](./21_merge_two_sorted_lists.md) — 🟢 Easy · the k = 2 case
+- [88. Merge Sorted Array](./88_merge_sorted_array.md) — 🟢 Easy · merging sorted sequences
+- [215. Kth Largest Element in an Array](./215_kth_largest_element_in_an_array.md) — 🟡 Medium · heap of bounded size

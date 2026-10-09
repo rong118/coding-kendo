@@ -1,5 +1,7 @@
 # 211. Design Add and Search Words Data Structure
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/design-add-and-search-words-data-structure/)
 
@@ -42,65 +44,51 @@ Constraints:
 - DFS
 - backtracking
 
-## Code
-```c++
-class TrieNode {
-public:
-    vector<TrieNode*> children;
-    bool isWord;
-    TrieNode(){
-        //children may resize or update inital value
-        children.resize(26, NULL);
-        isWord = false;
-    }
-};
+## Approach
+**Key idea:** Store the words in a trie. A normal letter follows one child; a `.` tries every child with DFS, and the search succeeds if any branch reaches the end of a word.
 
-class WordDictionary {
-private:
-    TrieNode* root;
+1. Each trie node has a `children` map and an `is_word` flag.
+2. `addWord`: walk down from the root, creating missing children, and mark the last node with `is_word = True`.
+3. `search`: run `dfs(pos, node)`; when `pos` reaches the end of the word, return `node.is_word`.
+4. If `word[pos]` is a letter, continue into that child (fail if it is missing).
+5. If it is `.`, try `dfs(pos + 1, child)` for every child and return `True` as soon as one matches.
 
-public:
-    WordDictionary(){
-        root = new TrieNode();
-    }
+## Code Implementation
+```python
+class TrieNode:
+    def __init__(self):
+        self.children: dict[str, "TrieNode"] = {}
+        self.is_word = False
 
-    void addWord(string word){
-        TrieNode* node = root;
-        for(char c : word){
-            if(node->children[c - 'a'] == NULL){
-                node->children[c - 'a'] = new TrieNode();
-            }
-            node = node->children[c - 'a'];
-        }
-        node->isWord = true;
-    }
+class WordDictionary:
+    def __init__(self):
+        self.root = TrieNode()
 
-    bool search(string word){
-        return helper(word, 0, root);
-    }
+    def addWord(self, word: str) -> None:
+        node = self.root
+        for ch in word:
+            node = node.children.setdefault(ch, TrieNode())
+        node.is_word = True
 
-    bool helper(string word, int pos, TrieNode* node){
-        if(pos == word.size()) { return node->isWord; }
-        char ch = word[pos];
-        if(ch != '.'){
-            return node->children[ch - 'a'] != NULL && 
-                helper(word, pos + 1, node->children[ch - 'a']);
-        }else{  // support match '.'
-            for(int i = 0; i < 26; i++){
-                if( node->children[i] != NULL && 
-                helper(word, pos + 1, node->children[i])){
-                    return true;
-                }
-            }
-        }
+    def search(self, word: str) -> bool:
+        def dfs(pos: int, node: TrieNode) -> bool:
+            if pos == len(word):
+                return node.is_word
+            ch = word[pos]
+            if ch == '.':
+                return any(dfs(pos + 1, child) for child in node.children.values())
+            child = node.children.get(ch)
+            return child is not None and dfs(pos + 1, child)
 
-        return false;
-    }
-};
+        return dfs(0, self.root)
 ```
 
 ## Time Complexity Analysis
-Input word length is n.
-Number of the nodes is v.
-- insert()  => O(n)
-- search()  => O(v)
+> Time complexity  : addWord O(L); search O(L) without dots, O(N) worst case with dots — L = word length, N = trie nodes
+>
+> Space complexity : O(N) — total characters stored in the trie, plus O(L) recursion stack
+
+## Related Problems
+- [208. Implement Trie (Prefix Tree)](./208_implement_trie.md) — 🟡 Medium · the basic trie insert and search
+- [212. Word Search II](./212_word_search_II.md) — 🔴 Hard · trie plus DFS backtracking
+- [421. Maximum XOR of Two Numbers in an Array](./421_maximum_xor_of_numbers_in_an_array.md) — 🟡 Medium · searching a trie branch by branch

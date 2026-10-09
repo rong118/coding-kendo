@@ -1,5 +1,7 @@
 # 102. Binary Tree Level Order Traversal
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/binary-tree-level-order-traversal/)
 
@@ -31,67 +33,74 @@ Constraints:
 - tree
 - bfs
 
+## Approach
+**Key idea:** BFS visits nodes in exactly level order; processing the queue one level at a time (using its current size) groups the values by depth.
+
+1. If `root` is empty, return `[]`; otherwise push `root` into a queue.
+2. While the queue is non-empty, record its current size — that is the number of nodes on this level.
+3. Pop that many nodes, append their values to a `level` list, and push their non-null children.
+4. Append `level` to the answer and continue with the next level.
+5. Alternative (DFS): recurse with a `depth` argument and append each value to `ans[depth]`, creating the list the first time a depth is reached.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-    //bfs
-    vector<vector<int>> levelOrder(TreeNode* root) {
-        vector<vector<int> > ans;
-        vector<int> tmp;
-        queue<TreeNode*> que;
-        TreeNode* flagNode=new TreeNode(INT_MAX); 
-        if(root == NULL) return ans;
-        que.push(root);
-        que.push(flagNode);
-        while(1){
-            root = que.front(); que.pop();
-            if(root->val == INT_MAX){
-                ans.push_back(tmp);
-                if(que.empty()) break;
-                que.push(flagNode);
-                tmp.clear();
-            }else{
-                tmp.push_back(root->val);
-                if(root->left != NULL)
-                    que.push(root->left);
-                if(root->right != NULL)
-                    que.push(root->right);
-            }
-        }
+### Approach 1: BFS
+```python
+from collections import deque
+from typing import Optional
 
-        return ans;
-    }
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def levelOrder(self, root: Optional[TreeNode]) -> list[list[int]]:
+        if not root:
+            return []
+        ans = []
+        queue = deque([root])
+        while queue:
+            level = []
+            for _ in range(len(queue)):
+                node = queue.popleft()
+                level.append(node.val)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            ans.append(level)
+        return ans
+```
 
-    // dfs & recursive
-    vector<vector<int>> levelOrder(TreeNode* root) {
-        vector<vector<int>> ret;
-        dfs(root, ret, 0);
-        return ret;
-    }
+### Approach 2: DFS (recursive)
+```python
+from typing import Optional
 
-    void dfs(TreeNode* root, vector<vector<int>>& ret, int height){
-        if(root == NULL) return;
-        if(height == ret.size()) ret.push_back({});
-        ret[height].push_back(root->val);
-        if(root->left != NULL)
-            dfs(root->left, ret, height + 1);
-        if(root->right != NULL)
-            dfs(root->right, ret, height + 1);
-    }
-};
+class Solution:
+    def levelOrder(self, root: Optional[TreeNode]) -> list[list[int]]:
+        ans = []
+
+        def dfs(node: Optional[TreeNode], depth: int) -> None:
+            if not node:
+                return
+            if depth == len(ans):
+                ans.append([])
+            ans[depth].append(node.val)
+            dfs(node.left, depth + 1)
+            dfs(node.right, depth + 1)
+
+        dfs(root, 0)
+        return ans
 ```
 
 ## Time Complexity Analysis
-Running time : O(n)
+> Time complexity  : O(n) — every node is visited once (both approaches)
+>
+> Space complexity : O(n) — BFS queue holds up to a full level (~n/2 nodes); DFS uses O(h) recursion stack, plus O(n) for the output
+
+## Related Problems
+- [107. Binary Tree Level Order Traversal II](./107_binary_tree_level_order_traversal_II.md) — 🟡 Medium · same BFS, levels returned bottom-up
+- [103. Binary Tree Zigzag Level Order Traversal](./103_binary_tree_zigzig_level_order_traversal.md) — 🟡 Medium · level order with alternating direction
+- [199. Binary Tree Right Side View](https://leetcode.com/problems/binary-tree-right-side-view) — 🟡 Medium · last node of each BFS level
+- [314. Binary Tree Vertical Order Traversal](./314_binary_tree_vertical_order_traversal.md) — 🟡 Medium · BFS grouped by column instead of depth

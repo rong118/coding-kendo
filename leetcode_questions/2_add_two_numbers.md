@@ -1,5 +1,7 @@
 # 2. Add Two Numbers
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/add-two-numbers/)
 
@@ -37,6 +39,14 @@ Constraints:
 ## Tags
 - linkedlist
 
+## Approach
+**Key idea:** The digits are stored least-significant first, so we can add the lists column by column like grade-school addition, carrying overflow into the next node.
+
+1. Start with a dummy head node and `carry = 0`.
+2. While either list still has nodes or `carry` is non-zero, add `carry` plus the current digit of each list.
+3. Split the total with `divmod(total, 10)` into the new `carry` and the digit to append.
+4. Advance both list pointers and return `dummy.next`.
+
 ## Code Implementation
 ```python
 from typing import Optional
@@ -71,3 +81,9 @@ class Solution:
 > Time complexity  : O(max(m, n)) — single pass through the longer list
 >
 > Space complexity : O(max(m, n)) — output list length
+
+## Related Problems
+- [445. Add Two Numbers II](./445_add_two_numbers_II.md) — 🟡 Medium · same addition, but digits stored most-significant first
+- [21. Merge Two Sorted Lists](./21_merge_two_sorted_lists.md) — 🟢 Easy · dummy-head technique for building a list
+- [67. Add Binary](https://leetcode.com/problems/add-binary) — 🟢 Easy · digit-by-digit addition with carry
+- [415. Add Strings](https://leetcode.com/problems/add-strings) — 🟢 Easy · digit-by-digit addition with carry

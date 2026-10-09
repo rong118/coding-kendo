@@ -1,5 +1,7 @@
 # 981. Time Based Key-Value Store
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/time-based-key-value-store/)
 
@@ -40,6 +42,15 @@ Constraints:
 ## Tags
 - treemap
 
+## Approach
+**Key idea:** For each key, keep its values ordered by timestamp; a `get` is then a floor lookup — the largest stored timestamp that is `<= timestamp` — found by binary search.
+
+1. Map each key to a `SortedDict` of `timestamp -> value`.
+2. In `set`, create the key's `SortedDict` if needed and store the value at its timestamp.
+3. In `get`, return `""` if the key has never been set.
+4. Use `bisect_right(timestamp) - 1` to find the index of the floor timestamp.
+5. Return `""` if that index is negative, otherwise the value at that index.
+
 ## Code Implementation
 ```python
 from sortedcontainers import SortedDict
@@ -71,3 +82,8 @@ class TimeMap:
 > Time complexity  : O(log n) for both set and get — SortedDict insertion and bisect are O(log n)
 >
 > Space complexity : O(n) — stores all key/timestamp/value tuples
+
+## Related Problems
+- [729. My Calendar I](./729_my_calendar_i.md) — 🟡 Medium · sorted-map neighbor lookups
+- [1146. Snapshot Array](https://leetcode.com/problems/snapshot-array) — 🟡 Medium · versioned values with binary-search floor lookup
+- [704. Binary Search](https://leetcode.com/problems/binary-search) — 🟢 Easy · the underlying binary search

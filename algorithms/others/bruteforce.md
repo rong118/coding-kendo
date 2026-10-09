@@ -8,34 +8,20 @@ Brute Force Algorithm is a simple algorithmic approach to solve problems. It's b
 3. Eventually finds a correct solution (if one exists): By trying every possible solution, the algorithm will eventually find a valid answer if one exists.
 
 ## II. Example
-### C++ Implementation
+### Python Implementation
 Below is an example of finding all possible permutations of a string.
-```c++
-#include <iostream>
-#include <string>
+```python
+def print_permutations(chars: list[str], l: int) -> None:
+    if l == len(chars) - 1:
+        print("".join(chars))
+        return
+    for i in range(l, len(chars)):
+        chars[l], chars[i] = chars[i], chars[l]
+        print_permutations(chars, l + 1)
+        chars[l], chars[i] = chars[i], chars[l]  # backtrack
 
-using namespace std;
 
-void printPermutations(string str, int l, int r) {
-    if (l == r)
-        cout << str << endl;
-    else {
-        for (int i = l; i <= r; i++) {
-            swap(str[l], str[i]);
-            printPermutations(str, l + 1, r);
-            swap(str[l], str[i]); // backtrack
-        }
-    }
-}
-
-int main() {
-    string str = "abc";
-    int n = str.length();
-    for (int i = 0; i < n; i++) {
-        printPermutations(str, 0, i);
-    }
-    return 0;
-}
+print_permutations(list("abc"), 0)  # abc acb bac bca cba cab
 ```
 
 ##  III. Drawbacks

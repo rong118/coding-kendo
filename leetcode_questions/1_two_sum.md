@@ -1,5 +1,7 @@
 # 1. Two Sum
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/two-sum/)
 
@@ -36,6 +38,14 @@ Constraints:
 - sort
 - hashMap
 
+## Approach
+**Key idea:** For each number, the only partner that works is `target - num`; a hash map of values already seen answers "have I seen the complement?" in O(1).
+
+1. Create an empty map from value to index.
+2. Walk the array; for each `num` at index `i`, compute `complement = target - num`.
+3. If `complement` is already in the map, return `[map[complement], i]`.
+4. Otherwise store `num -> i` and continue (storing after the check prevents using the same element twice).
+
 ## Code Implementation
 ```python
 class Solution:
@@ -59,3 +69,9 @@ class Solution:
 > Time complexity  : O(n)
 >
 > Space complexity : O(n)
+
+## Related Problems
+- [15. 3Sum](./15_three_sum.md) — 🟡 Medium · extends the pair-sum idea to triplets
+- [167. Two Sum II - Input Array Is Sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted) — 🟡 Medium · same problem on sorted input, solved with two pointers
+- [217. Contains Duplicate](./217_contain_duplicate.md) — 🟢 Easy · hash set lookup of previously seen values
+- [49. Group Anagrams](./49_group_anagrams.md) — 🟡 Medium · hash map keyed by a derived value

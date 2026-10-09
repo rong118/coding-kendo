@@ -1,5 +1,7 @@
 # 445. Add Two Numbers II
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/add-two-numbers-ii/)
 
@@ -34,6 +36,15 @@ Constraints:
 
 ## Tags
 - linkedlist
+
+## Approach
+**Key idea:** Addition must start from the least significant digit, which sits at the tail; pushing the digits onto stacks lets us pop them in reverse, and prepending each result node builds the answer in the right order.
+
+1. Push every digit of `l1` onto stack `s1` and every digit of `l2` onto stack `s2`.
+2. While either stack is non-empty or there is a carry, pop available digits and add them to the carry.
+3. Split the total into a new carry and a digit with `divmod(total, 10)`.
+4. Create a node for the digit and prepend it to the result list.
+5. Return the head of the result.
 
 ## Code Implementation
 ```python
@@ -75,3 +86,8 @@ class Solution:
 > Time complexity  : O(m + n) — traverse both lists plus build result
 >
 > Space complexity : O(m + n) — stacks plus output list
+
+## Related Problems
+- [2. Add Two Numbers](./2_add_two_numbers.md) — 🟡 Medium · same addition with digits stored in reverse
+- [206. Reverse Linked List](./206_reverse_linked_list.md) — 🟢 Easy · alternative: reverse the lists instead of using stacks
+- [234. Palindrome Linked List](./234_palindrome_linked_list.md) — 🟢 Easy · processing a singly linked list from both ends

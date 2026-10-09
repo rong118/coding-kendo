@@ -1,5 +1,7 @@
 # 82. Remove Duplicates from Sorted List II
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/)
 
@@ -26,6 +28,14 @@ Constraints:
 
 ## Tags
 - linkedlist
+
+## Approach
+**Key idea:** A dummy node in front of `head` lets us delete a run of duplicates even when it starts at the head; `prev` always points at the last node known to be distinct.
+
+1. Create `dummy -> head`, set `prev = dummy` and `cur = head`.
+2. If `cur` and `cur.next` share a value, advance `cur` past every node with that value and link `prev.next = cur`.
+3. Otherwise `cur` is distinct: move both `prev` and `cur` one step forward.
+4. Return `dummy.next`.
 
 ## Code Implementation
 ```python
@@ -60,3 +70,8 @@ class Solution:
 > Time complexity  : O(n) — each node visited once
 >
 > Space complexity : O(1) — in-place with a single dummy node
+
+## Related Problems
+- [83. Remove Duplicates from Sorted List](./83_remove_duplicates_from_sorted_list.md) — 🟢 Easy · keep one copy instead of removing all
+- [203. Remove Linked List Elements](./203_remove_linked_list_elements.md) — 🟢 Easy · dummy-node deletion in a linked list
+- [26. Remove Duplicates from Sorted Array](./26_remove_duplicates_from_sorted_array.md) — 🟢 Easy · same dedup on a sorted array

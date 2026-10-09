@@ -1,5 +1,7 @@
 # 703. Kth Largest Element in a Stream
 
+**Difficulty:** 🟢 Easy
+
 ## Question link
 (https://leetcode.com/problems/kth-largest-element-in-a-stream/)
 
@@ -39,6 +41,15 @@ Constraints:
 ## Tags
 - heap
 
+## Approach
+**Key idea:** Keep a min-heap of only the `k` largest values seen so far; its root is then always the `k`th largest element of the stream.
+
+1. Store `k` and start with an empty min-heap.
+2. Feed every initial number through `add`.
+3. In `add`, push the new value onto the heap.
+4. If the heap has more than `k` elements, pop the smallest.
+5. Return the heap root.
+
 ## Code Implementation
 ```python
 import heapq
@@ -61,3 +72,8 @@ class KthLargest:
 > Time complexity  : O(log k) per add — push/pop on a heap of size ≤ k
 >
 > Space complexity : O(k) — the heap holds at most k elements
+
+## Related Problems
+- [215. Kth Largest Element in an Array](./215_kth_largest_element_in_an_array.md) — 🟡 Medium · same size-k heap on a static array
+- [295. Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream) — 🔴 Hard · order statistics on a stream with heaps
+- [347. Top K Frequent Elements](./347_top_k_frequent_elements.md) — 🟡 Medium · size-k heap selection

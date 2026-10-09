@@ -1,5 +1,7 @@
 # 1676 Lowest Common Ancestor of a Binary Tree IV
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree-iv/)
 
@@ -43,34 +45,45 @@ Constraints:
 ## Tags
 - tree
 
-## Code Implementation
-```c++
-class Solution {
-    TreeNode* _lowestCommonAncestor(TreeNode* root, const set<TreeNode*>& nodes_set) {
-        if (root == nullptr) {
-            return nullptr;
-        }
-    
-        if (nodes_set.count(root) > 0) {
-            return root;
-        }
-    
-        TreeNode* l = _lowestCommonAncestor(root->left, nodes_set);
-        TreeNode* r = _lowestCommonAncestor(root->right, nodes_set);
-    
-        if (l && r) { return root;}
-        if(!l && r){ return r;}
-        if(l && !r){ return l;}
+## Approach
+**Key idea:** Generalize the classic two-node LCA: put all targets in a set; a subtree returns a target as soon as it hits one, and the first node that receives non-null results from both sides is the LCA.
 
-        return NULL;
-    }
-    
-public:
-    TreeNode* lowestCommonAncestor(TreeNode* root, vector<TreeNode*> &nodes) {
-        set<TreeNode*>nodes_set(nodes.begin(), nodes.end());
-        return _lowestCommonAncestor(root, nodes_set);
-    }
-};
+1. Store all target nodes in a hash set for O(1) lookups.
+2. DFS: if the node is null or is a target, return it (a target is an ancestor of every target below it).
+3. Otherwise recurse into the left and right subtrees.
+4. If both sides return a node, targets are split across this node, so it is the LCA; otherwise pass up whichever side is non-null.
+
+## Code Implementation
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', nodes: 'list[TreeNode]') -> 'TreeNode':
+        targets = set(nodes)
+
+        def dfs(node: Optional[TreeNode]) -> Optional[TreeNode]:
+            if not node or node in targets:
+                return node
+            l = dfs(node.left)
+            r = dfs(node.right)
+            if l and r:
+                return node
+            return l or r
+
+        return dfs(root)
 ```
 
 ## Time Complexity Analysis
+> Time complexity  : O(n + m) — each tree node is visited once, plus building the set of m target nodes
+>
+> Space complexity : O(h + m) — recursion depth h plus the target set
+
+## Related Problems
+- [236. Lowest Common Ancestor of a Binary Tree](./236_lowest_common_ancestor_of_a_binary_tree.md) — 🟡 Medium · the two-node version of the same DFS
+- [1644. Lowest Common Ancestor of a Binary Tree II](./1644_lowest_common_ancestor_of_a_binary_tree_ii.md) — 🟡 Medium · targets may not exist in the tree
+- [1650. Lowest Common Ancestor of a Binary Tree III](./1650_lowest_common_ancestor_of_a_binary_tree_iii.md) — 🟡 Medium · LCA using parent pointers
+- [235. Lowest Common Ancestor of a Binary Search Tree](./235_lowest_common_ancestor_of_a_binary_search_tree.md) — 🟡 Medium · LCA using BST ordering

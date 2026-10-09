@@ -1,5 +1,7 @@
 # 76. Minimum Window Substring
 
+**Difficulty:** 🔴 Hard
+
 ## Question link
 (https://leetcode.com/problems/minimum-window-substring/)
 
@@ -47,6 +49,15 @@ Constraints:
 - string
 - sliding window
 
+## Approach
+**Key idea:** Expand the right edge until the window covers all of `t`, then shrink the left edge as far as possible while it still covers `t`; every minimal valid window is seen this way.
+
+1. Count the characters needed from `t` in `need`, and track `missing = len(t)` still uncovered.
+2. Move `r` across `s`: if `s[r]` is still needed, decrement `missing`; always decrement `need[s[r]]`.
+3. While `missing == 0`, record the window if it is the shortest so far.
+4. Then drop `s[l]`: increment `need[s[l]]`, and if it becomes positive the window is no longer valid, so increment `missing`. Advance `l`.
+5. Return the best window, or `""` if none was found.
+
 ## Code Implementation
 ```python
 from collections import Counter
@@ -75,6 +86,12 @@ class Solution:
 ```
 
 ## Time Complexity Analysis
-> Time complexity  : O(n)
+> Time complexity  : O(m + n) — each index of s enters and leaves the window at most once, plus counting t
 >
 > Space complexity : O(1) — at most 52 uppercase/lowercase letters
+
+## Related Problems
+- [3. Longest Substring Without Repeating Characters](./3_longest_substring_without_repeating_characters.md) — 🟡 Medium · variable-size sliding window
+- [438. Find All Anagrams in a String](./438_find_all_anagrams_in_a_string.md) — 🟡 Medium · sliding window with character counts
+- [567. Permutation in String](https://leetcode.com/problems/permutation-in-string) — 🟡 Medium · window must cover a target's character counts
+- [239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum) — 🔴 Hard · sliding window

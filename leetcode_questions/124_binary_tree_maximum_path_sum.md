@@ -1,5 +1,7 @@
 # 124. Binary Tree Maximum Path Sum
 
+**Difficulty:** 🔴 Hard
+
 ## Question link
 (https://leetcode.com/problems/binary-tree-maximum-path-sum/)
 
@@ -42,40 +44,51 @@ Constraints:
 - tree
 - dfs
 
+## Approach
+**Key idea:** Every path has a single highest node where it "bends"; at that node the path is `node.val + best left branch + best right branch`, while a parent can only extend one of those branches.
+
+1. Post-order DFS returns the best downward path sum starting at each node.
+2. Clamp each child's gain at 0 — a negative branch is better left out.
+3. Update the global answer with `node.val + left + right` (the path that bends here).
+4. Return `node.val + max(left, right)` to the parent.
+5. Start the answer at negative infinity so all-negative trees return their largest node.
+
 ## Code Implementation
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-    int maxV = INT_MIN;
-public:
-    int maxPathSum(TreeNode* root) {
-        _dfs(root);
-        return maxV;
-    }
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 
-    int _dfs(TreeNode* root){
-        if(root == NULL){
-            return 0;
-        }
+from typing import Optional
 
-        int left = max(0, _dfs(root->left));
-        int right = max(0, _dfs(root->right));
-        maxV = max(maxV, (left + right + root->val));
-        return max(left, right) + root->val;
-    }
-};
+
+class Solution:
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        best = float("-inf")
+
+        def gain(node: Optional[TreeNode]) -> int:
+            """Best sum of a downward path starting at node."""
+            nonlocal best
+            if not node:
+                return 0
+            left = max(0, gain(node.left))    # drop negative branches
+            right = max(0, gain(node.right))
+            best = max(best, node.val + left + right)  # path bending at node
+            return node.val + max(left, right)          # extend only one side upward
+
+        gain(root)
+        return best
 ```
 
 ## Time Complexity Analysis
-Running time  : O(n)
-running space : O(1)
+> Time complexity  : O(n)
+>
+> Space complexity : O(h) — recursion stack, h = tree height
+
+## Related Problems
+- [549. Binary Tree Longest Consecutive Sequence II](./549_binary_tree_longest_consecutive_sequence_ii.md) — 🟡 Medium · combine left and right downward results at each node
+- [543. Diameter of Binary Tree](https://leetcode.com/problems/diameter-of-binary-tree) — 🟢 Easy · same bend-at-a-node pattern, counting edges
+- [687. Longest Univalue Path](https://leetcode.com/problems/longest-univalue-path) — 🟡 Medium · same pattern with an equal-value constraint

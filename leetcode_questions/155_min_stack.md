@@ -1,5 +1,7 @@
 # 155. Min Stack
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/min-stack/)
 
@@ -40,6 +42,14 @@ Constraints:
 ## Tags
 - stack
 
+## Approach
+**Key idea:** Keep a second stack whose top is always the minimum of the main stack; it only changes when a new minimum is pushed or the current minimum is popped.
+
+1. `push(val)`: append to `stack`; also append to `min_stack` if it is empty or `val <= min_stack[-1]` (`<=` keeps duplicate minimums).
+2. `pop()`: if the popped value equals `min_stack[-1]`, pop `min_stack` too.
+3. `top()`: return `stack[-1]`.
+4. `getMin()`: return `min_stack[-1]`.
+
 ## Code Implementation
 ```python
 class MinStack:
@@ -68,3 +78,9 @@ class MinStack:
 > Time complexity  : O(1) for all operations
 >
 > Space complexity : O(n)
+
+## Related Problems
+- [716. Max Stack](./716_max_stack.md) — 🔴 Hard · harder variant that also pops the max element
+- [232. Implement Queue using Stacks](./232_implement_queue_using_stacks.md) — 🟢 Easy · auxiliary-stack design
+- [1381. Design a Stack With Increment Operation](./1381_design_a_stack_with_increment_operation.md) — 🟡 Medium · augmenting a stack with extra O(1) operations
+- [895. Maximum Frequency Stack](./895_maximum_frequency_stack.md) — 🔴 Hard · stack design with tracked statistics

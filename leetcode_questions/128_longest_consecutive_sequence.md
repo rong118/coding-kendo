@@ -1,5 +1,7 @@
 # 128. Longest Consecutive Sequence
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/longest-consecutive-sequence/)
 
@@ -30,6 +32,14 @@ Constraints:
 ## Tags
 - hashset
 
+## Approach
+**Key idea:** Put the numbers in a hash set and only start counting from a number whose predecessor (`num - 1`) is missing, so each sequence is walked only once.
+
+1. Build a set of all numbers so lookups are O(1).
+2. For each number, skip it if `num - 1` is in the set (it is not the start of a sequence).
+3. Otherwise, count upward while `num + 1`, `num + 2`, ... are in the set.
+4. Keep the longest streak seen and return it.
+
 ## Code Implementation
 ```python
 class Solution:
@@ -54,3 +64,8 @@ class Solution:
 > Time complexity  : O(n) — each element is visited at most twice (once as a start, once within a streak)
 >
 > Space complexity : O(n) — the hash set
+
+## Related Problems
+- [549. Binary Tree Longest Consecutive Sequence II](./549_binary_tree_longest_consecutive_sequence_ii.md) — 🟡 Medium · longest consecutive run, but along a tree path
+- [298. Binary Tree Longest Consecutive Sequence](https://leetcode.com/problems/binary-tree-longest-consecutive-sequence) — 🟡 Medium · consecutive run along parent-child paths
+- [217. Contains Duplicate](./217_contain_duplicate.md) — 🟢 Easy · hash set membership checks

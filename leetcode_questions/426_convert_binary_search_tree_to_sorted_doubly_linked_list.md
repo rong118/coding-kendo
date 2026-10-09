@@ -1,5 +1,7 @@
 # 426. Convert Binary Search Tree to Sorted Doubly Linked List
 
+**Difficulty:** 🟡 Medium
+
 ## Question link
 (https://leetcode.com/problems/convert-binary-search-tree-to-sorted-doubly-linked-list/)
 
@@ -30,6 +32,14 @@ Constraints:
 ## Tags
 - linkedlist
 - tree
+
+## Approach
+**Key idea:** An in-order traversal of a BST visits nodes in sorted order, so linking each node to the previously visited node builds the sorted list in place.
+
+1. Return `None` for an empty tree.
+2. Do an in-order traversal, keeping `head` (first node visited) and `prev` (last node visited).
+3. At each node, set `prev.right = node` and `node.left = prev`, then make `node` the new `prev`.
+4. After the traversal, connect `head` and `prev` (the last node) to make the list circular, and return `head`.
 
 ## Code Implementation
 ```python
@@ -79,3 +89,8 @@ class Solution:
 > Time complexity  : O(n) — each node visited once via in-order traversal
 >
 > Space complexity : O(h) — recursion stack, where h is the tree height
+
+## Related Problems
+- [94. Binary Tree Inorder Traversal](./94_binary_tree_inorder_traversal.md) — 🟢 Easy · the in-order traversal this relies on
+- [173. Binary Search Tree Iterator](./173_binary_search_tree_iterator.md) — 🟡 Medium · walks a BST in sorted order
+- [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list) — 🟡 Medium · rewires tree pointers into a list in place
