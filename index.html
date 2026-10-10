@@ -5,6 +5,24 @@
   <title>Coding Kendo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <style>
+    /* Mobile: use full width and wrap long code lines instead of horizontal scrolling */
+    @media screen and (max-width: 768px) {
+      .markdown-section {
+        max-width: 100%;
+        padding: 20px 12px 40px;
+      }
+      .markdown-section pre {
+        padding: 0 .6rem;
+        -webkit-overflow-scrolling: touch;
+      }
+      .markdown-section pre > code {
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        font-size: 13px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div id="app">Loading...</div>
