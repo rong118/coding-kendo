@@ -169,11 +169,15 @@ print("DFS Post-Order:", bt.dfs_postorder())  # Outputs: [4, 5, 2, 6, 7, 3, 1]
 ```
 
 ## Leetcode Questions
-1. Path (传递) => DFS (recursive)
-- [257 Binary Tree Paths](../../leetcode_questions/257_binary_tree_paths.md)
-- [1448 Count Good Nodes in Binary Tree](../../leetcode_questions/1448_count_good_nodes_in_binary_tree.md)
-- [124 Binary Tree Maximum Path Sum](../../leetcode_questions/124_binary_tree_maximum_path_sum.md)
-- [1120 Maximum Average Subtree](../../leetcode_questions/1120_maximum_average_subtree.md)
-- [1372 Longest ZigZag Path in a Binary Tree](../../leetcode_questions/1372_longest_zigzag_path_in_a_binary_tree.md)
-- [1123 Lowest Common Ancestor of Deepest Leaves](../../leetcode_questions/1123_lowest_common_ancestor_of_deepest_leaves.md)
-- [549 Binary Tree Longest Consecutive Sequence II](../../leetcode_questions/549_binary_tree_longest_consecutive_sequence_ii.md)
+
+### Path (传递) => DFS (recursive)
+
+| # | Problem | Difficulty |
+|---|---------|------------|
+| 257 | [Binary Tree Paths](../../leetcode_questions/257_binary_tree_paths.md) | Easy |
+| 1448 | [Count Good Nodes in Binary Tree](../../leetcode_questions/1448_count_good_nodes_in_binary_tree.md) | Medium |
+| 124 | [Binary Tree Maximum Path Sum](../../leetcode_questions/124_binary_tree_maximum_path_sum.md) | Hard |
+| 1120 | [Maximum Average Subtree](../../leetcode_questions/1120_maximum_average_subtree.md) | Medium |
+| 1372 | [Longest ZigZag Path in a Binary Tree](../../leetcode_questions/1372_longest_zigzag_path_in_a_binary_tree.md) | Medium |
+| 1123 | [Lowest Common Ancestor of Deepest Leaves](../../leetcode_questions/1123_lowest_common_ancestor_of_deepest_leaves.md) | Medium |
+| 549 | [Binary Tree Longest Consecutive Sequence II](../../leetcode_questions/549_binary_tree_longest_consecutive_sequence_ii.md) | Medium |

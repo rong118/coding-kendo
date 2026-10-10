@@ -64,8 +64,11 @@ The update operation has an average-case time complexity of O(log n), where n is
 The query operation has an average-case time complexity of O(log n) as well, since we need to traverse the BIT from the highest bit set in the start index down to the lowest bit set in the end index.
 
 ## LeetCode Questions
-- [307. Range Sum Query - Mutable]()
-- [308. Range Sum Query 2D]()
-- [315. Count of Smaller Numbers After Self]()
-- [327. Count of Range Sum]()
-- [440. K-th Smallest in Lexicographical Order]()
+
+| # | Problem | Difficulty |
+|---|---------|------------|
+| 307 | [Range Sum Query - Mutable](https://leetcode.com/problems/range-sum-query-mutable/) | Medium |
+| 308 | [Range Sum Query 2D - Mutable](https://leetcode.com/problems/range-sum-query-2d-mutable/) | Medium |
+| 315 | [Count of Smaller Numbers After Self](https://leetcode.com/problems/count-of-smaller-numbers-after-self/) | Hard |
+| 327 | [Count of Range Sum](https://leetcode.com/problems/count-of-range-sum/) | Hard |
+| 440 | [K-th Smallest in Lexicographical Order](https://leetcode.com/problems/k-th-smallest-in-lexicographical-order/) | Hard |

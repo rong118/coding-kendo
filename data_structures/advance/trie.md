@@ -85,8 +85,11 @@ The time complexity for finding all strings that start with a given prefix in a 
 This is because we need to traverse the Trie, starting from the root node and following the child pointers until we reach the end of the string. We then need to collect all the strings that match the prefix.
 
 ## Leetcode questions
-- [208 Implement Trie](../leetcode_questions/208_implement_trie.md)
-- [211 Design add and search words data structure](../leetcode_questions/211_design_add_search_words_data_structure.md)
-- [212 Word Search II](../leetcode_questions/212_word_search_II.md)
-- [421 Maximum XOR of Numbers in An Array](../leetcode_questions/421_maximum_xor_of_numbers_in_an_array.md)
-- [1707 Maximum XOR with An Element From Array](../leetcode_questions/1707_maximum_xor_with_an_element_from_array.md)
+
+| # | Problem | Difficulty |
+|---|---------|------------|
+| 208 | [Implement Trie (Prefix Tree)](../../leetcode_questions/208_implement_trie.md) | Medium |
+| 211 | [Design Add and Search Words Data Structure](../../leetcode_questions/211_design_add_search_words_data_structure.md) | Medium |
+| 212 | [Word Search II](../../leetcode_questions/212_word_search_II.md) | Hard |
+| 421 | [Maximum XOR of Two Numbers in an Array](../../leetcode_questions/421_maximum_xor_of_numbers_in_an_array.md) | Medium |
+| 1707 | [Maximum XOR With an Element From Array](../../leetcode_questions/1707_maximum_xor_with_an_element_from_array.md) | Hard |

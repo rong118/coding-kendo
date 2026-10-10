@@ -124,10 +124,13 @@ DFS Space Complexity: **O(V)**
 BFS Space Complexity: **O(V)**
 
 ## Leetcode Questions
-- [127. Word Ladder]()
-- [130. Surrounded Regions]()
-- [133. Clone Graph]() 
-- [200. Number of Islands]()
-- [417. Pacific Atlantic Water Flow]()
-- [797. All Paths From Source to Target]()
-- [994. Rotting Oranges]()
+
+| # | Problem | Difficulty |
+|---|---------|------------|
+| 127 | [Word Ladder](https://leetcode.com/problems/word-ladder/) | Hard |
+| 130 | [Surrounded Regions](https://leetcode.com/problems/surrounded-regions/) | Medium |
+| 133 | [Clone Graph](https://leetcode.com/problems/clone-graph/) | Medium |
+| 200 | [Number of Islands](https://leetcode.com/problems/number-of-islands/) | Medium |
+| 417 | [Pacific Atlantic Water Flow](https://leetcode.com/problems/pacific-atlantic-water-flow/) | Medium |
+| 797 | [All Paths From Source to Target](https://leetcode.com/problems/all-paths-from-source-to-target/) | Medium |
+| 994 | [Rotting Oranges](https://leetcode.com/problems/rotting-oranges/) | Medium |

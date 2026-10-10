@@ -126,4 +126,7 @@ if dist is not None:
 - The time complexity is **O(|E| * |V|)**, where |E| is the number of edges and |V| is the number of vertices.
 
 ## Leetcode Questions
-- [787 Cheapest Flights Within K Stops](../leetcode_questions/787_cheapest_flights_within_k_stops.md)
+
+| # | Problem | Difficulty |
+|---|---------|------------|
+| 787 | [Cheapest Flights Within K Stops](../../leetcode_questions/787_cheapest_flights_within_k_stops.md) | Medium |

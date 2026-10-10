@@ -21,4 +21,6 @@ print(gcd(8, 12))  # 4
 
 ### LeetCode
 
-- [1979. Find Greatest Common Divisor of Array](../../leetcode_questions/1979_find_greatest_common_divisor.md)
+| # | Problem | Difficulty |
+|---|---------|------------|
+| 1979 | [Find Greatest Common Divisor of Array](https://leetcode.com/problems/find-greatest-common-divisor-of-array/) | Easy |

@@ -103,7 +103,10 @@ When both path compression and union by rank/size are used, the amortized time c
 α(n) is the inverse Ackermann function, which grows extremely slowly. For all practical purposes, α(n) can be considered a constant.
 
 ## Leetcode Questions
-- [305 Number of Island II](../leetcode_questions/305_number_of_island_ii.md)
-- [547 Friend Circles](../leetcode_questions/547_friend_circles.md)
-- [128 Longest Consecutive Sequence](../leetcode_questions/128_longest_consecutive_sequence.md)
-- [261 Graph Valid Tree](../leetcode_questions/261_graph_valid_tree.md)
+
+| # | Problem | Difficulty |
+|---|---------|------------|
+| 305 | [Number of Islands II](../../leetcode_questions/305_number_of_island_ii.md) | Hard |
+| 547 | [Number of Provinces](../../leetcode_questions/547_number_of_provinces.md) | Medium |
+| 128 | [Longest Consecutive Sequence](../../leetcode_questions/128_longest_consecutive_sequence.md) | Medium |
+| 261 | [Graph Valid Tree](../../leetcode_questions/261_graph_valid_tree.md) | Medium |

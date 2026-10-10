@@ -29,8 +29,6 @@ Input: root = [1,null,2]
 Output: [2,1]
 
 
-![Image]()
-<img src="" width="400" />
 
 Example
 > example's description

@@ -225,7 +225,10 @@ Prim's algorithm and Kruskal's algorithm are both greedy algorithms used to solv
 In summary, Prim's algorithm starts with an arbitrary vertex, grows the MST from that vertex, and selects edges based on their weight, while Kruskal's algorithm processes all edges in the graph, selects edges based on their weight, and performs union operations for each connected component.
 
 ## Leetcode Questions
-- [1168 Optimize Water Distribution in a Village](../../leetcode_questions/1168_optimize_water_distribution_in_a_village.md)
-- [1135 Connecting Cities With Minimum Cost](../../leetcode_questions/1135_connecting_cities_with_minimum_cost.md)
-- [1584 Min Cost to Connect All Points](../../leetcode_questions/1584_min_cost_to_connect_all_points.md)
-- [1489 Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree](../../leetcode_questions/1489_find_critical_and_pseudo_critical_edges_in_minimum_spanning_tree.md)
+
+| # | Problem | Difficulty |
+|---|---------|------------|
+| 1168 | [Optimize Water Distribution in a Village](../../leetcode_questions/1168_optimize_water_distribution_in_a_village.md) | Hard |
+| 1135 | [Connecting Cities With Minimum Cost](../../leetcode_questions/1135_connecting_cities_with_minimum_cost.md) | Medium |
+| 1584 | [Min Cost to Connect All Points](../../leetcode_questions/1584_min_cost_to_connect_all_points.md) | Medium |
+| 1489 | [Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree](../../leetcode_questions/1489_find_critical_and_pseudo_critical_edges_in_minimum_spanning_tree.md) | Hard |

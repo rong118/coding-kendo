@@ -105,23 +105,29 @@ print("Search 25:", bst.search(25))  # Outputs: False
 ```
 
 ## Leetcode Questions
-1. Binary Search Tree
-- [270 Closest Binary Search Tree Value](../leetcode_questions/270_closest_binary_search_tree_value.md)
-- [450 Delete Node in BST](../leetcode_questions/450_delete_node_in_BST.md)
-- [98 Validate Binary Search Tree](../leetcode_questions/98_validate_binary_search_tree.md)
-- [173 Binary Search Tree Iterator](../leetcode_questions/173_binary_search_tree_iterator.md)
-- [99 Recover Binary Search Tree](../leetcode_questions/99_recover_binary_search_tree.md)
-- [108 Convert Sorted Array to Binary Search Tree](../leetcode_questions/108_convert_sorted_array_to_binary_search_tree.md)
-- [1382 Balance a Binary Search Tree](../leetcode_questions/1382_balance_a_binary_search_tree.md)
-- [96 Unique Binary Search Trees](../leetcode_questions/96_unique_binary_search_trees.md)
-- [95 Unique Binary Search Trees II](../leetcode_questions/95_unique_binary_search_trees_ii.md)
-- [450 Delete Node in a BST](../leetcode_questions/450_delete_node_in_BST.md)
 
-2. Lowest Common Ancestor
-- [235 Lowest Common Ancestor of a Binary Search Tree](../leetcode_questions/235_lowest_common_ancestor_of_a_binary_search_tree.md)
-- [236 Lowest Common Ancestor of a Binary Tree](../leetcode_questions/236_lowest_common_ancestor_of_a_binary_tree.md)
-- [1644 Lowest Common Ancestor of a Binary Tree II](../leetcode_questions/1644_lowest_common_ancestor_of_a_binary_tree_ii.md)
-- [1650 Lowest Common Ancestor of a Binary Tree III](../leetcode_questions/1650_lowest_common_ancestor_of_a_binary_tree_iii.md)
-- [1676 Lowest Common Ancestor of a Binary Tree IV](../leetcode_questions/1676_lowest_common_ancestor_of_a_binary_tree_iv.md)
-- [1123 Lowest Common Ancestor of Deepest Leaves](../leetcode_questions/1123_lowest_common_ancestor_of_deepest_leaves.md)
-- [865 Smallest Subtree with all the Deepest Nodes](../leetcode_questions/865_smallest_subtree_with_all_the_deepest_nodes.md)
+### Binary Search Tree
+
+| # | Problem | Difficulty |
+|---|---------|------------|
+| 270 | [Closest Binary Search Tree Value](../../leetcode_questions/270_closest_binary_search_tree_value.md) | Easy |
+| 450 | [Delete Node in a BST](../../leetcode_questions/450_delete_node_in_BST.md) | Medium |
+| 98 | [Validate Binary Search Tree](../../leetcode_questions/98_validate_binary_search_tree.md) | Medium |
+| 173 | [Binary Search Tree Iterator](../../leetcode_questions/173_binary_search_tree_iterator.md) | Medium |
+| 99 | [Recover Binary Search Tree](../../leetcode_questions/99_recover_binary_search_tree.md) | Medium |
+| 108 | [Convert Sorted Array to Binary Search Tree](../../leetcode_questions/108_convert_sorted_array_to_binary_search_tree.md) | Easy |
+| 1382 | [Balance a Binary Search Tree](../../leetcode_questions/1382_balance_a_binary_search_tree.md) | Medium |
+| 96 | [Unique Binary Search Trees](../../leetcode_questions/96_unique_binary_search_trees.md) | Medium |
+| 95 | [Unique Binary Search Trees II](../../leetcode_questions/95_unique_binary_search_trees_ii.md) | Medium |
+
+### Lowest Common Ancestor
+
+| # | Problem | Difficulty |
+|---|---------|------------|
+| 235 | [Lowest Common Ancestor of a Binary Search Tree](../../leetcode_questions/235_lowest_common_ancestor_of_a_binary_search_tree.md) | Medium |
+| 236 | [Lowest Common Ancestor of a Binary Tree](../../leetcode_questions/236_lowest_common_ancestor_of_a_binary_tree.md) | Medium |
+| 1644 | [Lowest Common Ancestor of a Binary Tree II](../../leetcode_questions/1644_lowest_common_ancestor_of_a_binary_tree_ii.md) | Medium |
+| 1650 | [Lowest Common Ancestor of a Binary Tree III](../../leetcode_questions/1650_lowest_common_ancestor_of_a_binary_tree_iii.md) | Medium |
+| 1676 | [Lowest Common Ancestor of a Binary Tree IV](../../leetcode_questions/1676_lowest_common_ancestor_of_a_binary_tree_iv.md) | Medium |
+| 1123 | [Lowest Common Ancestor of Deepest Leaves](../../leetcode_questions/1123_lowest_common_ancestor_of_deepest_leaves.md) | Medium |
+| 865 | [Smallest Subtree with all the Deepest Nodes](../../leetcode_questions/865_smallest_subtree_with_all_the_deepest_nodes.md) | Medium |
